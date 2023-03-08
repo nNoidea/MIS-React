@@ -1,6 +1,6 @@
 # Motion Is Superior
 
-## Setup
+## Setup for development
 ```
 cd MIS-React
 npm install
