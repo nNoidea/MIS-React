@@ -43,7 +43,7 @@ export function modal(GLOBALS: any) {
                                     })()}
                                     <Button className='button'>📁Library</Button>
                                     <Button className='button' onClick={() => { window.open(youtubeSearchLinkGenerator(movie.title), '_blank'); }}>
-                                        <img src="../../images/youtube.png " height={16} />YouTube
+                                        <img src="https://raw.githubusercontent.com/nNoidea/MIS-React/main/images/youtube.png" height={16} />YouTube
                                     </Button>
                                 </>
                             </div>
