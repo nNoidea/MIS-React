@@ -1,0 +1,136 @@
+/* Hide the scrollbar */
+::-webkit-scrollbar {
+    display: none;
+}
+
+#body {
+    overflow-anchor: none;
+    background: linear-gradient(to right, #2b5876, #4e4376);
+}
+
+/* Style the search box inside the navigation bar */
+.topnav input[type=text] {
+    color: white;
+    background-color: transparent;
+    float: right;
+    padding: 6px;
+    border: none;
+    margin-top: 8px;
+    margin-right: 16px;
+    font-size: 17px;
+    width: 140px;
+}
+
+.topnav input[type="text"]::placeholder {
+    color: white;
+}
+
+/* Buttons */
+.button {
+    border: 1px solid white !important;
+    margin: 10px;
+}
+
+/* Load more button */
+.loadMoreButton {
+    margin-top: 50px;
+}
+
+/* Season buttons */
+#movie-content>Button {
+    border: white;
+    background-color: #4e4376;
+    margin: 3px;
+}
+
+/* Close button in modal */
+.btn-close {
+    margin: 10px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+}
+
+/* Footer margin */
+#endFooter {
+    margin: 100px;
+}
+
+/* Modal  */
+#modal {
+    max-width: 75% !important;
+}
+
+.container {
+    max-width: 100%;
+}
+
+.col {
+    margin-bottom: 50px;
+    min-width: 200px;
+}
+
+.modal-body {
+    margin-top: 30px;
+}
+
+#modal-img {
+    border-radius: 25px;
+    max-width: 70%;
+}
+
+.content-score {
+    border-width: 2px;
+    border-style: solid;
+    border-color: white;
+    margin: 2px;
+}
+
+/* Modal background color */
+
+.modal-content {
+    color: white !important;
+    background: linear-gradient(to right, #329de4, #7b4397);
+}
+
+/* Text */
+#date {
+    color: white;
+}
+
+.description {
+    color: white;
+}
+
+#movie-title {
+    color: white !important;
+}
+
+#episodes {
+    margin-top: 10px;
+}
+
+#single-episode {
+    background-color: #4e4376;
+    color: white;
+
+    border-width: 2px;
+    border-style: solid;
+    border-color: #352e50;
+}
+
+#genre {
+    color: rgb(211, 211, 211);
+}
+
+/* border */
+.border {
+    border-width: 2px;
+    border-style: solid;
+    border-color: black;
+}
+
+.testimage {
+    width: 100px;
+}
