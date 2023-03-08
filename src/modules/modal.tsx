@@ -111,12 +111,24 @@ function episodesSection(movie: Movie, setMovie: any, mediaType: string, seasons
             episodes = <>
                 {episodes}
                 <ListGroup.Item id="single-episode" onClick={() => { alert(`You clicked: ${ i + 1 }`); }}>
-                    <span>{i + 1}. {movie.seasons[seasonNumber].episodes[i].name} {setupRuntime(movie.seasons[seasonNumber].episodes[i].runtime, mediaType, true)}</span>
+                    <span><strong>{i + 1}.</strong> {movie.seasons[seasonNumber].episodes[i].name}{epsiodeRuntime(setupRuntime(movie.seasons[seasonNumber].episodes[i].runtime, mediaType, true))}{episodeReleaseDate(movie.seasons[seasonNumber].episodes[i].air_date)}</span>
                 </ListGroup.Item>
             </>;
         }
 
         return episodes;
+
+        function epsiodeRuntime(runtime: any) {
+            if (runtime != null) {
+                return <><br />{runtime}</>;
+            }
+        }
+
+        function episodeReleaseDate(releaseDate: string) {
+            if (releaseDate != null) {
+                return <><br />📅{releaseDate}</>;
+            }
+        }
     }
 }
 
@@ -211,6 +223,9 @@ function setupRuntime(runtime: number[] | null, mediaType: string, episodeBoolea
             else if (runtime[1] != 0) {
                 return `⏳${ runtime[1] }m`;
             }
+        }
+        else {
+            return null;
         }
     }
 }
