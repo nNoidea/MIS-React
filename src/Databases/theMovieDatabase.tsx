@@ -21,75 +21,76 @@ export async function getSearchResults(searchQuery: string, pageNumber: number) 
     let json = await (await fetch(cloudflare(["search", searchQuery, pageNumber]))).json();
 
     return normalize(await json);
-}
 
-export async function getGenres(type: string) {
-    let json = await (await fetch(cloudflare(["genre", type]))).json();
-    return (await json);
-}
+    async function normalize(json: any) {
+        let tvGenreList = await getGenres("tv");
+        let movieGenreList = await getGenres("movie");
 
-async function normalize(json: any) {
-    let tvGenreList = await getGenres("tv");
-    let movieGenreList = await getGenres("movie");
+        let pages = json.total_pages;
+        let results = json.results;
+        let movieArr: any[] = [];
 
-    let pages = json.total_pages;
-    let results = json.results;
-    let movieArr: any[] = [];
+        results.forEach((element: any) => {
+            // Media Type
+            if (element.media_type != "tv" && element.media_type != "movie") {
+                return;
+            }
 
-    results.forEach((element: any) => {
-        // Media Type
-        if (element.media_type != "tv" && element.media_type != "movie") {
-            return;
-        }
+            // Poser
+            let poster = "";
+            if (element.poster_path == null) {
+                poster = "NO-IMAGE";
+            }
+            else {
+                poster = "https://image.tmdb.org/t/p/w500" + element.poster_path;
+            }
 
-        // Poser
-        let poster = "";
-        if (element.poster_path == null) {
-            poster = "NO-IMAGE";
-        }
-        else {
-            poster = "https://image.tmdb.org/t/p/w500" + element.poster_path;
-        }
+            // Title
+            let title = element.title;
+            if (title == undefined) {
+                title = element.name;
+            }
 
-        // Title
-        let title = element.title;
-        if (title == undefined) {
-            title = element.name;
-        }
+            // Release date
+            let releaseDate = element.release_date;
+            if (releaseDate == undefined) {
+                releaseDate = element.first_air_date;
+            }
 
-        // Release date
-        let releaseDate = element.release_date;
-        if (releaseDate == undefined) {
-            releaseDate = element.first_air_date;
-        }
+            // Genre ids
+            let genreIDS = element.genre_ids;
+            let genres: string[] = [];
+            let genreList: any;
+            if (element.media_type == "movie") {
+                genreList = movieGenreList;
+            }
+            else {
+                genreList = tvGenreList;
+            }
 
-        // Genre ids
-        let genreIDS = element.genre_ids;
-        let genres: string[] = [];
-        let genreList: any;
-        if (element.media_type == "movie") {
-            genreList = movieGenreList;
-        }
-        else {
-            genreList = tvGenreList;
-        }
-
-        genreIDS.forEach((id: number) => {
-            genreList.genres.forEach((genre: any) => {
-                if (genre.id == id) {
-                    genres.push(genre.name);
-                }
+            genreIDS.forEach((id: number) => {
+                genreList.genres.forEach((genre: any) => {
+                    if (genre.id == id) {
+                        genres.push(genre.name);
+                    }
+                });
             });
+
+            let movie = new Movie(title, element.id, poster, element.media_type, element.overview, releaseDate, genres);
+            movieArr.push(movie);
         });
 
-        let movie = new Movie(title, element.id, poster, element.media_type, element.overview, releaseDate, genres);
-        movieArr.push(movie);
-    });
+        let movieList = new MovieList(pages, movieArr);
 
-    let movieList = new MovieList(pages, movieArr);
+        return movieList;
+    }
 
-    return movieList;
+    async function getGenres(type: string) {
+        let json = await (await fetch(cloudflare(["genre", type]))).json();
+        return (await json);
+    }
 }
+
 
 export async function TMDBRequestExtraDetails(movie: Movie) {
     let json;
