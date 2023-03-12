@@ -1,8 +1,7 @@
 import { Movie, MovieList } from "../classes/Movie";
 
-
 function cloudflare(array: any[]) {
-    const baseDomain = "https://mis.zugo.workers.dev/";
+    const baseDomain = "https://mis-get.zugo.workers.dev/";
     let parameters = "";
     for (let i = 0; i < array.length; i++) {
         let argument = String(array[i]);
