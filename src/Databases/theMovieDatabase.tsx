@@ -1,29 +1,37 @@
 import { Movie, MovieList } from "../classes/Movie";
 
-function cloudflare(array: any[]) {
-    const baseDomain = "https://mis-get.zugo.workers.dev/";
-    let parameters = "";
-    for (let i = 0; i < array.length; i++) {
-        let argument = String(array[i]);
+async function cloudflare(array: any[]) {
+    const options: RequestInit = {
+        method: 'GET',
+        redirect: 'follow'
+    };
 
-        if (i != array.length - 1) {
-            parameters += argument + "?";
-        }
-        else {
-            parameters += argument;
-        }
-    }
-    return baseDomain + parameters;
+    const json = btoa(JSON.stringify({ "array": array.slice(1) }));
+
+    return await (await fetch(`https://mis-get.zugo.workers.dev/?mode=${ array[0] }&jsonArray=${ json }`, options)).json();
 }
 
-export async function getSearchResults(searchQuery: string, pageNumber: number) {
-    let json = await (await fetch(cloudflare(["search", searchQuery, pageNumber]))).json();
+// We generate these variables on the global scope, since this scope gets executed only once.
+let tvGenreList: any = null;
+let movieGenreList: any = null;
 
-    return normalize(await json);
+export async function getSearchResults(searchQuery: string, pageNumber: number) {
+    // We will request this only once and reuse the data we get.
+    if (tvGenreList == null) {
+        tvGenreList = await getGenres("tv");
+        movieGenreList = await getGenres("movie");
+    }
+
+    async function getGenres(type: string) {
+        let json = await cloudflare(["genre", type]);
+        return (json);
+    }
+
+    let json = await cloudflare(["search", searchQuery, pageNumber]);
+
+    return normalize(json);
 
     async function normalize(json: any) {
-        let tvGenreList = await getGenres("tv");
-        let movieGenreList = await getGenres("movie");
 
         let pages = json.total_pages;
         let results = json.results;
@@ -41,7 +49,7 @@ export async function getSearchResults(searchQuery: string, pageNumber: number) 
                 poster = "NO-IMAGE";
             }
             else {
-                poster = "https://image.tmdb.org/t/p/w500" + element.poster_path;
+                poster = "https://image.tmdb.org/t/p/w154" + element.poster_path;
             }
 
             // Title
@@ -83,21 +91,16 @@ export async function getSearchResults(searchQuery: string, pageNumber: number) 
 
         return movieList;
     }
-
-    async function getGenres(type: string) {
-        let json = await (await fetch(cloudflare(["genre", type]))).json();
-        return (await json);
-    }
 }
 
 
 export async function TMDBRequestExtraDetails(movie: Movie) {
     let json;
     if (movie.mediaType == "movie") {
-        json = await (await fetch(cloudflare(["movieDetails", movie.id]))).json();
+        json = await cloudflare(["movieDetails", movie.id]);
     }
     else if (movie.mediaType == "tv") {
-        json = await (await fetch(cloudflare(["tvDetails", movie.id]))).json();
+        json = await cloudflare(["tvDetails", movie.id]);
 
         if (json.seasons[0].season_number == 1) {
             json.seasons.unshift(null);
@@ -116,7 +119,7 @@ export async function TMDBRequestSeasonDetails(movie: Movie, seasonNumber: numbe
     if (movie.mediaType == "tv") {
 
         let json;
-        json = await (await fetch(cloudflare(["seasonDetails", movie.id, seasonNumber]))).json();
+        json = await cloudflare(["seasonDetails", movie.id, seasonNumber]);
 
         movie.seasons[seasonNumber].episodes = json.episodes;
         for (let i = 0; i < movie.seasons[seasonNumber].episodes.length; i++) {

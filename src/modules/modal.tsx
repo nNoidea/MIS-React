@@ -25,7 +25,7 @@ export function modal(GLOBALS: any) {
                 <div className="container">
                     <div className="row">
                         <div className="col">
-                            <img id="modal-img" src={movie.poster} alt="" />
+                            <img id="modal-img" src={getBetterPoster(movie.poster)} alt="" />
                         </div>
                         <div className="col movie-data">
                             <div>
@@ -56,6 +56,10 @@ export function modal(GLOBALS: any) {
             </Modal.Body>
         </Modal>
     );
+}
+
+function getBetterPoster(poster: string) {
+    return poster.replace("w154", "w500");
 }
 
 function youtubeSearchLinkGenerator(string: string) {
