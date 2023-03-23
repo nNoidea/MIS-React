@@ -11,6 +11,7 @@ export class MovieList {
 }
 
 export class Movie {
+    uniqueID: string;
     title: string;
     id: number;
     poster: string;
@@ -27,6 +28,7 @@ export class Movie {
     seasons: any[] = [];
 
     constructor(name: string, id: number, poster: string, mediaType: string, description: string, releaseDate: string, genres: string[]) {
+        this.uniqueID = generateUniqueID(id, mediaType);
         this.title = name;
         this.id = id;
         this.poster = poster;
@@ -42,5 +44,13 @@ export class Movie {
 
     async requestSeasonDetails(seasonNumber: number) {
         await TMDBRequestSeasonDetails(this, seasonNumber);
+    }
+}
+
+function generateUniqueID(movieID: number, mediaType: string) {
+    if (mediaType == "movie") {
+        return "0" + String(movieID);
+    } else {
+        return "1" + String(movieID);
     }
 }

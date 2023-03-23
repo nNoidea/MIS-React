@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './css/search.css';
 
 function App() {
+
   // NavigationBar
   const [homeButtonColor, setHomeButtonColor] = useState('#dc3545');
   const [libraryButtonColor, setLibraryButtonColor] = useState('transparent');
@@ -21,6 +22,7 @@ function App() {
   const [modalShow, setModalShow] = useState(false);
   const [seasonNumber, setSeasonNumber] = useState(1); // Current season
   const [seasonName, setSeasonName] = useState(""); // Current season
+  const [addLibraryButtonColor, setAddLibraryButtonColor] = useState("crimson"); // Current season
 
   let GLOBALS = {
     GETTERS: {
@@ -30,7 +32,8 @@ function App() {
       movie,
       modalShow,
       seasonNumber,
-      seasonName
+      seasonName,
+      addLibraryButtonColor
     },
     SETTERS: {
       setHomeButtonColor,
@@ -39,7 +42,8 @@ function App() {
       setMovie,
       setModalShow,
       setSeasonNumber,
-      setSeasonName
+      setSeasonName,
+      setAddLibraryButtonColor
     }
   };
 

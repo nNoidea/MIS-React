@@ -2,6 +2,7 @@ import { Movie, MovieList } from "../classes/Movie";
 import { steamHover, steamHoverLeave } from "./steamHover";
 import { getSearchResults } from "../Databases/theMovieDatabase";
 import Button from 'react-bootstrap/Button';
+import { checkIfItemExists } from "./library";
 
 export function singlePageResults(GLOBALS: any, movieList: MovieList,) {
     let gridItems = <></>;
@@ -13,7 +14,9 @@ export function singlePageResults(GLOBALS: any, movieList: MovieList,) {
             element = (
                 <div data-bs-toggle="modal" data-bs-target="#movieModal" className="steamHover"
                     onMouseMove={steamHover} onMouseOut={steamHoverLeave}
-                    onClick={async () => { await setModalInformation(GLOBALS, movie); }}
+                    onClick={async () => {
+                        await setModalInformation(GLOBALS, movie);
+                    }}
                 ><img src={movie.poster} className="grid-item" /></div>
             );
         }
@@ -33,6 +36,12 @@ async function setModalInformation(GLOBALS: any, movie: Movie) {
     if (movie.mediaType == "tv") {
         GLOBALS.SETTERS.setSeasonNumber(1);
         GLOBALS.SETTERS.setSeasonName(movie.seasons[1].name);
+    }
+
+    if (await checkIfItemExists(movie.uniqueID) == false) {
+        GLOBALS.SETTERS.setAddLibraryButtonColor("crimson");
+    } else {
+        GLOBALS.SETTERS.setAddLibraryButtonColor("green");
     }
 
     GLOBALS.SETTERS.setModalShow(true);

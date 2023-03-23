@@ -1,5 +1,6 @@
 import { createResultPage } from './searchResults';
 import Button from 'react-bootstrap/Button';
+import { loadLibrary } from './library';
 
 export function NavigationBar(GLOBALS: any) {
   // Home Button
@@ -37,7 +38,7 @@ export function NavigationBar(GLOBALS: any) {
         style={{ backgroundColor: GLOBALS.GETTERS.libraryButtonColor }}
         onClick={() => {
           handleLibraryClick();
-          GLOBALS.SETTERS.setContent("library");
+          loadLibrary(GLOBALS);
         }}
       >
         📁Library

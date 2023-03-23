@@ -1,5 +1,6 @@
 import { Badge, Button, ListGroup, Modal } from "react-bootstrap";
 import { Movie } from "../classes/Movie";
+import { addToLibrary, checkIfItemExists, loadLibrary, removeFromLibrary } from "./library";
 
 export function modal(GLOBALS: any) {
     let movie: Movie = GLOBALS.GETTERS.movie;
@@ -41,7 +42,22 @@ export function modal(GLOBALS: any) {
                                             return <Button className='button'>👀Watched</Button>;
                                         }
                                     })()}
-                                    <Button className='button'>📁Library</Button>
+                                    <Button className='button' style={{ backgroundColor: GLOBALS.GETTERS.addLibraryButtonColor }}
+                                        onClick={() => {
+                                            if (GLOBALS.GETTERS.addLibraryButtonColor == "crimson") {
+                                                addToLibrary(movie);
+                                                GLOBALS.SETTERS.setAddLibraryButtonColor("green");
+                                            } else {
+                                                removeFromLibrary(movie.uniqueID);
+                                                GLOBALS.SETTERS.setAddLibraryButtonColor("crimson");
+                                            }
+
+                                            if (GLOBALS.GETTERS.libraryButtonColor != "transparent") {
+                                                loadLibrary(GLOBALS);
+                                            }
+                                        }}>
+                                        📁Library
+                                    </Button>
                                     <Button className='button' onClick={() => { window.open(youtubeSearchLinkGenerator(movie.title), '_blank'); }}>
                                         <img src="https://raw.githubusercontent.com/nNoidea/MIS-React/main/images/youtube.png" height={16} />YouTube
                                     </Button>
