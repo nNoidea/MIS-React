@@ -1,6 +1,6 @@
 import { Badge, Button, ListGroup, Modal } from "react-bootstrap";
 import { Movie } from "../classes/Movie";
-import { addToLibrary, checkIfItemExists, loadLibrary, removeFromLibrary } from "./library";
+import { addToLibrary, loadLibrary, removeFromLibrary } from "./library";
 
 export function modal(GLOBALS: any) {
     let movie: Movie = GLOBALS.GETTERS.movie;
