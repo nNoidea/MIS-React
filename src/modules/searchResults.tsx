@@ -1,14 +1,14 @@
-import { Movie, MovieList } from "../classes/Movie";
+import { Movie } from "../classes/Movie";
 import { steamHover, steamHoverLeave } from "./steamHover";
 import { getSearchResults } from "../Databases/theMovieDatabase";
 import Button from 'react-bootstrap/Button';
 import { checkIfItemExists } from "./library";
 
-export function singlePageResults(GLOBALS: any, movieList: MovieList,) {
+export function singlePageResults(GLOBALS: any, movieArray: Movie[],) {
     let gridItems = <></>;
-
-    for (let i = 0; i < movieList.movieArr.length; i++) {
-        let movie = movieList.movieArr[i];
+    
+    for (let i = 0; i < movieArray.length; i++) {
+        let movie = movieArray[i];
         let element = <></>;
         if (movie.poster != "NO-IMAGE") {
             element = (
@@ -49,7 +49,7 @@ async function setModalInformation(GLOBALS: any, movie: Movie) {
 
 export async function createResultPage(GLOBALS: any, oldItems: any, searchQuery: string, currentPage: number) {
     let movieList = await getSearchResults(searchQuery, currentPage);
-    let gridItems = <>{await oldItems}{singlePageResults(GLOBALS, movieList)}</>;
+    let gridItems = <>{await oldItems}{singlePageResults(GLOBALS, movieList.movieArr)}</>;
 
     async function nextResults() {
         currentPage++;

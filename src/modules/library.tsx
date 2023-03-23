@@ -1,19 +1,28 @@
-import { Movie, MovieList } from "../classes/Movie";
+import { Movie } from "../classes/Movie";
 import { singlePageResults } from "./searchResults";
 
 // Initiate the database
 let db: any;
-const request = indexedDB.open('library');
+const request = indexedDB.open('library', 1);
 request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
     db = (event.target as IDBOpenDBRequest).result;
-    db.createObjectStore('movies', { keyPath: 'uniqueID' });
+
+    // Delete the already existing database if it exists and if it's required by me.
+    if (db.objectStoreNames.contains('movies') && false) {
+        db.deleteObjectStore('movies');
+    }
+
+    // Create a new 'movies' object if it doesn't exists.
+    if (!db.objectStoreNames.contains('movies')) {
+        db.createObjectStore('movies', { keyPath: 'uniqueID' });
+    }
 };
 
 request.onsuccess = (event: Event) => {
     db = (event.target as IDBOpenDBRequest).result;
 };
 
-request.onerror = (event: Event) => {
+request.onerror = () => {
     console.error('Error opening database:', request.error);
 };
 
@@ -58,18 +67,24 @@ export function loadLibrary(GLOBALS: any) {
     const objectStore = createObjectStore();
 
     objectStore.getAll().onsuccess = async (event: any) => {
-        let list = event.target.result;
-        let arrayOfMovies = [];
-        for (let i = 0; i < list.length; i++) {
-            arrayOfMovies.push(new Movie(list[i].title, list[i].id, list[i].poster, list[i].mediaType, list[i].description, list[i].releaseDate, list[i].genres));
+        let movieArrayDB = event.target.result;
+        let movieArray: Movie[] = [];
+        for (let i = 0; i < movieArrayDB.length; i++) {
+            movieArray.push(new Movie(
+                movieArrayDB[i].title,
+                movieArrayDB[i].id,
+                movieArrayDB[i].poster,
+                movieArrayDB[i].mediaType,
+                movieArrayDB[i].description,
+                movieArrayDB[i].releaseDate,
+                movieArrayDB[i].genres
+            ));
         }
-
-        let movieList = new MovieList(1, arrayOfMovies);
 
         await GLOBALS.SETTERS.setContent(
             <>
                 <div className="grid-container" id="searchResults">
-                    {singlePageResults(GLOBALS, movieList)}
+                    {singlePageResults(GLOBALS, movieArray)}
                 </div>
             </>
         );

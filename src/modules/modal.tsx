@@ -8,11 +8,9 @@ export function modal(GLOBALS: any) {
     if (movie == undefined) {
         return <></>;
     }
-    let seasonNumber = GLOBALS.GETTERS.seasonNumber;
-    let setSeasonNumber = GLOBALS.SETTERS.setSeasonNumber;
-    let setMovie = GLOBALS.SETTERS.setMovie;
-    let seasonName = GLOBALS.GETTERS.seasonName;
-    let setSeasonName = GLOBALS.SETTERS.setSeasonName;
+
+    const { seasonNumber, seasonName } = GLOBALS.GETTERS;
+    const { setSeasonNumber, setMovie, setSeasonName } = GLOBALS.SETTERS;
 
     return (
         <Modal
@@ -37,11 +35,6 @@ export function modal(GLOBALS: any) {
                             </div>
                             <div>
                                 <>
-                                    {(() => {
-                                        if (movie.mediaType == "movie") {
-                                            return <Button className='button'>👀Watched</Button>;
-                                        }
-                                    })()}
                                     <Button className='button' style={{ backgroundColor: GLOBALS.GETTERS.addLibraryButtonColor }}
                                         onClick={() => {
                                             if (GLOBALS.GETTERS.addLibraryButtonColor == "crimson") {
@@ -61,6 +54,11 @@ export function modal(GLOBALS: any) {
                                     <Button className='button' onClick={() => { window.open(youtubeSearchLinkGenerator(movie.title), '_blank'); }}>
                                         <img src="https://raw.githubusercontent.com/nNoidea/MIS-React/main/images/youtube.png" height={16} />YouTube
                                     </Button>
+                                    {(() => {
+                                        if (movie.mediaType == "movie") {
+                                            return <Button className='button'>👀Watched</Button>;
+                                        }
+                                    })()}
                                 </>
                             </div>
                         </div>
@@ -131,7 +129,11 @@ function episodesSection(movie: Movie, setMovie: any, mediaType: string, seasons
             episodes = <>
                 {episodes}
                 <ListGroup.Item id="single-episode" onClick={() => { alert(`You clicked: ${ i + 1 }`); }}>
-                    <span><strong>{i + 1}.</strong> {movie.seasons[seasonNumber].episodes[i].name}{epsiodeRuntime(setupRuntime(movie.seasons[seasonNumber].episodes[i].runtime, mediaType, true))}{episodeReleaseDate(movie.seasons[seasonNumber].episodes[i].air_date)}</span>
+                    <span>
+                        <strong>{i + 1}. </strong>
+                        {movie.seasons[seasonNumber].episodes[i].name}{epsiodeRuntime(setupRuntime(movie.seasons[seasonNumber].episodes[i].runtime, mediaType, true))}
+                        {episodeReleaseDate(movie.seasons[seasonNumber].episodes[i].air_date)}
+                    </span>
                 </ListGroup.Item>
             </>;
         }
