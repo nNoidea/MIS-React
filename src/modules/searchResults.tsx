@@ -6,7 +6,7 @@ import { checkIfItemExists } from "./library";
 
 export function singlePageResults(GLOBALS: any, movieArray: Movie[],) {
     let gridItems = <></>;
-    
+
     for (let i = 0; i < movieArray.length; i++) {
         let movie = movieArray[i];
         let element = <></>;
@@ -27,27 +27,31 @@ export function singlePageResults(GLOBALS: any, movieArray: Movie[],) {
 };
 
 async function setModalInformation(GLOBALS: any, movie: Movie) {
+    const { setMovie, setSeasonNumber, setSeasonName, setAddLibraryButtonColor, setModalShow } = GLOBALS.SETTERS;
+
     // Request the extra detail about the movie
     await movie.requestMovieDetails();
     await movie.requestSeasonDetails(1);
 
-    GLOBALS.SETTERS.setMovie(movie);
+    setMovie(movie);
 
     if (movie.mediaType == "tv") {
-        GLOBALS.SETTERS.setSeasonNumber(1);
-        GLOBALS.SETTERS.setSeasonName(movie.seasons[1].name);
+        setSeasonNumber(1);
+        setSeasonName(movie.seasons[1].name);
     }
 
     if (await checkIfItemExists(movie.uniqueID) == false) {
-        GLOBALS.SETTERS.setAddLibraryButtonColor("crimson");
+        setAddLibraryButtonColor("crimson");
     } else {
-        GLOBALS.SETTERS.setAddLibraryButtonColor("green");
+        setAddLibraryButtonColor("green");
     }
 
-    GLOBALS.SETTERS.setModalShow(true);
+    setModalShow(true);
 }
 
 export async function createResultPage(GLOBALS: any, oldItems: any, searchQuery: string, currentPage: number) {
+    const { setContent } = GLOBALS.SETTERS;
+
     let movieList = await getSearchResults(searchQuery, currentPage);
     let gridItems = <>{await oldItems}{singlePageResults(GLOBALS, movieList.movieArr)}</>;
 
@@ -61,7 +65,7 @@ export async function createResultPage(GLOBALS: any, oldItems: any, searchQuery:
         loadMoreButton = <div className="center"><Button className="button loadMoreButton" onClick={async () => await nextResults()} >Load More Results</Button></div>;
     }
 
-    await GLOBALS.SETTERS.setContent(
+    await setContent(
         <>
             <div className="grid-container" id="searchResults">
                 {gridItems}

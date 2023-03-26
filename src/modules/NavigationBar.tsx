@@ -3,20 +3,23 @@ import Button from 'react-bootstrap/Button';
 import { loadLibrary } from './library';
 
 export function NavigationBar(GLOBALS: any) {
+  const { homeButtonColor, libraryButtonColor } = GLOBALS.GETTERS;
+  const { setHomeButtonColor, setLibraryButtonColor, setContent } = GLOBALS.SETTERS;
+
   // Home Button
   function HomeButton() {
     function handleHomeClick() {
-      GLOBALS.SETTERS.setHomeButtonColor('#dc3545');
-      GLOBALS.SETTERS.setLibraryButtonColor('transparent');
+      setHomeButtonColor('#dc3545');
+      setLibraryButtonColor('transparent');
     }
 
     return (
       <Button
         className="button"
-        style={{ backgroundColor: GLOBALS.GETTERS.homeButtonColor }}
+        style={{ backgroundColor: homeButtonColor }}
         onClick={() => {
           handleHomeClick();
-          GLOBALS.SETTERS.setContent("HOMEPAGE");
+          setContent("HOMEPAGE");
         }}
       >
         🏠Home
@@ -28,14 +31,14 @@ export function NavigationBar(GLOBALS: any) {
 
   function LibraryButton() {
     function handleLibraryClick() {
-      GLOBALS.SETTERS.setHomeButtonColor('transparent');
-      GLOBALS.SETTERS.setLibraryButtonColor('#dc3545');
+      setHomeButtonColor('transparent');
+      setLibraryButtonColor('#dc3545');
     }
 
     return (
       <Button
         className="button"
-        style={{ backgroundColor: GLOBALS.GETTERS.libraryButtonColor }}
+        style={{ backgroundColor: libraryButtonColor }}
         onClick={() => {
           handleLibraryClick();
           loadLibrary(GLOBALS);
@@ -60,8 +63,8 @@ export function NavigationBar(GLOBALS: any) {
 
   async function onEnter(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
-      GLOBALS.SETTERS.setLibraryButtonColor("transparent");
-      GLOBALS.SETTERS.setHomeButtonColor("transparent");
+      setLibraryButtonColor("transparent");
+      setHomeButtonColor("transparent");
 
       let searchQuery = e.currentTarget.value;
       let gridItems = <></>;

@@ -57,13 +57,15 @@ export async function checkIfItemExists(uniqueID: string) {
             }
         };
 
-        request.onerror = (event: Event) => {
+        request.onerror = () => {
             reject(request.error);
         };
     });
 }
 
 export function loadLibrary(GLOBALS: any) {
+    const { setContent } = GLOBALS.SETTERS;
+
     const objectStore = createObjectStore();
 
     objectStore.getAll().onsuccess = async (event: any) => {
@@ -81,7 +83,7 @@ export function loadLibrary(GLOBALS: any) {
             ));
         }
 
-        await GLOBALS.SETTERS.setContent(
+        await setContent(
             <>
                 <div className="grid-container" id="searchResults">
                     {singlePageResults(GLOBALS, movieArray)}

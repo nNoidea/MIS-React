@@ -3,22 +3,22 @@ import { Movie } from "../classes/Movie";
 import { addToLibrary, loadLibrary, removeFromLibrary } from "./library";
 
 export function modal(GLOBALS: any) {
-    let movie: Movie = GLOBALS.GETTERS.movie;
+
+    const { movie, seasonNumber, seasonName, modalShow, addLibraryButtonColor, libraryButtonColor } = GLOBALS.GETTERS;
+    const { setSeasonNumber, setMovie, setSeasonName, setModalShow, setAddLibraryButtonColor } = GLOBALS.SETTERS;
 
     if (movie == undefined) {
         return <></>;
     }
 
-    const { seasonNumber, seasonName } = GLOBALS.GETTERS;
-    const { setSeasonNumber, setMovie, setSeasonName } = GLOBALS.SETTERS;
 
     return (
         <Modal
-            show={GLOBALS.GETTERS.modalShow}
+            show={modalShow}
             size="xl"
             aria-labelledby="contained-modal-title-vcenter"
             centered
-            onHide={() => { GLOBALS.SETTERS.setModalShow(false); }}
+            onHide={() => { setModalShow(false); }}
             id="modal">
             <Modal.Body>
                 <div className="container">
@@ -35,17 +35,17 @@ export function modal(GLOBALS: any) {
                             </div>
                             <div>
                                 <>
-                                    <Button className='button' style={{ backgroundColor: GLOBALS.GETTERS.addLibraryButtonColor }}
+                                    <Button className='button' style={{ backgroundColor: addLibraryButtonColor }}
                                         onClick={() => {
-                                            if (GLOBALS.GETTERS.addLibraryButtonColor == "crimson") {
+                                            if (addLibraryButtonColor == "crimson") {
                                                 addToLibrary(movie);
-                                                GLOBALS.SETTERS.setAddLibraryButtonColor("green");
+                                                setAddLibraryButtonColor("green");
                                             } else {
                                                 removeFromLibrary(movie.uniqueID);
-                                                GLOBALS.SETTERS.setAddLibraryButtonColor("crimson");
+                                                setAddLibraryButtonColor("crimson");
                                             }
 
-                                            if (GLOBALS.GETTERS.libraryButtonColor != "transparent") {
+                                            if (libraryButtonColor != "transparent") {
                                                 loadLibrary(GLOBALS);
                                             }
                                         }}>
