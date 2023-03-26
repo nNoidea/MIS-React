@@ -28,7 +28,11 @@ export function modal(GLOBALS: any) {
                 <div className="container">
                     <div className="row">
                         <div className="col">
-                            <img id="modal-img" src={getBetterPoster(movie.poster)} alt="" />
+                            <img
+                                id="modal-img"
+                                src={getBetterPoster(movie.poster)}
+                                alt=""
+                            />
                         </div>
                         <div className="col movie-data">
                             <div>
@@ -64,7 +68,10 @@ export function modal(GLOBALS: any) {
                                             window.open(youtubeSearchLinkGenerator(movie.title), "_blank");
                                         }}
                                     >
-                                        <img src="https://raw.githubusercontent.com/nNoidea/MIS-React/main/images/youtube.png" height={16} />
+                                        <img
+                                            src="https://raw.githubusercontent.com/nNoidea/MIS-React/main/images/youtube.png"
+                                            height={16}
+                                        />
                                         YouTube
                                     </Button>
                                     {(() => {
@@ -118,10 +125,16 @@ function episodesSection(
     if (mediaType == "tv") {
         return (
             <div className="col">
-                <div className="text-center" id="movie-content">
+                <div
+                    className="text-center"
+                    id="movie-content"
+                >
                     {seasonButtonSection(seasons)}
                 </div>
-                <div id="episodes" className="episodes">
+                <div
+                    id="episodes"
+                    className="episodes"
+                >
                     <ul className="list-group">{seasonEpisodesSection(seasons[seasonNumber])}</ul>
                 </div>
             </div>
@@ -262,7 +275,11 @@ function scoresSection(TMDBScore: number) {
     if (TMDBScore != 0) {
         TMDBScore = Math.round(TMDBScore * 10) / 10;
         let score = (
-            <Badge bg="" style={{ backgroundColor: determineScoreColor(TMDBScore) }} className="content-score">
+            <Badge
+                bg=""
+                style={{ backgroundColor: determineScoreColor(TMDBScore) }}
+                className="content-score"
+            >
                 🇹 {TMDBScore} / 10
             </Badge>
         );

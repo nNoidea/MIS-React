@@ -93,7 +93,10 @@ export function loadLibrary(GLOBALS: any) {
 
         await setContent(
             <>
-                <div className="grid-container" id="searchResults">
+                <div
+                    className="grid-container"
+                    id="searchResults"
+                >
                     {singlePageResults(GLOBALS, movieArray)}
                 </div>
             </>

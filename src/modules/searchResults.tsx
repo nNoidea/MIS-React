@@ -23,7 +23,10 @@ export function singlePageResults(GLOBALS: any, movieArray: Movie[]) {
                         await setModalInformation(GLOBALS, movie);
                     }}
                 >
-                    <img src={movie.poster} className="grid-item" />
+                    <img
+                        src={movie.poster}
+                        className="grid-item"
+                    />
                 </div>
             );
         }
@@ -84,7 +87,10 @@ export async function createResultPage(GLOBALS: any, oldItems: any, searchQuery:
     if (movieList.pages > currentPage) {
         loadMoreButton = (
             <div className="center">
-                <Button className="button loadMoreButton" onClick={async () => await nextResults()}>
+                <Button
+                    className="button loadMoreButton"
+                    onClick={async () => await nextResults()}
+                >
                     Load More Results
                 </Button>
             </div>
@@ -93,7 +99,10 @@ export async function createResultPage(GLOBALS: any, oldItems: any, searchQuery:
 
     await setContent(
         <>
-            <div className="grid-container" id="searchResults">
+            <div
+                className="grid-container"
+                id="searchResults"
+            >
                 {gridItems}
             </div>
             {loadMoreButton}
