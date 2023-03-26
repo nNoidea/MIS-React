@@ -110,25 +110,28 @@ export async function TMDBRequestExtraDetails(movie: Movie) {
     }
 
     let minutes = json.runtime;
-    movie.runtime = runtime(minutes);
+    movie.runtime = convertRuntime(minutes);
 
     movie.TMDBScore = json.vote_average;
+
+    movie.movieDetailsExist = true;
 }
 
 export async function TMDBRequestSeasonDetails(movie: Movie, seasonNumber: number) {
     if (movie.mediaType == "tv") {
-
         let json;
         json = await cloudflare(["seasonDetails", movie.id, seasonNumber]);
 
         movie.seasons[seasonNumber].episodes = json.episodes;
         for (let i = 0; i < movie.seasons[seasonNumber].episodes.length; i++) {
-            movie.seasons[seasonNumber].episodes[i].runtime = runtime(movie.seasons[seasonNumber].episodes[i].runtime);
+            // Convert runtime from mintues to [hours, mintues]
+            movie.seasons[seasonNumber].episodes[i].runtime = convertRuntime(movie.seasons[seasonNumber].episodes[i].runtime);
         }
     }
+    movie.seasonDetailsExist = true;
 }
 
-function runtime(minutes: number) {
+function convertRuntime(minutes: number) {
     if (minutes == null) {
         return null;
     } else {

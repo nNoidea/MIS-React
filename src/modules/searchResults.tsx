@@ -43,7 +43,7 @@ async function setModalInformation(GLOBALS: any, movie: Movie) {
     if (await checkIfItemExists(movie.uniqueID) == false) {
         setAddLibraryButtonColor("crimson");
     } else {
-        setAddLibraryButtonColor("green");
+        setAddLibraryButtonColor("#54B435");
     }
 
     setModalShow(true);

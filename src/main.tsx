@@ -7,7 +7,6 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './css/search.css';
 
 function App() {
-
   // NavigationBar
   const [homeButtonColor, setHomeButtonColor] = useState('#dc3545');
   const [libraryButtonColor, setLibraryButtonColor] = useState('transparent');

@@ -39,7 +39,7 @@ export function modal(GLOBALS: any) {
                                         onClick={() => {
                                             if (addLibraryButtonColor == "crimson") {
                                                 addToLibrary(movie);
-                                                setAddLibraryButtonColor("green");
+                                                setAddLibraryButtonColor("#54B435");
                                             } else {
                                                 removeFromLibrary(movie.uniqueID);
                                                 setAddLibraryButtonColor("crimson");
@@ -128,7 +128,7 @@ function episodesSection(movie: Movie, setMovie: any, mediaType: string, seasons
         for (let i = 0; i < episodeCount; i++) {
             episodes = <>
                 {episodes}
-                <ListGroup.Item id="single-episode" onClick={() => { alert(`You clicked: ${ i + 1 }`); }}>
+                <ListGroup.Item id="single-episode" onClick={() => {  }}>
                     <span>
                         <strong>{i + 1}. </strong>
                         {movie.seasons[seasonNumber].episodes[i].name}{epsiodeRuntime(setupRuntime(movie.seasons[seasonNumber].episodes[i].runtime, mediaType, true))}
@@ -155,7 +155,7 @@ function episodesSection(movie: Movie, setMovie: any, mediaType: string, seasons
 }
 
 function scoresSection(TMDBScore: number) {
-    let backgroundColor = "green";
+    let backgroundColor = "#54B435";
 
     if (TMDBScore != 0) {
         TMDBScore = Math.round(TMDBScore * 10) / 10;
@@ -176,7 +176,7 @@ function scoresSection(TMDBScore: number) {
             backgroundColor = "#BF40BF";
         }
         else if (score >= 7) {
-            backgroundColor = "green";
+            backgroundColor = "#54B435";
         }
         else if (score >= 5) {
             backgroundColor = "orange";

@@ -21,10 +21,12 @@ export class Movie {
     genres: string[];
 
     // Set setMovieDetails
+    movieDetailsExist: boolean = false;
     runtime: number[] | null = null;
     TMDBScore: number = 0;
-
-    //
+    
+    // set seasonDetails
+    seasonDetailsExist: boolean = false;
     seasons: any[] = [];
 
     constructor(name: string, id: number, poster: string, mediaType: string, description: string, releaseDate: string, genres: string[]) {
@@ -39,11 +41,15 @@ export class Movie {
     }
 
     async requestMovieDetails() {
-        await TMDBRequestExtraDetails(this);
+        if (this.movieDetailsExist == false) {
+            await TMDBRequestExtraDetails(this);
+        }
     }
 
     async requestSeasonDetails(seasonNumber: number) {
-        await TMDBRequestSeasonDetails(this, seasonNumber);
+        if (this.seasonDetailsExist == false) {
+            await TMDBRequestSeasonDetails(this, seasonNumber);
+        }
     }
 }
 
