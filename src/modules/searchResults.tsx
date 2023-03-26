@@ -44,9 +44,6 @@ export function singlePageResults(GLOBALS: any, movieArray: Movie[]) {
 async function setModalInformation(GLOBALS: any, movie: Movie) {
     const { setMovie, setSeasonNumber, setSeasonName, setAddLibraryButtonColor, setModalShow } = GLOBALS.SETTERS;
 
-    setMovie(movie);
-    setModalShow(true);
-
     if (await checkIfItemExists(movie.uniqueID)) {
         const libraryMovie = getFromLibrary(movie.uniqueID);
         if (libraryMovie != null) {
@@ -58,12 +55,13 @@ async function setModalInformation(GLOBALS: any, movie: Movie) {
     await movie.requestMovieDetails();
     await movie.requestSeasonDetails(1);
 
-    setMovie(movie);
-
     if (movie.mediaType == "tv") {
         setSeasonNumber(1);
         setSeasonName(movie.seasons[1].name);
     }
+
+    setMovie(movie);
+    setModalShow(true);
 
     setAddLibraryButtonColor((await checkIfItemExists(movie.uniqueID)) ? green : red);
 }
