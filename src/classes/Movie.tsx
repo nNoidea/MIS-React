@@ -52,26 +52,9 @@ export class Movie {
 }
 
 export function copyMovie(movie: Movie) {
-    const {
-        title,
-        id,
-        poster,
-        mediaType,
-        description,
-        releaseDate,
-        genres,
-        ...rest
-    } = movie;
+    const { title, id, poster, mediaType, description, releaseDate, genres, ...rest } = movie;
 
-    const newMovie = new Movie(
-        title,
-        id,
-        poster,
-        mediaType,
-        description,
-        releaseDate,
-        genres
-    );
+    const newMovie = new Movie(title, id, poster, mediaType, description, releaseDate, genres);
 
     Object.assign(newMovie, rest);
 

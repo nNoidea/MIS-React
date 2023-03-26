@@ -1,11 +1,11 @@
 import { Movie } from "../classes/Movie";
 import { steamHover, steamHoverLeave } from "./steamHover";
 import { getSearchResults } from "../Databases/theMovieDatabase";
-import Button from 'react-bootstrap/Button';
+import Button from "react-bootstrap/Button";
 import { checkIfItemExists, getFromLibrary } from "./library";
 import { green, red } from "./colorPallete";
 
-export function singlePageResults(GLOBALS: any, movieArray: Movie[],) {
+export function singlePageResults(GLOBALS: any, movieArray: Movie[]) {
     let gridItems = <></>;
 
     for (let i = 0; i < movieArray.length; i++) {
@@ -22,14 +22,21 @@ export function singlePageResults(GLOBALS: any, movieArray: Movie[],) {
                     onClick={async () => {
                         await setModalInformation(GLOBALS, movie);
                     }}
-                ><img src={movie.poster} className="grid-item" /></div>
+                >
+                    <img src={movie.poster} className="grid-item" />
+                </div>
             );
         }
-        gridItems = <>{gridItems}{element}</>;
+        gridItems = (
+            <>
+                {gridItems}
+                {element}
+            </>
+        );
     }
 
-    return (gridItems);
-};
+    return gridItems;
+}
 
 async function setModalInformation(GLOBALS: any, movie: Movie) {
     const { setMovie, setSeasonNumber, setSeasonName, setAddLibraryButtonColor, setModalShow } = GLOBALS.SETTERS;
@@ -52,7 +59,7 @@ async function setModalInformation(GLOBALS: any, movie: Movie) {
         setSeasonName(movie.seasons[1].name);
     }
 
-    setAddLibraryButtonColor(await checkIfItemExists(movie.uniqueID) ? green : red);
+    setAddLibraryButtonColor((await checkIfItemExists(movie.uniqueID)) ? green : red);
 
     setModalShow(true);
 }
@@ -61,7 +68,12 @@ export async function createResultPage(GLOBALS: any, oldItems: any, searchQuery:
     const { setContent } = GLOBALS.SETTERS;
 
     let movieList = await getSearchResults(searchQuery, currentPage);
-    let gridItems = <>{await oldItems}{singlePageResults(GLOBALS, movieList.movieArr)}</>;
+    let gridItems = (
+        <>
+            {await oldItems}
+            {singlePageResults(GLOBALS, movieList.movieArr)}
+        </>
+    );
 
     async function nextResults() {
         currentPage++;
@@ -70,14 +82,13 @@ export async function createResultPage(GLOBALS: any, oldItems: any, searchQuery:
 
     let loadMoreButton = <></>;
     if (movieList.pages > currentPage) {
-        loadMoreButton =
-            <div
-                className="center">
-                <Button className="button loadMoreButton"
-                    onClick={async () => await nextResults()}>
+        loadMoreButton = (
+            <div className="center">
+                <Button className="button loadMoreButton" onClick={async () => await nextResults()}>
                     Load More Results
                 </Button>
-            </div>;
+            </div>
+        );
     }
 
     await setContent(
@@ -89,4 +100,3 @@ export async function createResultPage(GLOBALS: any, oldItems: any, searchQuery:
         </>
     );
 }
-

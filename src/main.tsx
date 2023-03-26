@@ -1,65 +1,65 @@
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom/client';
-import { NavigationBar } from './modules/NavigationBar';
-import { modal } from './modules/modal';
-import { red } from './modules/colorPallete';
-import './css/style.css';
-import 'bootstrap/dist/css/bootstrap.css';
-import './css/search.css';
+import React, { useState } from "react";
+import ReactDOM from "react-dom/client";
+import { NavigationBar } from "./modules/NavigationBar";
+import { modal } from "./modules/modal";
+import { red } from "./modules/colorPallete";
+import "./css/style.css";
+import "bootstrap/dist/css/bootstrap.css";
+import "./css/search.css";
 
 function App() {
-  // NavigationBar
-  const [homeButtonColor, setHomeButtonColor] = useState(red);
-  const [libraryButtonColor, setLibraryButtonColor] = useState('transparent');
+    // NavigationBar
+    const [homeButtonColor, setHomeButtonColor] = useState(red);
+    const [libraryButtonColor, setLibraryButtonColor] = useState("transparent");
 
-  // Content
-  const [content, setContent] = useState("HOMEPAGE");
+    // Content
+    const [content, setContent] = useState("HOMEPAGE");
 
-  // Movie
-  const [movie, setMovie] = useState(undefined); // Will contain all the movie details
+    // Movie
+    const [movie, setMovie] = useState(undefined); // Will contain all the movie details
 
-  // Modal
-  const [modalShow, setModalShow] = useState(false);
-  const [seasonNumber, setSeasonNumber] = useState(1); // Current season
-  const [seasonName, setSeasonName] = useState(""); // Current season
-  const [addLibraryButtonColor, setAddLibraryButtonColor] = useState(red); // Current season
+    // Modal
+    const [modalShow, setModalShow] = useState(false);
+    const [seasonNumber, setSeasonNumber] = useState(1); // Current season
+    const [seasonName, setSeasonName] = useState(""); // Current season
+    const [addLibraryButtonColor, setAddLibraryButtonColor] = useState(red); // Current season
 
-  let GLOBALS = {
-    GETTERS: {
-      homeButtonColor,
-      libraryButtonColor,
-      content,
-      movie,
-      modalShow,
-      seasonNumber,
-      seasonName,
-      addLibraryButtonColor
-    },
-    SETTERS: {
-      setHomeButtonColor,
-      setLibraryButtonColor,
-      setContent,
-      setMovie,
-      setModalShow,
-      setSeasonNumber,
-      setSeasonName,
-      setAddLibraryButtonColor
-    }
-  };
+    let GLOBALS = {
+        GETTERS: {
+            homeButtonColor,
+            libraryButtonColor,
+            content,
+            movie,
+            modalShow,
+            seasonNumber,
+            seasonName,
+            addLibraryButtonColor,
+        },
+        SETTERS: {
+            setHomeButtonColor,
+            setLibraryButtonColor,
+            setContent,
+            setMovie,
+            setModalShow,
+            setSeasonNumber,
+            setSeasonName,
+            setAddLibraryButtonColor,
+        },
+    };
 
-  // Return 
-  return (
-    <>
-      {NavigationBar(GLOBALS)}
-      {content}
-      {modal(GLOBALS)}
-      <div id='endFooter'></div>
-    </>
-  );
+    // Return
+    return (
+        <>
+            {NavigationBar(GLOBALS)}
+            {content}
+            {modal(GLOBALS)}
+            <div id="endFooter"></div>
+        </>
+    );
 }
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>
 );

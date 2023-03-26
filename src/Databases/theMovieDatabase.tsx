@@ -2,13 +2,13 @@ import { Movie, MovieList } from "../classes/Movie";
 
 async function cloudflare(array: any[]) {
     const options: RequestInit = {
-        method: 'GET',
-        redirect: 'follow'
+        method: "GET",
+        redirect: "follow",
     };
 
-    const json = btoa(JSON.stringify({ "array": array.slice(1) }));
+    const json = btoa(JSON.stringify({ array: array.slice(1) }));
 
-    return await (await fetch(`https://mis-get.zugo.workers.dev/?mode=${ array[0] }&jsonArray=${ json }`, options)).json();
+    return await (await fetch(`https://mis-get.zugo.workers.dev/?mode=${array[0]}&jsonArray=${json}`, options)).json();
 }
 
 // We generate these variables on the global scope, since this scope gets executed only once.
@@ -24,7 +24,7 @@ export async function getSearchResults(searchQuery: string, pageNumber: number) 
 
     async function getGenres(type: string) {
         let json = await cloudflare(["genre", type]);
-        return (json);
+        return json;
     }
 
     let json = await cloudflare(["search", searchQuery, pageNumber]);
@@ -32,7 +32,6 @@ export async function getSearchResults(searchQuery: string, pageNumber: number) 
     return normalize(json);
 
     async function normalize(json: any) {
-
         let pages = json.total_pages;
         let results = json.results;
         let movieArr: any[] = [];
@@ -47,8 +46,7 @@ export async function getSearchResults(searchQuery: string, pageNumber: number) 
             let poster = "";
             if (element.poster_path == null) {
                 poster = "NO-IMAGE";
-            }
-            else {
+            } else {
                 poster = "https://image.tmdb.org/t/p/w154" + element.poster_path;
             }
 
@@ -70,8 +68,7 @@ export async function getSearchResults(searchQuery: string, pageNumber: number) 
             let genreList: any;
             if (element.media_type == "movie") {
                 genreList = movieGenreList;
-            }
-            else {
+            } else {
                 genreList = tvGenreList;
             }
 
@@ -93,13 +90,11 @@ export async function getSearchResults(searchQuery: string, pageNumber: number) 
     }
 }
 
-
 export async function TMDBRequestExtraDetails(movie: Movie) {
     let json;
     if (movie.mediaType == "movie") {
         json = await cloudflare(["movieDetails", movie.id]);
-    }
-    else if (movie.mediaType == "tv") {
+    } else if (movie.mediaType == "tv") {
         json = await cloudflare(["tvDetails", movie.id]);
 
         if (json.seasons[0].season_number == 1) {

@@ -3,18 +3,18 @@ import { singlePageResults } from "./searchResults";
 
 // Initiate the database
 let db: any;
-const request = indexedDB.open('library', 1);
+const request = indexedDB.open("library", 1);
 request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
     db = (event.target as IDBOpenDBRequest).result;
 
     // Delete the already existing database if it exists and if it's required by me.
-    if (db.objectStoreNames.contains('movies') && false) {
-        db.deleteObjectStore('movies');
+    if (db.objectStoreNames.contains("movies") && false) {
+        db.deleteObjectStore("movies");
     }
 
     // Create a new 'movies' object if it doesn't exists.
-    if (!db.objectStoreNames.contains('movies')) {
-        db.createObjectStore('movies', { keyPath: 'uniqueID' });
+    if (!db.objectStoreNames.contains("movies")) {
+        db.createObjectStore("movies", { keyPath: "uniqueID" });
     }
 };
 
@@ -23,12 +23,12 @@ request.onsuccess = (event: Event) => {
 };
 
 request.onerror = () => {
-    console.error('Error opening database:', request.error);
+    console.error("Error opening database:", request.error);
 };
 
 // Setup the setter / getter object.
 function createObjectStore() {
-    return db.transaction(['movies'], 'readwrite').objectStore('movies');
+    return db.transaction(["movies"], "readwrite").objectStore("movies");
 }
 
 // Methods to do stuff.
@@ -99,5 +99,4 @@ export function loadLibrary(GLOBALS: any) {
             </>
         );
     };
-
 }
