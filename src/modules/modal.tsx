@@ -183,14 +183,18 @@ function episodesSection(
 
         for (let i = 0; i < episodeCount; i++) {
             const episodeDate = movie.seasons[seasonNumber].episodes[i].air_date;
-
             const currentDateSum = date.getDate() + (date.getMonth() + 1) * 31 + date.getFullYear() * 365;
+            let episodesDateSplittedSum: number;
 
-            const episodesDateSplitted = episodeDate.split("-").map((element: string) => {
-                return Number(element);
-            });
+            if (episodeDate != null) {
+                const episodesDateSplitted = episodeDate.split("-").map((element: string) => {
+                    return Number(element);
+                });
 
-            const episodesDateSplittedSum = episodesDateSplitted[2] + episodesDateSplitted[1] * 31 + episodesDateSplitted[0] * 365;
+                episodesDateSplittedSum = episodesDateSplitted[2] + episodesDateSplitted[1] * 31 + episodesDateSplitted[0] * 365;
+            } else {
+                episodesDateSplittedSum = currentDateSum - 1;
+            }
 
             episodes = (
                 <>
