@@ -56,6 +56,7 @@ async function setModalInformation(GLOBALS: any, movie: Movie) {
     await movie.requestSeasonDetails(1);
 
     setMovie(movie);
+    setModalShow(true);
 
     if (movie.mediaType == "tv") {
         setSeasonNumber(1);
@@ -63,8 +64,6 @@ async function setModalInformation(GLOBALS: any, movie: Movie) {
     }
 
     setAddLibraryButtonColor((await checkIfItemExists(movie.uniqueID)) ? green : red);
-
-    setModalShow(true);
 }
 
 export async function createResultPage(GLOBALS: any, oldItems: any, searchQuery: string, currentPage: number) {
