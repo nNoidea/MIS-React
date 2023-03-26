@@ -57,23 +57,22 @@ export function NavigationBar(GLOBALS: any) {
       <input
         type="text"
         placeholder="🔍Search"
-        onKeyDown={(e) => onEnter(e)}
+        onKeyDown={
+          async (e) => {
+            if (e.key === "Enter") {
+              setLibraryButtonColor("transparent");
+              setHomeButtonColor("transparent");
+
+              let searchQuery = e.currentTarget.value;
+              let gridItems = <></>;
+              let currentPage = 1;
+
+              // Generate html elements based on the movielist.
+              await createResultPage(GLOBALS, gridItems, searchQuery, currentPage);
+            }
+          }}
       />
     );
-  }
-
-  async function onEnter(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Enter") {
-      setLibraryButtonColor("transparent");
-      setHomeButtonColor("transparent");
-
-      let searchQuery = e.currentTarget.value;
-      let gridItems = <></>;
-      let currentPage = 1;
-
-      // Generate html elements based on the movielist.
-      await createResultPage(GLOBALS, gridItems, searchQuery, currentPage);
-    }
   }
 
   return (

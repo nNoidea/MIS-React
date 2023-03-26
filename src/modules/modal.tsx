@@ -3,6 +3,8 @@ import { copyMovie, Movie } from "../classes/Movie";
 import { green, orange, purpble, red } from "./colorPallete";
 import { addToLibrary, loadLibrary, removeFromLibrary } from "./library";
 
+const date = new Date();
+
 export function modal(GLOBALS: any) {
     const { movie, seasonNumber, seasonName, modalShow, addLibraryButtonColor, libraryButtonColor } = GLOBALS.GETTERS;
     const { setSeasonNumber, setMovie, setSeasonName, setModalShow, setAddLibraryButtonColor } = GLOBALS.SETTERS;
@@ -17,8 +19,11 @@ export function modal(GLOBALS: any) {
             size="xl"
             aria-labelledby="contained-modal-title-vcenter"
             centered
-            onHide={() => { setModalShow(false); }}
-            id="modal">
+            onHide={() => {
+                setModalShow(false);
+            }}
+            id="modal"
+        >
             <Modal.Body>
                 <div className="container">
                     <div className="row">
@@ -34,7 +39,9 @@ export function modal(GLOBALS: any) {
                             </div>
                             <div>
                                 <>
-                                    <Button className='button' style={{ backgroundColor: addLibraryButtonColor }}
+                                    <Button
+                                        className="button"
+                                        style={{ backgroundColor: addLibraryButtonColor }}
                                         onClick={() => {
                                             if (addLibraryButtonColor == red) {
                                                 addToLibrary(movie);
@@ -47,23 +54,28 @@ export function modal(GLOBALS: any) {
                                             if (libraryButtonColor != "transparent") {
                                                 loadLibrary(GLOBALS);
                                             }
-                                        }}>
+                                        }}
+                                    >
                                         📁Library
                                     </Button>
-                                    <Button className='button' onClick={() => { window.open(youtubeSearchLinkGenerator(movie.title), '_blank'); }}>
-                                        <img src="https://raw.githubusercontent.com/nNoidea/MIS-React/main/images/youtube.png" height={16} />YouTube
+                                    <Button
+                                        className="button"
+                                        onClick={() => {
+                                            window.open(youtubeSearchLinkGenerator(movie.title), "_blank");
+                                        }}
+                                    >
+                                        <img src="https://raw.githubusercontent.com/nNoidea/MIS-React/main/images/youtube.png" height={16} />
+                                        YouTube
                                     </Button>
                                     {(() => {
                                         if (movie.mediaType == "movie") {
-                                            return <Button className='button'>👀Watched</Button>;
+                                            return <Button className="button">👀Watched</Button>;
                                         }
                                     })()}
                                 </>
                             </div>
                         </div>
-                        <>
-                            {episodesSection(GLOBALS, movie, setMovie, seasonNumber, setSeasonNumber, seasonName, setSeasonName, setAddLibraryButtonColor, libraryButtonColor)}
-                        </>
+                        <>{episodesSection(GLOBALS, movie, setMovie, seasonNumber, setSeasonNumber, seasonName, setSeasonName, setAddLibraryButtonColor, libraryButtonColor)}</>
                     </div>
                 </div>
             </Modal.Body>
@@ -75,10 +87,9 @@ export function modal(GLOBALS: any) {
             return (
                 <>
                     <hr className="hr" />
-                    <p className="description">
-                        {modalDescription}
-                    </p>
-                </>);
+                    <p className="description">{modalDescription}</p>
+                </>
+            );
         }
     }
 }
@@ -88,22 +99,30 @@ function getBetterPoster(poster: string) {
 }
 
 function youtubeSearchLinkGenerator(string: string) {
-    return `https://www.youtube.com/results?search_query=${ string.replaceAll(" ", "+") }`;
+    return `https://www.youtube.com/results?search_query=${string.replaceAll(" ", "+")}`;
 }
 
-function episodesSection(GLOBALS: any, movie: Movie, setMovie: any, seasonNumber: number, setSeasonNumber: any, seasonName: string, setSeasonName: any, setAddLibraryButtonColor: any, libraryButtonColor: any) {
+function episodesSection(
+    GLOBALS: any,
+    movie: Movie,
+    setMovie: any,
+    seasonNumber: number,
+    setSeasonNumber: any,
+    seasonName: string,
+    setSeasonName: any,
+    setAddLibraryButtonColor: any,
+    libraryButtonColor: any
+) {
     const { mediaType, seasons } = movie;
 
     if (mediaType == "tv") {
         return (
             <div className="col">
-                <div className="text-center" id='movie-content'>
+                <div className="text-center" id="movie-content">
                     {seasonButtonSection(seasons)}
                 </div>
                 <div id="episodes" className="episodes">
-                    <ul className="list-group">
-                        {seasonEpisodesSection(seasons[seasonNumber])}
-                    </ul>
+                    <ul className="list-group">{seasonEpisodesSection(seasons[seasonNumber])}</ul>
                 </div>
             </div>
         );
@@ -116,21 +135,32 @@ function episodesSection(GLOBALS: any, movie: Movie, setMovie: any, seasonNumber
 
             if (i == seasons.length && seasons[0] == null) {
                 break;
-            }
-            else if (i == seasons.length && seasons[0] != null) {
+            } else if (i == seasons.length && seasons[0] != null) {
                 index = 0;
             }
 
-            buttons = <>{buttons}<Button onClick={
-                async () => {
-                    await movie.requestSeasonDetails(index);
-                    setSeasonNumber(index);
-                    setMovie(movie);
-                    setSeasonName(seasons[index].name);
-                }
-            }>{index}</Button></>;
+            buttons = (
+                <>
+                    {buttons}
+                    <Button
+                        onClick={async () => {
+                            await movie.requestSeasonDetails(index);
+                            setSeasonNumber(index);
+                            setMovie(movie);
+                            setSeasonName(seasons[index].name);
+                        }}
+                    >
+                        {index}
+                    </Button>
+                </>
+            );
         }
-        buttons = <>{buttons}<div>{seasonName}</div></>;
+        buttons = (
+            <>
+                {buttons}
+                <div>{seasonName}</div>
+            </>
+        );
         return buttons;
     }
 
@@ -139,89 +169,123 @@ function episodesSection(GLOBALS: any, movie: Movie, setMovie: any, seasonNumber
         let episodes = <></>;
 
         for (let i = 0; i < episodeCount; i++) {
-            episodes = <>
-                {episodes}
-                <ListGroup.Item id="single-episode" style={{
-                    backgroundColor: (() => {
+            const episodeDate = movie.seasons[seasonNumber].episodes[i].air_date;
 
+            const currentDateSum = date.getDate() + (date.getMonth() + 1) * 31 + date.getFullYear() * 365;
 
-                        if (movie.seasons[seasonNumber].episodes[i]["watched"]) {
-                            return green;
-                        } else {
-                            return red;
-                        }
-                    })()
-                }}
-                    onClick={() => {
-                        const newMovie = copyMovie(movie);
+            const episodesDateSplitted = episodeDate.split("-").map((element: string) => {
+                return Number(element);
+            });
 
-                        if (newMovie.seasons[seasonNumber].episodes[i]["watched"] == true) {
-                            newMovie.seasons[seasonNumber].episodes[i]["watched"] = false;
-                        }
-                        else {
-                            newMovie.seasons[seasonNumber].episodes[i]["watched"] = true;
-                            setAddLibraryButtonColor(green);
-                            addToLibrary(newMovie);
+            const episodesDateSplittedSum = episodesDateSplitted[2] + episodesDateSplitted[1] * 31 + episodesDateSplitted[0] * 365;
 
-                            if (libraryButtonColor != "transparent") {
-                                loadLibrary(GLOBALS);
+            episodes = (
+                <>
+                    {episodes}
+                    <ListGroup.Item
+                        id="single-episode"
+                        style={{
+                            backgroundColor: (() => {
+                                if (episodesDateSplittedSum > currentDateSum) {
+                                    return "gray";
+                                }
+
+                                if (movie.seasons[seasonNumber].episodes[i]["watched"]) {
+                                    return green;
+                                } else {
+                                    return red;
+                                }
+                            })(),
+                            cursor: (() => {
+                                if (episodesDateSplittedSum > currentDateSum) {
+                                    return "not-allowed";
+                                } else {
+                                    return "pointer";
+                                }
+                            })(),
+                        }}
+                        onClick={() => {
+                            const newMovie = copyMovie(movie);
+
+                            if (newMovie.seasons[seasonNumber].episodes[i]["watched"] == true) {
+                                newMovie.seasons[seasonNumber].episodes[i]["watched"] = false;
+                            } else {
+                                newMovie.seasons[seasonNumber].episodes[i]["watched"] = true;
+                                setAddLibraryButtonColor(green);
+                                addToLibrary(newMovie);
+
+                                if (libraryButtonColor != "transparent") {
+                                    loadLibrary(GLOBALS);
+                                }
                             }
-                        }
-                        setMovie(newMovie);
-                    }}>
-                    <span>
-                        <strong>{i + 1}. </strong>
-                        {movie.seasons[seasonNumber].episodes[i].name}{epsiodeRuntime(setupRuntime(movie.seasons[seasonNumber].episodes[i].runtime, mediaType, true))}
-                        {episodeReleaseDate(movie.seasons[seasonNumber].episodes[i].air_date)}
-                    </span>
-                </ListGroup.Item>
-            </>;
+                            setMovie(newMovie);
+                        }}
+                    >
+                        <span>
+                            <strong>{i + 1}. </strong>
+                            {movie.seasons[seasonNumber].episodes[i].name}
+                            {epsiodeRuntime(setupRuntime(movie.seasons[seasonNumber].episodes[i].runtime, mediaType, true))}
+                            {episodeReleaseDate(episodeDate)}
+                        </span>
+                    </ListGroup.Item>
+                </>
+            );
         }
 
         return episodes;
 
         function epsiodeRuntime(runtime: any) {
             if (runtime != null) {
-                return <><br />{runtime}</>;
+                return (
+                    <>
+                        <br />
+                        {runtime}
+                    </>
+                );
             }
         }
 
         function episodeReleaseDate(releaseDate: string) {
             if (releaseDate != null) {
-                return <><br />📅{releaseDate}</>;
+                return (
+                    <>
+                        <br />
+                        📅{releaseDate}
+                    </>
+                );
             }
         }
     }
 }
 
 function scoresSection(TMDBScore: number) {
-    let backgroundColor = green;
-
     if (TMDBScore != 0) {
         TMDBScore = Math.round(TMDBScore * 10) / 10;
-        let score = <Badge bg="" style={{ backgroundColor: determineScoreColor(TMDBScore) }} className="content-score" >🇹 {TMDBScore} / 10</Badge >;
+        let score = (
+            <Badge bg="" style={{ backgroundColor: determineScoreColor(TMDBScore) }} className="content-score">
+                🇹 {TMDBScore} / 10
+            </Badge>
+        );
 
-        return (<>
-            <hr className="hr" />
-            <div>
-                <h3>
-                    {score}
-                </h3>
-            </div>
-        </>);
+        return (
+            <>
+                <hr className="hr" />
+                <div>
+                    <h3>{score}</h3>
+                </div>
+            </>
+        );
     }
 
     function determineScoreColor(score: number) {
+        let backgroundColor;
         if (score >= 8) {
             backgroundColor = purpble;
-        }
-        else if (score >= 7) {
+        } else if (score >= 7) {
             backgroundColor = green;
-        }
-        else if (score >= 5) {
+        } else if (score >= 5) {
             backgroundColor = orange;
-        }
-        else {
+        } else {
             backgroundColor = red;
         }
 
@@ -242,13 +306,17 @@ function movieDetailsSection(releaseDate: string, genres: string[], mediaType: s
         return (
             <>
                 <hr className="hr" />
-                <p id="date"> {movie_releaseDate} {movie_genres} {movie_runtime}</p>
-            </>);
+                <p id="date">
+                    {" "}
+                    {movie_releaseDate} {movie_genres} {movie_runtime}
+                </p>
+            </>
+        );
     }
 
     function releaseDateSection(releaseDate: string) {
         if (releaseDate != "") {
-            return `📅${ releaseDate?.split('-')[0] }`;
+            return `📅${releaseDate?.split("-")[0]}`;
         }
     }
 
@@ -257,18 +325,10 @@ function movieDetailsSection(releaseDate: string, genres: string[], mediaType: s
             return;
         }
 
-        let string = "";
-        for (let i = 0; i < genres.length; i++) {
-            if (i == genres.length - 1) {
-                string += genres[i];
-            }
-            else {
-                string += genres[i] + ", ";
-            }
-        }
+        let string = genres.join(", ");
 
         if (string != "") {
-            return `🧩 ${ string }`;
+            return `🧩 ${string}`;
         }
     }
 }
@@ -277,16 +337,13 @@ function setupRuntime(runtime: number[] | null, mediaType: string, episodeBoolea
     if (mediaType == "movie" || episodeBoolean) {
         if (runtime != null) {
             if (runtime[0] != 0 && runtime[1] != 0) {
-                return `⏳${ runtime[0] }h ${ runtime[1] }m`;
+                return `⏳${runtime[0]}h ${runtime[1]}m`;
+            } else if (runtime[0] != 0) {
+                return `⏳${runtime[0]}h`;
+            } else if (runtime[1] != 0) {
+                return `⏳${runtime[1]}m`;
             }
-            else if (runtime[0] != 0) {
-                return `⏳${ runtime[0] }h`;
-            }
-            else if (runtime[1] != 0) {
-                return `⏳${ runtime[1] }m`;
-            }
-        }
-        else {
+        } else {
             return null;
         }
     }

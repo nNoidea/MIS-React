@@ -13,8 +13,12 @@ export function singlePageResults(GLOBALS: any, movieArray: Movie[],) {
         let element = <></>;
         if (movie.poster != "NO-IMAGE") {
             element = (
-                <div data-bs-toggle="modal" data-bs-target="#movieModal" className="steamHover"
-                    onMouseMove={steamHover} onMouseOut={steamHoverLeave}
+                <div
+                    data-bs-toggle="modal"
+                    data-bs-target="#movieModal"
+                    className="steamHover"
+                    onMouseMove={steamHover}
+                    onMouseOut={steamHoverLeave}
                     onClick={async () => {
                         await setModalInformation(GLOBALS, movie);
                     }}
@@ -48,11 +52,7 @@ async function setModalInformation(GLOBALS: any, movie: Movie) {
         setSeasonName(movie.seasons[1].name);
     }
 
-    if (await checkIfItemExists(movie.uniqueID) == false) {
-        setAddLibraryButtonColor(red);
-    } else {
-        setAddLibraryButtonColor(green);
-    }
+    setAddLibraryButtonColor(await checkIfItemExists(movie.uniqueID) ? green : red);
 
     setModalShow(true);
 }
@@ -70,7 +70,14 @@ export async function createResultPage(GLOBALS: any, oldItems: any, searchQuery:
 
     let loadMoreButton = <></>;
     if (movieList.pages > currentPage) {
-        loadMoreButton = <div className="center"><Button className="button loadMoreButton" onClick={async () => await nextResults()} >Load More Results</Button></div>;
+        loadMoreButton =
+            <div
+                className="center">
+                <Button className="button loadMoreButton"
+                    onClick={async () => await nextResults()}>
+                    Load More Results
+                </Button>
+            </div>;
     }
 
     await setContent(
