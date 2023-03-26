@@ -112,10 +112,12 @@
 }
 
 #single-episode {
+    cursor: pointer;
     /* background-color: #4e4376; */
     color: white;
 
     border-width: 2px;
+    margin-top: -1px;
     border-style: solid;
     border-color: #000000;
 }

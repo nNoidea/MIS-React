@@ -3,6 +3,7 @@ import { steamHover, steamHoverLeave } from "./steamHover";
 import { getSearchResults } from "../Databases/theMovieDatabase";
 import Button from 'react-bootstrap/Button';
 import { checkIfItemExists, getFromLibrary } from "./library";
+import { green, red } from "./colorPallete";
 
 export function singlePageResults(GLOBALS: any, movieArray: Movie[],) {
     let gridItems = <></>;
@@ -48,9 +49,9 @@ async function setModalInformation(GLOBALS: any, movie: Movie) {
     }
 
     if (await checkIfItemExists(movie.uniqueID) == false) {
-        setAddLibraryButtonColor("crimson");
+        setAddLibraryButtonColor(red);
     } else {
-        setAddLibraryButtonColor("#54B435");
+        setAddLibraryButtonColor(green);
     }
 
     setModalShow(true);

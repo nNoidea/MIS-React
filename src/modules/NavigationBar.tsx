@@ -1,6 +1,7 @@
 import { createResultPage } from './searchResults';
 import Button from 'react-bootstrap/Button';
 import { loadLibrary } from './library';
+import { red } from './colorPallete';
 
 export function NavigationBar(GLOBALS: any) {
   const { homeButtonColor, libraryButtonColor } = GLOBALS.GETTERS;
@@ -9,7 +10,7 @@ export function NavigationBar(GLOBALS: any) {
   // Home Button
   function HomeButton() {
     function handleHomeClick() {
-      setHomeButtonColor('#dc3545');
+      setHomeButtonColor(red);
       setLibraryButtonColor('transparent');
     }
 
@@ -32,7 +33,7 @@ export function NavigationBar(GLOBALS: any) {
   function LibraryButton() {
     function handleLibraryClick() {
       setHomeButtonColor('transparent');
-      setLibraryButtonColor('#dc3545');
+      setLibraryButtonColor(red);
     }
 
     return (

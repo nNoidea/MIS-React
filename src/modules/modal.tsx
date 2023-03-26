@@ -1,9 +1,9 @@
 import { Badge, Button, ListGroup, Modal } from "react-bootstrap";
 import { copyMovie, Movie } from "../classes/Movie";
-import { addToLibrary, checkIfItemExists, loadLibrary, removeFromLibrary } from "./library";
+import { green, orange, purpble, red } from "./colorPallete";
+import { addToLibrary, loadLibrary, removeFromLibrary } from "./library";
 
 export function modal(GLOBALS: any) {
-
     const { movie, seasonNumber, seasonName, modalShow, addLibraryButtonColor, libraryButtonColor } = GLOBALS.GETTERS;
     const { setSeasonNumber, setMovie, setSeasonName, setModalShow, setAddLibraryButtonColor } = GLOBALS.SETTERS;
 
@@ -36,12 +36,12 @@ export function modal(GLOBALS: any) {
                                 <>
                                     <Button className='button' style={{ backgroundColor: addLibraryButtonColor }}
                                         onClick={() => {
-                                            if (addLibraryButtonColor == "crimson") {
+                                            if (addLibraryButtonColor == red) {
                                                 addToLibrary(movie);
-                                                setAddLibraryButtonColor("#54B435");
+                                                setAddLibraryButtonColor(green);
                                             } else {
                                                 removeFromLibrary(movie.uniqueID);
-                                                setAddLibraryButtonColor("crimson");
+                                                setAddLibraryButtonColor(red);
                                             }
 
                                             if (libraryButtonColor != "transparent") {
@@ -69,6 +69,18 @@ export function modal(GLOBALS: any) {
             </Modal.Body>
         </Modal>
     );
+
+    function descriptionSection(modalDescription: string) {
+        if (modalDescription != "") {
+            return (
+                <>
+                    <hr className="hr" />
+                    <p className="description">
+                        {modalDescription}
+                    </p>
+                </>);
+        }
+    }
 }
 
 function getBetterPoster(poster: string) {
@@ -129,7 +141,17 @@ function episodesSection(GLOBALS: any, movie: Movie, setMovie: any, seasonNumber
         for (let i = 0; i < episodeCount; i++) {
             episodes = <>
                 {episodes}
-                <ListGroup.Item style={{ backgroundColor: movie.seasons[seasonNumber].episodes[i]["watched"] ? '#54B435' : 'crimson' }} id="single-episode"
+                <ListGroup.Item id="single-episode" style={{
+                    backgroundColor: (() => {
+
+
+                        if (movie.seasons[seasonNumber].episodes[i]["watched"]) {
+                            return green;
+                        } else {
+                            return red;
+                        }
+                    })()
+                }}
                     onClick={() => {
                         const newMovie = copyMovie(movie);
 
@@ -138,7 +160,7 @@ function episodesSection(GLOBALS: any, movie: Movie, setMovie: any, seasonNumber
                         }
                         else {
                             newMovie.seasons[seasonNumber].episodes[i]["watched"] = true;
-                            setAddLibraryButtonColor("#54B435");
+                            setAddLibraryButtonColor(green);
                             addToLibrary(newMovie);
 
                             if (libraryButtonColor != "transparent") {
@@ -173,7 +195,7 @@ function episodesSection(GLOBALS: any, movie: Movie, setMovie: any, seasonNumber
 }
 
 function scoresSection(TMDBScore: number) {
-    let backgroundColor = "#54B435";
+    let backgroundColor = green;
 
     if (TMDBScore != 0) {
         TMDBScore = Math.round(TMDBScore * 10) / 10;
@@ -191,16 +213,16 @@ function scoresSection(TMDBScore: number) {
 
     function determineScoreColor(score: number) {
         if (score >= 8) {
-            backgroundColor = "#BF40BF";
+            backgroundColor = purpble;
         }
         else if (score >= 7) {
-            backgroundColor = "#54B435";
+            backgroundColor = green;
         }
         else if (score >= 5) {
-            backgroundColor = "orange";
+            backgroundColor = orange;
         }
         else {
-            backgroundColor = "crimson";
+            backgroundColor = red;
         }
 
         return backgroundColor;
@@ -267,17 +289,5 @@ function setupRuntime(runtime: number[] | null, mediaType: string, episodeBoolea
         else {
             return null;
         }
-    }
-}
-
-function descriptionSection(modalDescription: string) {
-    if (modalDescription != "") {
-        return (
-            <>
-                <hr className="hr" />
-                <p className="description">
-                    {modalDescription}
-                </p>
-            </>);
     }
 }
