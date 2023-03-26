@@ -1,4 +1,4 @@
-import { Movie } from "../classes/Movie";
+import { copyMovie, Movie } from "../classes/Movie";
 import { singlePageResults } from "./searchResults";
 
 // Initiate the database
@@ -34,7 +34,7 @@ function createObjectStore() {
 // Methods to do stuff.
 export function addToLibrary(movie: Movie) {
     const objectStore = createObjectStore();
-    objectStore.add(movie);
+    objectStore.put(movie);
 }
 
 export function removeFromLibrary(uniqueID: string) {
@@ -63,24 +63,32 @@ export async function checkIfItemExists(uniqueID: string) {
     });
 }
 
+export function getFromLibrary(uniqueID: string): Promise<Movie> {
+    const objectStore = createObjectStore();
+
+    return new Promise<Movie>((resolve, reject) => {
+        const request = objectStore.get(uniqueID);
+        request.onsuccess = (event: Event) => {
+            const result: Movie = copyMovie((event.target as IDBRequest).result);
+
+            resolve(result);
+        };
+
+        request.onerror = () => {
+            reject(request.error);
+        };
+    });
+}
+
 export function loadLibrary(GLOBALS: any) {
     const { setContent } = GLOBALS.SETTERS;
-
     const objectStore = createObjectStore();
 
     objectStore.getAll().onsuccess = async (event: any) => {
         let movieArrayDB = event.target.result;
         let movieArray: Movie[] = [];
         for (let i = 0; i < movieArrayDB.length; i++) {
-            movieArray.push(new Movie(
-                movieArrayDB[i].title,
-                movieArrayDB[i].id,
-                movieArrayDB[i].poster,
-                movieArrayDB[i].mediaType,
-                movieArrayDB[i].description,
-                movieArrayDB[i].releaseDate,
-                movieArrayDB[i].genres
-            ));
+            movieArray.push(copyMovie(movieArrayDB[i]));
         }
 
         await setContent(

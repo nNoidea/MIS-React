@@ -112,12 +112,12 @@
 }
 
 #single-episode {
-    background-color: #4e4376;
+    /* background-color: #4e4376; */
     color: white;
 
     border-width: 2px;
     border-style: solid;
-    border-color: #352e50;
+    border-color: #000000;
 }
 
 #genre {

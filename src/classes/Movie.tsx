@@ -24,9 +24,7 @@ export class Movie {
     movieDetailsExist: boolean = false;
     runtime: number[] | null = null;
     TMDBScore: number = 0;
-    
-    // set seasonDetails
-    seasonDetailsExist: boolean = false;
+
     seasons: any[] = [];
 
     constructor(name: string, id: number, poster: string, mediaType: string, description: string, releaseDate: string, genres: string[]) {
@@ -47,10 +45,37 @@ export class Movie {
     }
 
     async requestSeasonDetails(seasonNumber: number) {
-        if (this.seasonDetailsExist == false) {
+        if (this.mediaType == "tv" && this.seasons[seasonNumber].episodes == undefined) {
             await TMDBRequestSeasonDetails(this, seasonNumber);
         }
     }
+}
+
+export function copyMovie(movie: Movie) {
+    const {
+        title,
+        id,
+        poster,
+        mediaType,
+        description,
+        releaseDate,
+        genres,
+        ...rest
+    } = movie;
+
+    const newMovie = new Movie(
+        title,
+        id,
+        poster,
+        mediaType,
+        description,
+        releaseDate,
+        genres
+    );
+
+    Object.assign(newMovie, rest);
+
+    return newMovie;
 }
 
 function generateUniqueID(movieID: number, mediaType: string) {

@@ -128,7 +128,6 @@ export async function TMDBRequestSeasonDetails(movie: Movie, seasonNumber: numbe
             movie.seasons[seasonNumber].episodes[i].runtime = convertRuntime(movie.seasons[seasonNumber].episodes[i].runtime);
         }
     }
-    movie.seasonDetailsExist = true;
 }
 
 function convertRuntime(minutes: number) {

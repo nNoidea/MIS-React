@@ -2,7 +2,7 @@ import { Movie } from "../classes/Movie";
 import { steamHover, steamHoverLeave } from "./steamHover";
 import { getSearchResults } from "../Databases/theMovieDatabase";
 import Button from 'react-bootstrap/Button';
-import { checkIfItemExists } from "./library";
+import { checkIfItemExists, getFromLibrary } from "./library";
 
 export function singlePageResults(GLOBALS: any, movieArray: Movie[],) {
     let gridItems = <></>;
@@ -28,6 +28,13 @@ export function singlePageResults(GLOBALS: any, movieArray: Movie[],) {
 
 async function setModalInformation(GLOBALS: any, movie: Movie) {
     const { setMovie, setSeasonNumber, setSeasonName, setAddLibraryButtonColor, setModalShow } = GLOBALS.SETTERS;
+
+    if (await checkIfItemExists(movie.uniqueID)) {
+        const libraryMovie = getFromLibrary(movie.uniqueID);
+        if (libraryMovie != null) {
+            movie = await libraryMovie;
+        }
+    }
 
     // Request the extra detail about the movie
     await movie.requestMovieDetails();

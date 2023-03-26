@@ -1,6 +1,6 @@
 import { Badge, Button, ListGroup, Modal } from "react-bootstrap";
-import { Movie } from "../classes/Movie";
-import { addToLibrary, loadLibrary, removeFromLibrary } from "./library";
+import { copyMovie, Movie } from "../classes/Movie";
+import { addToLibrary, checkIfItemExists, loadLibrary, removeFromLibrary } from "./library";
 
 export function modal(GLOBALS: any) {
 
@@ -10,7 +10,6 @@ export function modal(GLOBALS: any) {
     if (movie == undefined) {
         return <></>;
     }
-
 
     return (
         <Modal
@@ -63,7 +62,7 @@ export function modal(GLOBALS: any) {
                             </div>
                         </div>
                         <>
-                            {episodesSection(movie, setMovie, movie.mediaType, movie.seasons, seasonNumber, setSeasonNumber, seasonName, setSeasonName)}
+                            {episodesSection(GLOBALS, movie, setMovie, seasonNumber, setSeasonNumber, seasonName, setSeasonName, setAddLibraryButtonColor, libraryButtonColor)}
                         </>
                     </div>
                 </div>
@@ -80,7 +79,9 @@ function youtubeSearchLinkGenerator(string: string) {
     return `https://www.youtube.com/results?search_query=${ string.replaceAll(" ", "+") }`;
 }
 
-function episodesSection(movie: Movie, setMovie: any, mediaType: string, seasons: any[], seasonNumber: number, setSeasonNumber: any, seasonName: string, setSeasonName: any) {
+function episodesSection(GLOBALS: any, movie: Movie, setMovie: any, seasonNumber: number, setSeasonNumber: any, seasonName: string, setSeasonName: any, setAddLibraryButtonColor: any, libraryButtonColor: any) {
+    const { mediaType, seasons } = movie;
+
     if (mediaType == "tv") {
         return (
             <div className="col">
@@ -128,7 +129,24 @@ function episodesSection(movie: Movie, setMovie: any, mediaType: string, seasons
         for (let i = 0; i < episodeCount; i++) {
             episodes = <>
                 {episodes}
-                <ListGroup.Item id="single-episode" onClick={() => {  }}>
+                <ListGroup.Item style={{ backgroundColor: movie.seasons[seasonNumber].episodes[i]["watched"] ? '#54B435' : 'crimson' }} id="single-episode"
+                    onClick={() => {
+                        const newMovie = copyMovie(movie);
+
+                        if (newMovie.seasons[seasonNumber].episodes[i]["watched"] == true) {
+                            newMovie.seasons[seasonNumber].episodes[i]["watched"] = false;
+                        }
+                        else {
+                            newMovie.seasons[seasonNumber].episodes[i]["watched"] = true;
+                            setAddLibraryButtonColor("#54B435");
+                            addToLibrary(newMovie);
+
+                            if (libraryButtonColor != "transparent") {
+                                loadLibrary(GLOBALS);
+                            }
+                        }
+                        setMovie(newMovie);
+                    }}>
                     <span>
                         <strong>{i + 1}. </strong>
                         {movie.seasons[seasonNumber].episodes[i].name}{epsiodeRuntime(setupRuntime(movie.seasons[seasonNumber].episodes[i].runtime, mediaType, true))}
