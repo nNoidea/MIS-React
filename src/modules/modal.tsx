@@ -218,20 +218,22 @@ function episodesSection(
                             })(),
                         }}
                         onClick={() => {
-                            const newMovie = copyMovie(movie);
+                            if (episodesDateSplittedSum <= currentDateSum) {
+                                const newMovie = copyMovie(movie);
 
-                            if (newMovie.seasons[seasonNumber].episodes[i]["watched"] == true) {
-                                newMovie.seasons[seasonNumber].episodes[i]["watched"] = false;
-                            } else {
-                                newMovie.seasons[seasonNumber].episodes[i]["watched"] = true;
-                                setAddLibraryButtonColor(green);
-                                addToLibrary(newMovie);
+                                if (newMovie.seasons[seasonNumber].episodes[i]["watched"] == true) {
+                                    newMovie.seasons[seasonNumber].episodes[i]["watched"] = false;
+                                } else {
+                                    newMovie.seasons[seasonNumber].episodes[i]["watched"] = true;
+                                    setAddLibraryButtonColor(green);
+                                    addToLibrary(newMovie);
 
-                                if (libraryButtonColor != "transparent") {
-                                    loadLibrary(GLOBALS);
+                                    if (libraryButtonColor != "transparent") {
+                                        loadLibrary(GLOBALS);
+                                    }
                                 }
+                                setMovie(newMovie);
                             }
-                            setMovie(newMovie);
                         }}
                     >
                         <span>
