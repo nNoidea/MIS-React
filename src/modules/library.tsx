@@ -3,12 +3,12 @@ import { singlePageResults } from "./searchResults";
 
 // Initiate the database
 let db: any;
-const request = indexedDB.open("library", 1);
+const request = indexedDB.open("library", 2);
 request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
     db = (event.target as IDBOpenDBRequest).result;
 
     // Delete the already existing database if it exists and if it's required by me.
-    if (db.objectStoreNames.contains("movies") && false) {
+    if (db.objectStoreNames.contains("movies") && true) {
         db.deleteObjectStore("movies");
     }
 
