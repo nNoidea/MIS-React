@@ -1,7 +1,8 @@
 import { Badge, Button, ListGroup, Modal } from "react-bootstrap";
 import { copyMovie, Movie } from "../classes/Movie";
 import { green, orange, purpble, red } from "./colorPallete";
-import { addToLibrary, loadLibrary, removeFromLibrary } from "./library";
+import { libraryAdd, libraryRemove } from "./indexedDB";
+import { setupLibraryPage } from "./library";
 
 const date = new Date();
 
@@ -48,15 +49,15 @@ export function modal(GLOBALS: any) {
                                         style={{ backgroundColor: addLibraryButtonColor }}
                                         onClick={() => {
                                             if (addLibraryButtonColor == red) {
-                                                addToLibrary(movie);
+                                                libraryAdd(movie);
                                                 setAddLibraryButtonColor(green);
                                             } else {
-                                                removeFromLibrary(movie.uniqueID);
+                                                libraryRemove(movie.uniqueID);
                                                 setAddLibraryButtonColor(red);
                                             }
 
                                             if (libraryButtonColor != "transparent") {
-                                                loadLibrary(GLOBALS);
+                                                setupLibraryPage(GLOBALS);
                                             }
                                         }}
                                     >
@@ -230,10 +231,10 @@ function episodesSection(
                                 } else {
                                     newMovie.seasons[seasonNumber].episodes[i]["watched"] = true;
                                     setAddLibraryButtonColor(green);
-                                    addToLibrary(newMovie);
+                                    libraryAdd(newMovie);
 
                                     if (libraryButtonColor != "transparent") {
-                                        loadLibrary(GLOBALS);
+                                        setupLibraryPage(GLOBALS);
                                     }
                                 }
                                 setMovie(newMovie);
@@ -314,10 +315,6 @@ function scoresSection(TMDBScore: number) {
 
         return backgroundColor;
     }
-
-    // <Badge bg="" className="content-score">🟨 9.9 / 10</Badge>
-    // <Badge bg="" className="content-score">🍅 9.9 / 10</Badge>
-    // <Badge bg="" className="content-score">Ⓜ️ 9.9 / 10</Badge>
 }
 
 function movieDetailsSection(releaseDate: string, genres: string[], mediaType: string, runtime: number[] | null) {

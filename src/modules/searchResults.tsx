@@ -2,7 +2,7 @@ import { Movie } from "../classes/Movie";
 import { steamHover, steamHoverLeave } from "./steamHover";
 import { getSearchResults } from "../Databases/theMovieDatabase";
 import Button from "react-bootstrap/Button";
-import { checkIfItemExists, getFromLibrary } from "./library";
+import { libraryCheck, libraryGet } from "./indexedDB";
 import { green, red } from "./colorPallete";
 
 export function singlePageResults(GLOBALS: any, movieArray: Movie[]) {
@@ -44,8 +44,8 @@ export function singlePageResults(GLOBALS: any, movieArray: Movie[]) {
 async function setModalInformation(GLOBALS: any, movie: Movie) {
     const { setMovie, setSeasonNumber, setSeasonName, setAddLibraryButtonColor, setModalShow } = GLOBALS.SETTERS;
 
-    if (await checkIfItemExists(movie.uniqueID)) {
-        const libraryMovie = getFromLibrary(movie.uniqueID);
+    if (await libraryCheck(movie.uniqueID)) {
+        const libraryMovie = libraryGet(movie.uniqueID);
         if (libraryMovie != null) {
             movie = await libraryMovie;
         }
@@ -63,7 +63,7 @@ async function setModalInformation(GLOBALS: any, movie: Movie) {
     setMovie(movie);
     setModalShow(true);
 
-    setAddLibraryButtonColor((await checkIfItemExists(movie.uniqueID)) ? green : red);
+    setAddLibraryButtonColor((await libraryCheck(movie.uniqueID)) ? green : red);
 }
 
 export async function createResultPage(GLOBALS: any, oldItems: any, searchQuery: string, currentPage: number) {

@@ -1,7 +1,7 @@
 import { createResultPage } from "./searchResults";
 import Button from "react-bootstrap/Button";
-import { loadLibrary } from "./library";
 import { red } from "./colorPallete";
+import { setupLibraryPage } from "./library";
 
 export function NavigationBar(GLOBALS: any) {
     const { homeButtonColor, libraryButtonColor } = GLOBALS.GETTERS;
@@ -42,7 +42,7 @@ export function NavigationBar(GLOBALS: any) {
                 style={{ backgroundColor: libraryButtonColor }}
                 onClick={() => {
                     handleLibraryClick();
-                    loadLibrary(GLOBALS);
+                    setupLibraryPage(GLOBALS);
                 }}
             >
                 📁Library
