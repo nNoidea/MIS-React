@@ -44,6 +44,9 @@ export function singlePageResults(GLOBALS: any, movieArray: Movie[]) {
 async function setModalInformation(GLOBALS: any, movie: Movie) {
     const { setMovie, setSeasonNumber, setSeasonName, setAddLibraryButtonColor, setModalShow } = GLOBALS.SETTERS;
 
+    setMovie(movie);
+    setModalShow(true);
+
     if (await checkIfItemExists(movie.uniqueID)) {
         const libraryMovie = getFromLibrary(movie.uniqueID);
         if (libraryMovie != null) {
@@ -56,7 +59,6 @@ async function setModalInformation(GLOBALS: any, movie: Movie) {
     await movie.requestSeasonDetails(1);
 
     setMovie(movie);
-    setModalShow(true);
 
     if (movie.mediaType == "tv") {
         setSeasonNumber(1);
