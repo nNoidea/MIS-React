@@ -1,7 +1,8 @@
 import { createResultPage } from "./searchResults";
 import Button from "react-bootstrap/Button";
 import { red } from "./colorPallete";
-import { setupLibraryPage } from "./library";
+import { setupLibraryPage } from "./librarypage";
+import { Homepage } from "./homepage";
 
 export function NavigationBar(GLOBALS: any) {
     const { homeButtonColor, libraryButtonColor } = GLOBALS.GETTERS;
@@ -20,7 +21,7 @@ export function NavigationBar(GLOBALS: any) {
                 style={{ backgroundColor: homeButtonColor }}
                 onClick={() => {
                     handleHomeClick();
-                    setContent("HOMEPAGE");
+                    setContent(Homepage());
                 }}
             >
                 🏠Home

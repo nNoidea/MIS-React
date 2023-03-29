@@ -2,10 +2,9 @@ import { Badge, Button, ListGroup, Modal } from "react-bootstrap";
 import { copyMovie, Movie } from "../classes/Movie";
 import { green, orange, purpble, red } from "./colorPallete";
 import { libraryAdd, libraryRemove } from "./indexedDB";
-import { setupLibraryPage } from "./library";
+import { setupLibraryPage } from "./librarypage";
 
 const date = new Date();
-
 export function modal(GLOBALS: any) {
     const { movie, seasonNumber, seasonName, modalShow, addLibraryButtonColor, libraryButtonColor } = GLOBALS.GETTERS;
     const { setSeasonNumber, setMovie, setSeasonName, setModalShow, setAddLibraryButtonColor } = GLOBALS.SETTERS;
@@ -184,15 +183,11 @@ function episodesSection(
 
         for (let i = 0; i < episodeCount; i++) {
             const episodeDate = movie.seasons[seasonNumber].episodes[i].air_date;
-            const currentDateSum = date.getDate() + (date.getMonth() + 1) * 31 + date.getFullYear() * 365;
+            const currentDateSum = getNormalizedDate();
             let episodesDateSplittedSum: number;
 
             if (episodeDate != null) {
-                const episodesDateSplitted = episodeDate.split("-").map((element: string) => {
-                    return Number(element);
-                });
-
-                episodesDateSplittedSum = episodesDateSplitted[2] + episodesDateSplitted[1] * 31 + episodesDateSplitted[0] * 365;
+                episodesDateSplittedSum = normalizeDate(episodeDate);
             } else {
                 episodesDateSplittedSum = currentDateSum - 1;
             }
@@ -276,6 +271,18 @@ function episodesSection(
             }
         }
     }
+}
+
+export function getNormalizedDate() {
+    return date.getDate() + (date.getMonth() + 1) * 31 + date.getFullYear() * 365;
+}
+// date has to be in the form of: DD-MM-YYYY
+export function normalizeDate(date: string) {
+    const dateSplitted = date.split("-").map((element: string) => {
+        return Number(element);
+    });
+
+    return dateSplitted[2] + dateSplitted[1] * 31 + dateSplitted[0] * 365;
 }
 
 function scoresSection(TMDBScore: number) {

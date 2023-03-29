@@ -5,7 +5,7 @@ export async function setupLibraryPage(GLOBALS: any) {
     const { setContent } = GLOBALS.SETTERS;
     const movieArray = await libraryGetAll();
 
-    await setContent(
+    setContent(
         <>
             <div
                 className="grid-container"

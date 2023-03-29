@@ -6,6 +6,7 @@ import { red } from "./modules/colorPallete";
 import "./css/style.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "./css/search.css";
+import { Homepage } from "./modules/homepage";
 
 function App() {
     // NavigationBar
@@ -13,7 +14,7 @@ function App() {
     const [libraryButtonColor, setLibraryButtonColor] = useState("transparent");
 
     // Content
-    const [content, setContent] = useState("HOMEPAGE");
+    const [content, setContent] = useState(Homepage());
 
     // Movie
     const [movie, setMovie] = useState(undefined); // Will contain all the movie details
