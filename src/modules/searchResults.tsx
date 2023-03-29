@@ -5,12 +5,13 @@ import Button from "react-bootstrap/Button";
 import { libraryCheck, libraryGet } from "./indexedDB";
 import { green, red } from "./colorPallete";
 
-export function singlePageResults(GLOBALS: any, movieArray: Movie[]) {
+export function GridItems(GLOBALS: any, movieArray: Movie[]) {
     let gridItems = <></>;
 
     for (let i = 0; i < movieArray.length; i++) {
         let movie = movieArray[i];
         let element = <></>;
+
         if (movie.poster != "NO-IMAGE") {
             element = (
                 <div
@@ -30,6 +31,7 @@ export function singlePageResults(GLOBALS: any, movieArray: Movie[]) {
                 </div>
             );
         }
+
         gridItems = (
             <>
                 {gridItems}
@@ -39,47 +41,47 @@ export function singlePageResults(GLOBALS: any, movieArray: Movie[]) {
     }
 
     return gridItems;
-}
 
-async function setModalInformation(GLOBALS: any, movie: Movie) {
-    const { setMovie, setSeasonNumber, setSeasonName, setAddLibraryButtonColor, setModalShow } = GLOBALS.SETTERS;
+    async function setModalInformation(GLOBALS: any, movie: Movie) {
+        const { setMovie, setSeasonNumber, setSeasonName, setAddLibraryButtonColor, setModalShow } = GLOBALS.SETTERS;
 
-    if (await libraryCheck(movie.uniqueID)) {
-        const libraryMovie = libraryGet(movie.uniqueID);
-        if (libraryMovie != null) {
-            movie = await libraryMovie;
+        if (await libraryCheck(movie.uniqueID)) {
+            const libraryMovie = libraryGet(movie.uniqueID);
+            if (libraryMovie != null) {
+                movie = await libraryMovie;
+            }
         }
+
+        // Request the extra detail about the movie
+        await movie.requestMovieDetails();
+        await movie.requestSeasonDetails(1);
+
+        if (movie.mediaType == "tv") {
+            setSeasonNumber(1);
+            setSeasonName(movie.seasons[1].name);
+        }
+
+        setMovie(movie);
+        setModalShow(true);
+
+        setAddLibraryButtonColor((await libraryCheck(movie.uniqueID)) ? green : red);
     }
-
-    // Request the extra detail about the movie
-    await movie.requestMovieDetails();
-    await movie.requestSeasonDetails(1);
-
-    if (movie.mediaType == "tv") {
-        setSeasonNumber(1);
-        setSeasonName(movie.seasons[1].name);
-    }
-
-    setMovie(movie);
-    setModalShow(true);
-
-    setAddLibraryButtonColor((await libraryCheck(movie.uniqueID)) ? green : red);
 }
 
-export async function createResultPage(GLOBALS: any, oldItems: any, searchQuery: string, currentPage: number) {
+export async function setupSearchResults(GLOBALS: any, oldItems: any, searchQuery: string, currentPage: number) {
     const { setContent } = GLOBALS.SETTERS;
 
     let movieList = await getSearchResults(searchQuery, currentPage);
     let gridItems = (
         <>
             {await oldItems}
-            {singlePageResults(GLOBALS, movieList.movieArr)}
+            {GridItems(GLOBALS, movieList.movieArr)}
         </>
     );
 
     async function nextResults() {
         currentPage++;
-        await createResultPage(GLOBALS, gridItems, searchQuery, currentPage);
+        await setupSearchResults(GLOBALS, gridItems, searchQuery, currentPage);
     }
 
     let loadMoreButton = <></>;

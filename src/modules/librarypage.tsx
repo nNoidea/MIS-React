@@ -1,5 +1,5 @@
 import { libraryGetAll } from "./indexedDB";
-import { singlePageResults } from "./searchResults";
+import { GridItems } from "./searchResults";
 
 export async function setupLibraryPage(GLOBALS: any) {
     const { setContent } = GLOBALS.SETTERS;
@@ -11,7 +11,7 @@ export async function setupLibraryPage(GLOBALS: any) {
                 className="grid-container"
                 id="searchResults"
             >
-                {singlePageResults(GLOBALS, movieArray)}
+                {GridItems(GLOBALS, movieArray)}
             </div>
         </>
     );

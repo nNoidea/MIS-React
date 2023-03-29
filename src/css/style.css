@@ -9,7 +9,7 @@
 }
 
 /* Style the search box inside the navigation bar */
-.topnav input[type=text] {
+.NavigationBar input[type=text] {
     color: white;
     background-color: transparent;
     float: right;
@@ -21,7 +21,7 @@
     width: 140px;
 }
 
-.topnav input[type="text"]::placeholder {
+.NavigationBar input[type="text"]::placeholder {
     color: white;
 }
 

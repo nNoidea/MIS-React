@@ -1,4 +1,4 @@
-import { createResultPage } from "./searchResults";
+import { setupSearchResults } from "./searchResults";
 import Button from "react-bootstrap/Button";
 import { red } from "./colorPallete";
 import { setupLibraryPage } from "./librarypage";
@@ -10,17 +10,13 @@ export function NavigationBar(GLOBALS: any) {
 
     // Home Button
     function HomeButton() {
-        function handleHomeClick() {
-            setHomeButtonColor(red);
-            setLibraryButtonColor("transparent");
-        }
-
         return (
             <Button
                 className="button"
                 style={{ backgroundColor: homeButtonColor }}
                 onClick={() => {
-                    handleHomeClick();
+                    setHomeButtonColor(red);
+                    setLibraryButtonColor("transparent");
                     setContent(Homepage());
                 }}
             >
@@ -30,19 +26,14 @@ export function NavigationBar(GLOBALS: any) {
     }
 
     // Library Button
-
     function LibraryButton() {
-        function handleLibraryClick() {
-            setHomeButtonColor("transparent");
-            setLibraryButtonColor(red);
-        }
-
         return (
             <Button
                 className="button"
                 style={{ backgroundColor: libraryButtonColor }}
                 onClick={() => {
-                    handleLibraryClick();
+                    setHomeButtonColor("transparent");
+                    setLibraryButtonColor(red);
                     setupLibraryPage(GLOBALS);
                 }}
             >
@@ -52,7 +43,6 @@ export function NavigationBar(GLOBALS: any) {
     }
 
     // SearchBar
-
     function SearchBar() {
         return (
             <input
@@ -68,7 +58,7 @@ export function NavigationBar(GLOBALS: any) {
                         let currentPage = 1;
 
                         // Generate html elements based on the movielist.
-                        await createResultPage(GLOBALS, gridItems, searchQuery, currentPage);
+                        await setupSearchResults(GLOBALS, gridItems, searchQuery, currentPage);
                     }
                 }}
             />
@@ -76,7 +66,7 @@ export function NavigationBar(GLOBALS: any) {
     }
 
     return (
-        <div className="topnav">
+        <div className="NavigationBar">
             <HomeButton />
             <LibraryButton />
             <SearchBar />

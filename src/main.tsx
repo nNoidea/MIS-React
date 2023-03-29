@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import { NavigationBar } from "./modules/NavigationBar";
-import { modal } from "./modules/modal";
+import { MyModal } from "./modules/modal";
 import { red } from "./modules/colorPallete";
 import "./css/style.css";
 import "bootstrap/dist/css/bootstrap.css";
@@ -53,7 +53,7 @@ function App() {
         <>
             {NavigationBar(GLOBALS)}
             {content}
-            {modal(GLOBALS)}
+            {MyModal(GLOBALS)}
             <div id="endFooter"></div>
         </>
     );

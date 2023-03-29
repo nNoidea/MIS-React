@@ -1,11 +1,11 @@
 import { Badge, Button, ListGroup, Modal } from "react-bootstrap";
 import { copyMovie, Movie } from "../classes/Movie";
-import { green, orange, purpble, red } from "./colorPallete";
+import { green, orange, purple, red } from "./colorPallete";
 import { libraryAdd, libraryRemove } from "./indexedDB";
 import { setupLibraryPage } from "./librarypage";
 
 const date = new Date();
-export function modal(GLOBALS: any) {
+export function MyModal(GLOBALS: any) {
     const { movie, seasonNumber, seasonName, modalShow, addLibraryButtonColor, libraryButtonColor } = GLOBALS.GETTERS;
     const { setSeasonNumber, setMovie, setSeasonName, setModalShow, setAddLibraryButtonColor } = GLOBALS.SETTERS;
 
@@ -311,7 +311,7 @@ function scoresSection(TMDBScore: number) {
     function determineScoreColor(score: number) {
         let backgroundColor;
         if (score >= 8) {
-            backgroundColor = purpble;
+            backgroundColor = purple;
         } else if (score >= 7) {
             backgroundColor = green;
         } else if (score >= 5) {
