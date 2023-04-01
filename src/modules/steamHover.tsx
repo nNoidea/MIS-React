@@ -1,4 +1,6 @@
 export function steamHover(ev: React.MouseEvent<HTMLImageElement>) {
+    const rotationMultiplier = 40;
+
     let img = ev.currentTarget.children[0];
     let imgRect = (img as HTMLImageElement).getBoundingClientRect();
 
@@ -24,12 +26,12 @@ export function steamHover(ev: React.MouseEvent<HTMLImageElement>) {
 
     function xRotation(mouseY: number, height: number) {
         let poz = (mouseY / height) * 2 - 1; // mouse will be in -1 to 1
-        return poz * -45; // Up is negative, down is positive
+        return poz * -rotationMultiplier; // Up is negative, down is positive
     }
 
     function yRotation(mouseX: number, width: number) {
         let poz = (mouseX / width) * 2 - 1; // mouse will be in -1 to 1
-        return poz * 45;
+        return poz * rotationMultiplier;
     }
 
     function brightnessLevel(mouseY: number, height: number) {

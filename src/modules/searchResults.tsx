@@ -27,8 +27,8 @@ export function GridItems(GLOBALS: Globals, movieArray: Movie[]) {
                     }}
                 >
                     <img
-                        src={movie.poster}
                         className="grid-item"
+                        src={movie.poster}
                     />
                 </div>
             );
