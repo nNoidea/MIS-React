@@ -62,9 +62,6 @@ export async function preload(GLOBALS: any) {
                 }
             });
 
-            console.log(movieArray);
-            
-
             return movieArray;
         }
     }

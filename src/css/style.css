@@ -142,3 +142,8 @@
     margin-top: 50px;
     color: white;
 }
+
+.text-center {
+    display: flex;
+    align-items: center;
+}
