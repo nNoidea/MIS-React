@@ -65,9 +65,8 @@ export function MyModal(GLOBALS: Globals) {
                                     </Button>
                                     <Button
                                         className="button"
-                                        onClick={() => {
-                                            window.open(youtubeSearchLinkGenerator(movie.title), "_blank");
-                                        }}
+                                        href={youtubeSearchLinkGenerator(movie.title)}
+                                        target="_blank" // Forces the link to be opened on a new tab.
                                     >
                                         <img
                                             src="https://raw.githubusercontent.com/nNoidea/MIS-React/main/images/youtube.png"
