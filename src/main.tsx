@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { NavigationBar } from "./modules/NavigationBar";
 import { MyModal } from "./modules/modal";
-import { green, red } from "./modules/colorPallete";
+import { red } from "./modules/colorPallete";
 import "./css/style.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "./css/search.css";
-import { Homepage } from "./modules/homepage";
 import { preload } from "./modules/preload";
 import { Spinner } from "react-bootstrap";
+import { Globals } from "./interfaces/interfaces";
 
 function App() {
     // NavigationBar
@@ -17,7 +17,6 @@ function App() {
 
     // Content
     const [content, setContent] = useState(<></>);
-
     // Movie
     const [movie, setMovie] = useState(undefined); // Will contain all the movie details
 
@@ -28,7 +27,7 @@ function App() {
     const [addLibraryButtonColor, setAddLibraryButtonColor] = useState(red); // Current season
     const [preloaded, setPreloaded] = useState(false);
 
-    let GLOBALS = {
+    let GLOBALS: Globals = {
         GETTERS: {
             homeButtonColor,
             libraryButtonColor,

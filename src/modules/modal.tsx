@@ -3,11 +3,12 @@ import { copyMovie, Movie } from "../classes/Movie";
 import { green, orange, purple, red } from "./colorPallete";
 import { libraryAdd, libraryRemove } from "./indexedDB";
 import { setupLibraryPage } from "./librarypage";
+import { Globals } from "../interfaces/interfaces";
 
 const date = new Date();
-export function MyModal(GLOBALS: any) {
-    const { movie, seasonNumber, seasonName, modalShow, addLibraryButtonColor, libraryButtonColor } = GLOBALS.GETTERS;
-    const { setSeasonNumber, setMovie, setSeasonName, setModalShow, setAddLibraryButtonColor } = GLOBALS.SETTERS;
+export function MyModal(GLOBALS: Globals) {
+    const { movie, modalShow, addLibraryButtonColor, libraryButtonColor } = GLOBALS.GETTERS;
+    const { setModalShow, setAddLibraryButtonColor } = GLOBALS.SETTERS;
 
     if (movie == undefined) {
         return <></>;
@@ -82,7 +83,7 @@ export function MyModal(GLOBALS: any) {
                                 </>
                             </div>
                         </div>
-                        <>{episodesSection(GLOBALS, movie, setMovie, seasonNumber, setSeasonNumber, seasonName, setSeasonName, setAddLibraryButtonColor, libraryButtonColor)}</>
+                        <>{episodesSection(GLOBALS)}</>
                     </div>
                 </div>
             </Modal.Body>
@@ -109,17 +110,9 @@ function youtubeSearchLinkGenerator(string: string) {
     return `https://www.youtube.com/results?search_query=${string.replaceAll(" ", "+")}`;
 }
 
-function episodesSection(
-    GLOBALS: any,
-    movie: Movie,
-    setMovie: any,
-    seasonNumber: number,
-    setSeasonNumber: any,
-    seasonName: string,
-    setSeasonName: any,
-    setAddLibraryButtonColor: any,
-    libraryButtonColor: any
-) {
+function episodesSection(GLOBALS: Globals) {
+    const { setMovie, setSeasonNumber, setSeasonName, setAddLibraryButtonColor } = GLOBALS.SETTERS;
+    const { movie, seasonNumber, seasonName, libraryButtonColor } = GLOBALS.GETTERS;
     const { mediaType, seasons } = movie;
 
     if (mediaType == "tv") {

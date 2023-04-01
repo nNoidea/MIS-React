@@ -77,7 +77,8 @@
 
 #modal-img {
     border-radius: 25px;
-    max-width: 70%;
+    max-height: 75vh;
+    max-width: 100%;
 }
 
 .content-score {

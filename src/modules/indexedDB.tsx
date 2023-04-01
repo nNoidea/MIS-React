@@ -1,7 +1,7 @@
 import { copyMovie, Movie } from "../classes/Movie";
 
 // Initiate the database
-let db: any;
+let db: IDBDatabase | undefined;
 const request = indexedDB.open("library", 2);
 request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
     db = (event.target as IDBOpenDBRequest).result;
@@ -22,11 +22,14 @@ request.onsuccess = (event: Event) => {
 };
 
 request.onerror = () => {
-    console.error("Error opening database:", request.error);
+    throw new Error("Database is not initialized!");
 };
 
 // Setup the setter / getter object.
 function createObjectStore() {
+    if (!db) {
+        throw new Error("Database is not initialized!");
+    }
     return db.transaction(["movies"], "readwrite").objectStore("movies");
 }
 

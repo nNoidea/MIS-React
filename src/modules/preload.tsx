@@ -1,16 +1,17 @@
 import { cloudflare, generateMedia } from "../APIs/theMovieDatabase";
 import { Movie } from "../classes/Movie";
+import { Globals, Trending, TrendingResult } from "../interfaces/interfaces";
 import { Homepage } from "./homepage";
 
 // We generate these variables on the global scope, since this scope gets executed only once.
-export let tvGenreList: any = null;
-export let movieGenreList: any = null;
+export let tvGenreList: object | null = null;
+export let movieGenreList: object | null = null;
 
 // Homepage
-export let upcomingMovies: any = null;
-export let trendingMedia: any = null;
+export let upcomingMovies: Movie[] | null = null;
+export let trendingMedia: Movie[] | null = null;
 
-export async function preload(GLOBALS: any) {
+export async function preload(GLOBALS: Globals) {
     const { setContent, setPreloaded } = GLOBALS.SETTERS;
 
     // Get the movie genre list
@@ -18,7 +19,7 @@ export async function preload(GLOBALS: any) {
     movieGenreList = await getGenres("movie");
 
     async function getGenres(type: string) {
-        let json = await cloudflare(["genre", type]);
+        let json = await cloudflare(["Genre", type]);
         return json;
     }
 
@@ -26,7 +27,7 @@ export async function preload(GLOBALS: any) {
     upcomingMovies = await getUpcomingMovies();
 
     async function getUpcomingMovies() {
-        let json = await cloudflare(["upcomingMovies", 1]);
+        let json = await cloudflare(["Get Upcoming Movies", String(1)]);
         return convertToMovieArray(await json);
 
         function convertToMovieArray(json: any) {
@@ -47,14 +48,14 @@ export async function preload(GLOBALS: any) {
 
     trendingMedia = await getTrendingMedia();
     async function getTrendingMedia() {
-        let json = await cloudflare(["trendingAll"]);
+        let trendingResults: Trending = await cloudflare(["Get Trending"]);
 
-        return convertToMovieArray(await json);
+        return convertToMovieArray(trendingResults.results);
 
-        function convertToMovieArray(json: any) {
+        function convertToMovieArray(array: TrendingResult[]) {
             let movieArray: Movie[] = [];
 
-            json.results.forEach((element: any) => {
+            array.forEach((element: TrendingResult) => {
                 let correctMedia = generateMedia(element);
 
                 if (correctMedia != false) {

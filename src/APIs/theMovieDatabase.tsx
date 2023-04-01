@@ -1,7 +1,7 @@
 import { Movie, MovieList } from "../classes/Movie";
 import { movieGenreList, tvGenreList } from "../modules/preload";
 
-export async function cloudflare(array: any[]) {
+export async function cloudflare(array: string[]) {
     const options: RequestInit = {
         method: "GET",
         redirect: "follow",
@@ -13,14 +13,14 @@ export async function cloudflare(array: any[]) {
 }
 
 export async function getSearchResults(searchQuery: string, pageNumber: number) {
-    let json = await cloudflare(["search", searchQuery, pageNumber]);
+    let json = await cloudflare(["Multi Search", searchQuery, String(pageNumber)]);
 
     return normalize(json);
 
     function normalize(json: any) {
         let pages = json.total_pages;
         let results = json.results;
-        let movieArr: any[] = [];
+        let movieArr: Movie[] = [];
 
         results.forEach((media: any) => {
             let correctMedia = generateMedia(media);
@@ -37,7 +37,7 @@ export async function getSearchResults(searchQuery: string, pageNumber: number) 
 
 export function generateMedia(media: any) {
     // Media Type
-    if ((media.media_type != "tv" && media.media_type != "movie")) {
+    if (media.media_type != "tv" && media.media_type != "movie") {
         return false;
     }
 
@@ -83,9 +83,9 @@ export function generateMedia(media: any) {
 export async function TMDBRequestExtraDetails(movie: Movie) {
     let json;
     if (movie.mediaType == "movie") {
-        json = await cloudflare(["movieDetails", movie.id]);
+        json = await cloudflare(["Get Details", "movie", String(movie.id)]);
     } else if (movie.mediaType == "tv") {
-        json = await cloudflare(["tvDetails", movie.id]);
+        json = await cloudflare(["Get Details", "tv", String(movie.id)]);
 
         if (json.seasons[0].season_number == 1) {
             json.seasons.unshift(null);
@@ -105,7 +105,7 @@ export async function TMDBRequestExtraDetails(movie: Movie) {
 export async function TMDBRequestSeasonDetails(movie: Movie, seasonNumber: number) {
     if (movie.mediaType == "tv") {
         let json;
-        json = await cloudflare(["seasonDetails", movie.id, seasonNumber]);
+        json = await cloudflare(["Season Details", String(movie.id), String(seasonNumber)]);
 
         movie.seasons[seasonNumber].episodes = json.episodes;
         for (let i = 0; i < movie.seasons[seasonNumber].episodes.length; i++) {

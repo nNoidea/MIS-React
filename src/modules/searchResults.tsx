@@ -4,8 +4,10 @@ import { getSearchResults } from "../APIs/theMovieDatabase";
 import Button from "react-bootstrap/Button";
 import { libraryCheck, libraryGet } from "./indexedDB";
 import { green, red } from "./colorPallete";
+import { ReactNode } from "react";
+import { Globals } from "../interfaces/interfaces";
 
-export function GridItems(GLOBALS: any, movieArray: Movie[]) {
+export function GridItems(GLOBALS: Globals, movieArray: Movie[]) {
     let gridItems = <></>;
 
     for (let i = 0; i < movieArray.length; i++) {
@@ -42,7 +44,7 @@ export function GridItems(GLOBALS: any, movieArray: Movie[]) {
 
     return gridItems;
 
-    async function setModalInformation(GLOBALS: any, movie: Movie) {
+    async function setModalInformation(GLOBALS: Globals, movie: Movie) {
         const { setMovie, setSeasonNumber, setSeasonName, setAddLibraryButtonColor, setModalShow } = GLOBALS.SETTERS;
 
         if (await libraryCheck(movie.uniqueID)) {
@@ -68,7 +70,7 @@ export function GridItems(GLOBALS: any, movieArray: Movie[]) {
     }
 }
 
-export async function setupSearchResults(GLOBALS: any, oldItems: any, searchQuery: string, currentPage: number) {
+export async function setupSearchResults(GLOBALS: Globals, oldItems: ReactNode, searchQuery: string, currentPage: number) {
     const { setContent } = GLOBALS.SETTERS;
 
     let movieList = await getSearchResults(searchQuery, currentPage);
