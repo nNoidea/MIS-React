@@ -28,3 +28,11 @@ jobs:
         cache: 'npm'
     - run: npm install        
     - run: npm run build --if-present
+    - name: Deploy to Docs
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        deploy_key: ${{ secrets.DEPLOY_KEY }}
+        publish_dir: ./docs
+        publish_branch: main
+        force_orphan: true
+        clean: true
