@@ -59,25 +59,26 @@
 
 /* Modal  */
 #modal {
-    max-width: 75% !important;
+    max-width: 80% !important;
 }
 
 .container {
     max-width: 100%;
 }
 
+.modal-body {
+    margin-top: 10px;
+}
+
 .col {
-    margin-bottom: 50px;
+    margin-bottom: 10px;
     min-width: 200px;
 }
 
-.modal-body {
-    margin-top: 30px;
-}
 
 #modal-img {
     border-radius: 25px;
-    max-height: 75vh;
+    max-height: 85vh;
     max-width: 100%;
 }
 
