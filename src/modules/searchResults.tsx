@@ -1,6 +1,6 @@
 import { Movie } from "../classes/Movie";
 import { steamHover, steamHoverLeave } from "./steamHover";
-import { getSearchResults } from "../Databases/theMovieDatabase";
+import { getSearchResults } from "../APIs/theMovieDatabase";
 import Button from "react-bootstrap/Button";
 import { libraryCheck, libraryGet } from "./indexedDB";
 import { green, red } from "./colorPallete";
@@ -98,7 +98,7 @@ export async function setupSearchResults(GLOBALS: any, oldItems: any, searchQuer
         );
     }
 
-    await setContent(
+    setContent(
         <>
             <div
                 className="grid-container"

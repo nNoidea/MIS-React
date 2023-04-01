@@ -135,3 +135,10 @@
 .testimage {
     width: 100px;
 }
+
+/* Homepage */
+.homepageTitle {
+    padding-left: 40px;
+    margin-top: 50px;
+    color: white;
+}

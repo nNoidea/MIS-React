@@ -17,7 +17,7 @@ export function NavigationBar(GLOBALS: any) {
                 onClick={() => {
                     setHomeButtonColor(red);
                     setLibraryButtonColor("transparent");
-                    setContent(Homepage());
+                    setContent(Homepage(GLOBALS));
                 }}
             >
                 🏠Home

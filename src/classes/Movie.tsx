@@ -1,4 +1,4 @@
-import { TMDBRequestExtraDetails, TMDBRequestSeasonDetails } from "../Databases/theMovieDatabase";
+import { TMDBRequestExtraDetails, TMDBRequestSeasonDetails } from "../APIs/theMovieDatabase";
 
 export class MovieList {
     pages: number;
