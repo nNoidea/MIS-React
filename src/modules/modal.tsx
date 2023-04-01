@@ -106,7 +106,7 @@ function getBetterPoster(poster: string) {
 }
 
 function youtubeSearchLinkGenerator(string: string) {
-    return `https://www.youtube.com/results?search_query=${string.replaceAll(" ", "+")}`;
+    return `https://m.youtube.com/results?search_query=${string.replaceAll(" ", "+")}`;
 }
 
 function episodesSection(GLOBALS: Globals) {
