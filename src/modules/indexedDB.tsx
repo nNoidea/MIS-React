@@ -2,7 +2,7 @@ import { copyMovie, Movie } from "../classes/Movie";
 
 // Initiate the database
 let db: IDBDatabase | undefined;
-const request = indexedDB.open("library", 2);
+const request = indexedDB.open("library", 3);
 request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
     db = (event.target as IDBOpenDBRequest).result;
 
