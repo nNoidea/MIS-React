@@ -103,7 +103,7 @@ export function MyModal(GLOBALS: Globals) {
 }
 
 function getBetterPoster(poster: string) {
-    return poster.replace(gridImageResolution, "original");
+    return poster.replace(gridImageResolution, "w780");
 }
 
 function youtubeSearchLinkGenerator(string: string) {
