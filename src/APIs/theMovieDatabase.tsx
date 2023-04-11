@@ -1,6 +1,8 @@
 import { Movie, MovieList } from "../classes/Movie";
 import { movieGenreList, tvGenreList } from "../modules/preload";
 
+export let gridImageResolution = "w342";
+
 export async function cloudflare(array: string[]) {
     const options: RequestInit = {
         method: "GET",
@@ -57,7 +59,7 @@ export function generateMedia(media: any) {
     if (media.poster_path == null) {
         poster = "NO-IMAGE";
     } else {
-        poster = "https://image.tmdb.org/t/p/w342" + media.poster_path;
+        poster = `https://image.tmdb.org/t/p/${gridImageResolution}` + media.poster_path;
     }
 
     // Genre ids

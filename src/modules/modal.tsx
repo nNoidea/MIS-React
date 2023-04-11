@@ -4,6 +4,7 @@ import { green, orange, purple, red } from "./colorPallete";
 import { libraryAdd, libraryRemove } from "./indexedDB";
 import { setupLibraryPage } from "./librarypage";
 import { Globals } from "../interfaces/interfaces";
+import { gridImageResolution } from "../APIs/theMovieDatabase";
 
 const date = new Date();
 export function MyModal(GLOBALS: Globals) {
@@ -102,7 +103,7 @@ export function MyModal(GLOBALS: Globals) {
 }
 
 function getBetterPoster(poster: string) {
-    return poster.replace("w154", "w500");
+    return poster.replace(gridImageResolution, "original");
 }
 
 function youtubeSearchLinkGenerator(string: string) {
