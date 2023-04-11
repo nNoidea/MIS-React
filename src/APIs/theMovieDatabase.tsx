@@ -57,7 +57,7 @@ export function generateMedia(media: any) {
     if (media.poster_path == null) {
         poster = "NO-IMAGE";
     } else {
-        poster = "https://image.tmdb.org/t/p/w154" + media.poster_path;
+        poster = "https://image.tmdb.org/t/p/w342" + media.poster_path;
     }
 
     // Genre ids
