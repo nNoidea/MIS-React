@@ -6,8 +6,8 @@ const request = indexedDB.open("library", 3);
 request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
     db = (event.target as IDBOpenDBRequest).result;
 
-    // Delete the already existing database if it exists and if it's required by me.
-    if (db.objectStoreNames.contains("movies") && true) {
+    // Delete the already existing database if it exists.
+    if (db.objectStoreNames.contains("movies")) {
         db.deleteObjectStore("movies");
     }
 
