@@ -18,13 +18,13 @@ function App() {
     // Content
     const [content, setContent] = useState(<></>);
     // Movie
-    const [movie, setMovie] = useState(undefined); // Will contain all the movie details
+    const [media, setMedia] = useState(undefined); // Will contain all the movie details
 
     // Modal
     const [modalShow, setModalShow] = useState(false);
-    const [seasonNumber, setSeasonNumber] = useState(1); // Current season
-    const [seasonName, setSeasonName] = useState(""); // Current season
-    const [addLibraryButtonColor, setAddLibraryButtonColor] = useState(red); // Current season
+    const [seasonNumber, setSeasonNumber] = useState(1); 
+    const [seasonName, setSeasonName] = useState(""); 
+    const [addLibraryButtonColor, setAddLibraryButtonColor] = useState(red);
     const [preloaded, setPreloaded] = useState(false);
 
     let GLOBALS: Globals = {
@@ -32,7 +32,7 @@ function App() {
             homeButtonColor,
             libraryButtonColor,
             content,
-            movie,
+            media,
             modalShow,
             seasonNumber,
             seasonName,
@@ -43,7 +43,7 @@ function App() {
             setHomeButtonColor,
             setLibraryButtonColor,
             setContent,
-            setMovie,
+            setMedia,
             setModalShow,
             setSeasonNumber,
             setSeasonName,

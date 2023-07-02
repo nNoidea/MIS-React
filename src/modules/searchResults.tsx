@@ -1,20 +1,20 @@
-import { Movie } from "../classes/Movie";
 import { steamHover, steamHoverLeave } from "./steamHover";
 import { getSearchResults } from "../APIs/theMovieDatabase";
 import Button from "react-bootstrap/Button";
 import { libraryCheck, libraryGet } from "./indexedDB";
-import { green, red } from "./colorPallete";
+import { green, lightBlue, red } from "./colorPallete";
 import { ReactNode } from "react";
 import { Globals } from "../interfaces/interfaces";
+import { Movie, TV } from "../classes/Media";
 
-export function GridItems(GLOBALS: Globals, movieArray: Movie[]) {
+export function GridItems(GLOBALS: Globals, mediaArray: (Movie | TV)[]) {
     let gridItems = <></>;
 
-    for (let i = 0; i < movieArray.length; i++) {
-        let movie = movieArray[i];
+    for (let i = 0; i < mediaArray.length; i++) {
+        let media = mediaArray[i];
         let element = <></>;
 
-        if (movie.poster != "NO-IMAGE") {
+        if (media.poster != "NO-IMAGE") {
             element = (
                 <div
                     data-bs-toggle="modal"
@@ -23,12 +23,12 @@ export function GridItems(GLOBALS: Globals, movieArray: Movie[]) {
                     onMouseMove={steamHover}
                     onMouseOut={steamHoverLeave}
                     onClick={async () => {
-                        await setModalInformation(GLOBALS, movie);
+                        await setModalInformation(GLOBALS, media);
                     }}
                 >
                     <img
                         className="grid-item"
-                        src={movie.poster}
+                        src={media.poster}
                     />
                 </div>
             );
@@ -44,29 +44,29 @@ export function GridItems(GLOBALS: Globals, movieArray: Movie[]) {
 
     return gridItems;
 
-    async function setModalInformation(GLOBALS: Globals, movie: Movie) {
-        const { setMovie, setSeasonNumber, setSeasonName, setAddLibraryButtonColor, setModalShow } = GLOBALS.SETTERS;
+    async function setModalInformation(GLOBALS: Globals, media: Movie | TV) {
+        const { setMedia, setSeasonNumber, setSeasonName, setAddLibraryButtonColor, setModalShow } = GLOBALS.SETTERS;
 
-        if (await libraryCheck(movie.uniqueID)) {
-            const libraryMovie = libraryGet(movie.uniqueID);
+        if (await libraryCheck(media.uniqueID)) {
+            const libraryMovie = libraryGet(media.uniqueID);
             if (libraryMovie != null) {
-                movie = await libraryMovie;
+                media = await libraryMovie;
             }
         }
 
         // Request the extra detail about the movie
-        await movie.requestMovieDetails();
-        await movie.requestSeasonDetails(1);
+        await media.requestDetails();
 
-        if (movie.mediaType == "tv") {
+        if (media instanceof TV) {
+            await media.requestSeasonDetails(1);
             setSeasonNumber(1);
-            setSeasonName(movie.seasons[1].name);
+            setSeasonName(media.seasons[1].name);
         }
 
-        setMovie(movie);
+        setMedia(media);
         setModalShow(true);
 
-        setAddLibraryButtonColor((await libraryCheck(movie.uniqueID)) ? green : red);
+        setAddLibraryButtonColor((await libraryCheck(media.uniqueID)) ? green : red);
     }
 }
 
@@ -77,7 +77,7 @@ export async function setupSearchResults(GLOBALS: Globals, oldItems: ReactNode, 
     let gridItems = (
         <>
             {await oldItems}
-            {GridItems(GLOBALS, movieList.movieArr)}
+            {GridItems(GLOBALS, movieList.mediaArray)}
         </>
     );
 
@@ -89,13 +89,19 @@ export async function setupSearchResults(GLOBALS: Globals, oldItems: ReactNode, 
     let loadMoreButton = <></>;
     if (movieList.pages > currentPage) {
         loadMoreButton = (
-            <div className="center">
-                <Button
-                    className="button loadMoreButton"
+            <div
+                data-bs-toggle="modal"
+                data-bs-target="#movieModal"
+                className="steamHover"
+                onMouseMove={steamHover}
+                onMouseOut={steamHoverLeave}
+            >
+                <img
+                    className="grid-item"
+                    style={{ backgroundColor: lightBlue, height: "100%" }}
                     onClick={async () => await nextResults()}
-                >
-                    Load More Results
-                </Button>
+                    src="https://raw.githubusercontent.com/nNoidea/MIS-React/main/images/next.png"
+                />
             </div>
         );
     }
@@ -107,8 +113,8 @@ export async function setupSearchResults(GLOBALS: Globals, oldItems: ReactNode, 
                 id="searchResults"
             >
                 {gridItems}
+                {loadMoreButton}
             </div>
-            {loadMoreButton}
         </>
     );
 }

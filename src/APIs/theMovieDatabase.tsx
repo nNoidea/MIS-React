@@ -1,4 +1,4 @@
-import { Movie, MovieList } from "../classes/Movie";
+import { Movie, TV } from "../classes/Media";
 import { movieGenreList, tvGenreList } from "../modules/preload";
 
 export let gridImageResolution = "w342";
@@ -22,51 +22,42 @@ export async function getSearchResults(searchQuery: string, pageNumber: number) 
     function normalize(json: any) {
         let pages = json.total_pages;
         let results = json.results;
-        let movieArr: Movie[] = [];
 
-        results.forEach((media: any) => {
-            let correctMedia = generateMedia(media);
+        let mediaArray: (Movie | TV)[] = [];
+
+        results.forEach((rawMedia: any) => {
+            let correctMedia = createMediaObject(rawMedia);
             if (correctMedia != false) {
-                movieArr.push(correctMedia);
+                mediaArray.push(correctMedia);
             }
         });
 
-        let movieList = new MovieList(pages, movieArr);
-
-        return movieList;
+        return { pages, mediaArray };
     }
 }
 
-export function generateMedia(media: any) {
-    // Media Type
-    if (media.media_type != "tv" && media.media_type != "movie") {
-        return false;
-    }
-
-    let title = "";
+export function createMediaObject(rawMedia: any) {
+    let name = "";
     let releaseDate = "";
 
-    if (media.media_type == "movie") {
-        title = media.title;
-        releaseDate = media.release_date;
-    } else if (media.media_type == "tv") {
-        title = media.name;
-        releaseDate = media.first_air_date;
+    // Media Type
+    if (rawMedia.media_type != "tv" && rawMedia.media_type != "movie") {
+        return false;
     }
 
     // Poster
     let poster = "";
-    if (media.poster_path == null) {
+    if (rawMedia.poster_path == null) {
         poster = "NO-IMAGE";
     } else {
-        poster = `https://image.tmdb.org/t/p/${gridImageResolution}` + media.poster_path;
+        poster = `https://image.tmdb.org/t/p/${gridImageResolution}` + rawMedia.poster_path;
     }
 
     // Genre ids
-    let genreIDS = media.genre_ids;
+    let genreIDS = rawMedia.genre_ids;
     let genres: string[] = [];
     let genreList: any;
-    if (media.media_type == "movie") {
+    if (rawMedia.media_type == "movie") {
         genreList = movieGenreList;
     } else {
         genreList = tvGenreList;
@@ -79,41 +70,51 @@ export function generateMedia(media: any) {
             }
         });
     });
-    return new Movie(title, media.id, poster, media.media_type, media.overview, releaseDate, genres);
+
+    if (rawMedia.media_type == "movie") {
+        name = rawMedia.title;
+        releaseDate = rawMedia.release_date;
+
+        return new Movie(rawMedia.id, name, poster, rawMedia.overview, releaseDate, genres);
+    } else if (rawMedia.media_type == "tv") {
+        name = rawMedia.name;
+        releaseDate = rawMedia.first_air_date;
+
+        return new TV(rawMedia.id, name, poster, rawMedia.overview, releaseDate, genres);
+    }
+    return false;
 }
 
-export async function TMDBRequestExtraDetails(movie: Movie) {
+export async function TMDBRequestDetails(media: Movie | TV) {
     let json;
-    if (movie.mediaType == "movie") {
-        json = await cloudflare(["Get Details", "movie", String(movie.id)]);
-    } else if (movie.mediaType == "tv") {
-        json = await cloudflare(["Get Details", "tv", String(movie.id)]);
+
+    if (media instanceof Movie) {
+        json = await cloudflare(["Get Details", "movie", String(media.id)]);
+        let minutes = json.runtime;
+        media.runtime = convertRuntime(minutes);
+    } else if (media instanceof TV) {
+        json = await cloudflare(["Get Details", "tv", String(media.id)]);
 
         if (json.seasons[0].season_number == 1) {
             json.seasons.unshift(null);
         }
 
-        movie.seasons = json.seasons;
+        media.seasons = json.seasons;
     }
 
-    let minutes = json.runtime;
-    movie.runtime = convertRuntime(minutes);
+    media.TMDBScore = json.vote_average;
 
-    movie.TMDBScore = json.vote_average;
-
-    movie.movieDetailsExist = true;
+    media.detailsExist = true;
 }
 
-export async function TMDBRequestSeasonDetails(movie: Movie, seasonNumber: number) {
-    if (movie.mediaType == "tv") {
-        let json;
-        json = await cloudflare(["Season Details", String(movie.id), String(seasonNumber)]);
+export async function TMDBRequestSeasonDetails(tv: TV, seasonNumber: number) {
+    let json;
+    json = await cloudflare(["Season Details", String(tv.id), String(seasonNumber)]);
 
-        movie.seasons[seasonNumber].episodes = json.episodes;
-        for (let i = 0; i < movie.seasons[seasonNumber].episodes.length; i++) {
-            // Convert runtime from mintues to [hours, mintues]
-            movie.seasons[seasonNumber].episodes[i].runtime = convertRuntime(movie.seasons[seasonNumber].episodes[i].runtime);
-        }
+    tv.seasons[seasonNumber].episodes = json.episodes;
+    for (let i = 0; i < tv.seasons[seasonNumber].episodes.length; i++) {
+        // Convert runtime from mintues to [hours, mintues]
+        tv.seasons[seasonNumber].episodes[i].runtime = convertRuntime(tv.seasons[seasonNumber].episodes[i].runtime);
     }
 }
 

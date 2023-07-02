@@ -1,17 +1,17 @@
 import { Badge, Button, ListGroup, Modal } from "react-bootstrap";
-import { copyMovie, Movie } from "../classes/Movie";
 import { green, orange, purple, red } from "./colorPallete";
 import { libraryAdd, libraryRemove } from "./indexedDB";
 import { setupLibraryPage } from "./librarypage";
 import { Globals } from "../interfaces/interfaces";
 import { gridImageResolution } from "../APIs/theMovieDatabase";
+import { TV, copyMedia } from "../classes/Media";
 
 const date = new Date();
 export function MyModal(GLOBALS: Globals) {
-    const { movie, modalShow, addLibraryButtonColor, libraryButtonColor } = GLOBALS.GETTERS;
+    const { media, modalShow, addLibraryButtonColor, libraryButtonColor } = GLOBALS.GETTERS;
     const { setModalShow, setAddLibraryButtonColor } = GLOBALS.SETTERS;
 
-    if (movie == undefined) {
+    if (media == undefined) {
         return <></>;
     }
 
@@ -32,28 +32,28 @@ export function MyModal(GLOBALS: Globals) {
                         <div className="col">
                             <img
                                 id="modal-img"
-                                src={getBetterPoster(movie.poster)}
+                                src={getBetterPoster(media.poster)}
                                 alt=""
                             />
                         </div>
                         <div className="col movie-data">
                             <div>
-                                <h1 id="movie-title">{movie.title}</h1>
-                                {movieDetailsSection(movie.releaseDate, movie.genres, movie.mediaType, movie.runtime)}
-                                {scoresSection(movie.TMDBScore)}
-                                {descriptionSection(movie.description)}
+                                <h1 id="movie-title">{media.name}</h1>
+                                {movieDetailsSection(media.releaseDate, media.genres, media.mediaType, media.runtime)}
+                                {scoresSection(media.TMDBScore)}
+                                {descriptionSection(media.description)}
                             </div>
                             <div>
                                 <>
                                     <Button
                                         className="button"
-                                        style={{ backgroundColor: addLibraryButtonColor }}
+                                        style={{ backgroundColor: addLibraryButtonColor, filter: addLibraryButtonColor === "red" ? "brightness(70%)" : "brightness(90%)" }}
                                         onClick={() => {
                                             if (addLibraryButtonColor == red) {
-                                                libraryAdd(movie);
+                                                libraryAdd(media);
                                                 setAddLibraryButtonColor(green);
                                             } else {
-                                                libraryRemove(movie.uniqueID);
+                                                libraryRemove(media.uniqueID);
                                                 setAddLibraryButtonColor(red);
                                             }
 
@@ -66,7 +66,7 @@ export function MyModal(GLOBALS: Globals) {
                                     </Button>
                                     <Button
                                         className="button"
-                                        href={youtubeSearchLinkGenerator(movie.title)}
+                                        href={youtubeSearchLinkGenerator(media.name)}
                                         target="_blank" // Forces the link to be opened on a new tab.
                                     >
                                         <img
@@ -76,7 +76,7 @@ export function MyModal(GLOBALS: Globals) {
                                         YouTube
                                     </Button>
                                     {(() => {
-                                        if (movie.mediaType == "movie") {
+                                        if (media.mediaType == "movie") {
                                             return <Button className="button">👀Watched</Button>;
                                         }
                                     })()}
@@ -111,11 +111,11 @@ function youtubeSearchLinkGenerator(string: string) {
 }
 
 function episodesSection(GLOBALS: Globals) {
-    const { setMovie, setSeasonNumber, setSeasonName, setAddLibraryButtonColor } = GLOBALS.SETTERS;
-    const { movie, seasonNumber, seasonName, libraryButtonColor } = GLOBALS.GETTERS;
-    const { mediaType, seasons } = movie;
+    const { setMedia, setSeasonNumber, setSeasonName, setAddLibraryButtonColor } = GLOBALS.SETTERS;
+    const { media, seasonNumber, seasonName, libraryButtonColor } = GLOBALS.GETTERS;
+    const { seasons } = media;
 
-    if (mediaType == "tv") {
+    if (media instanceof TV) {
         return (
             <div className="col">
                 <div
@@ -150,9 +150,9 @@ function episodesSection(GLOBALS: Globals) {
                     {buttons}
                     <Button
                         onClick={async () => {
-                            await movie.requestSeasonDetails(index);
+                            await media.requestSeasonDetails(index);
                             setSeasonNumber(index);
-                            setMovie(movie);
+                            setMedia(media);
                             setSeasonName(seasons[index].name);
                         }}
                     >
@@ -175,7 +175,7 @@ function episodesSection(GLOBALS: Globals) {
         let episodes = <></>;
 
         for (let i = 0; i < episodeCount; i++) {
-            const episodeDate = movie.seasons[seasonNumber].episodes[i].air_date;
+            const episodeDate = media.seasons[seasonNumber].episodes[i].air_date;
             const currentDateSum = getNormalizedDate();
             let episodesDateSplittedSum: number;
 
@@ -196,7 +196,7 @@ function episodesSection(GLOBALS: Globals) {
                                     return "gray";
                                 }
 
-                                if (movie.seasons[seasonNumber].episodes[i]["watched"]) {
+                                if (media.seasons[seasonNumber].episodes[i]["watched"]) {
                                     return green;
                                 } else {
                                     return red;
@@ -212,27 +212,30 @@ function episodesSection(GLOBALS: Globals) {
                         }}
                         onClick={() => {
                             if (episodesDateSplittedSum <= currentDateSum) {
-                                const newMovie = copyMovie(movie);
+                                const newTV = copyMedia(media);
+                                if (!(newTV instanceof TV)) {
+                                    return;
+                                }
 
-                                if (newMovie.seasons[seasonNumber].episodes[i]["watched"] == true) {
-                                    newMovie.seasons[seasonNumber].episodes[i]["watched"] = false;
+                                if (newTV.seasons[seasonNumber].episodes[i]["watched"] == true) {
+                                    newTV.seasons[seasonNumber].episodes[i]["watched"] = false;
                                 } else {
-                                    newMovie.seasons[seasonNumber].episodes[i]["watched"] = true;
+                                    newTV.seasons[seasonNumber].episodes[i]["watched"] = true;
                                     setAddLibraryButtonColor(green);
-                                    libraryAdd(newMovie);
+                                    libraryAdd(newTV);
 
                                     if (libraryButtonColor != "transparent") {
                                         setupLibraryPage(GLOBALS);
                                     }
                                 }
-                                setMovie(newMovie);
+                                setMedia(newTV);
                             }
                         }}
                     >
                         <span>
                             <strong>{i + 1}. </strong>
-                            {movie.seasons[seasonNumber].episodes[i].name}
-                            {epsiodeRuntime(setupRuntime(movie.seasons[seasonNumber].episodes[i].runtime, mediaType, true))}
+                            {media.seasons[seasonNumber].episodes[i].name}
+                            {epsiodeRuntime(setupRuntime(media.seasons[seasonNumber].episodes[i].runtime, true))}
                             {episodeReleaseDate(episodeDate)}
                         </span>
                     </ListGroup.Item>
@@ -320,7 +323,7 @@ function scoresSection(TMDBScore: number) {
 function movieDetailsSection(releaseDate: string, genres: string[], mediaType: string, runtime: number[] | null) {
     let movie_releaseDate = releaseDateSection(releaseDate);
     let movie_genres = genresSection(genres);
-    let movie_runtime = setupRuntime(runtime, mediaType, false);
+    let movie_runtime = setupRuntime(runtime, false);
 
     if (movie_releaseDate != undefined || movie_genres != undefined || movie_runtime != undefined) {
         return (
@@ -353,8 +356,8 @@ function movieDetailsSection(releaseDate: string, genres: string[], mediaType: s
     }
 }
 
-function setupRuntime(runtime: number[] | null, mediaType: string, episodeBoolean: boolean) {
-    if (mediaType == "movie" || episodeBoolean) {
+function setupRuntime(runtime: number[] | null, episodeBoolean: boolean) {
+    if (episodeBoolean) {
         if (runtime != null) {
             if (runtime[0] != 0 && runtime[1] != 0) {
                 return `⏳${runtime[0]}h ${runtime[1]}m`;

@@ -1,5 +1,5 @@
-import { cloudflare, generateMedia } from "../APIs/theMovieDatabase";
-import { Movie } from "../classes/Movie";
+import { cloudflare, createMediaObject } from "../APIs/theMovieDatabase";
+import { Movie, TV } from "../classes/Media";
 import { Globals, Trending, TrendingResult } from "../interfaces/interfaces";
 import { Homepage } from "./homepage";
 
@@ -9,7 +9,7 @@ export let movieGenreList: object | null = null;
 
 // Homepage
 export let upcomingMovies: Movie[] | null = null;
-export let trendingMedia: Movie[] | null = null;
+export let trendingMedia: (Movie | TV)[] | null = null;
 
 export async function preload(GLOBALS: Globals) {
     const { setContent, setPreloaded } = GLOBALS.SETTERS;
@@ -35,9 +35,9 @@ export async function preload(GLOBALS: Globals) {
 
             json.results.forEach((element: any) => {
                 element["media_type"] = "movie";
-                let correctMedia = generateMedia(element);
+                let correctMedia = createMediaObject(element);
 
-                if (correctMedia != false) {
+                if (correctMedia != false && correctMedia instanceof Movie) {
                     movieArray.push(correctMedia);
                 }
             });
@@ -50,20 +50,20 @@ export async function preload(GLOBALS: Globals) {
     async function getTrendingMedia() {
         let trendingResults: Trending = await cloudflare(["Get Trending"]);
 
-        return convertToMovieArray(trendingResults.results);
+        return convertToMediaArray(trendingResults.results);
 
-        function convertToMovieArray(array: TrendingResult[]) {
-            let movieArray: Movie[] = [];
+        function convertToMediaArray(array: TrendingResult[]) {
+            let mediaArray: (Movie | TV)[] = [];
 
             array.forEach((element: TrendingResult) => {
-                let correctMedia = generateMedia(element);
+                let correctMedia = createMediaObject(element);
 
                 if (correctMedia != false) {
-                    movieArray.push(correctMedia);
+                    mediaArray.push(correctMedia);
                 }
             });
 
-            return movieArray;
+            return mediaArray;
         }
     }
 

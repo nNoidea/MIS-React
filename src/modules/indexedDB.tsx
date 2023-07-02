@@ -1,4 +1,4 @@
-import { copyMovie, Movie } from "../classes/Movie";
+import { Media, Movie, TV, copyMedia } from "../classes/Media";
 
 // Initiate the database
 let db: IDBDatabase | undefined;
@@ -7,13 +7,13 @@ request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
     db = (event.target as IDBOpenDBRequest).result;
 
     // Delete the already existing database if it exists.
-    if (db.objectStoreNames.contains("movies")) {
-        db.deleteObjectStore("movies");
+    if (db.objectStoreNames.contains("media")) {
+        db.deleteObjectStore("media");
     }
 
     // Create a new 'movies' object if it doesn't exists.
-    if (!db.objectStoreNames.contains("movies")) {
-        db.createObjectStore("movies", { keyPath: "uniqueID" });
+    if (!db.objectStoreNames.contains("media")) {
+        db.createObjectStore("media", { keyPath: "uniqueID" });
     }
 };
 
@@ -30,13 +30,13 @@ function createObjectStore() {
     if (!db) {
         throw new Error("Database is not initialized!");
     }
-    return db.transaction(["movies"], "readwrite").objectStore("movies");
+    return db.transaction(["media"], "readwrite").objectStore("media");
 }
 
 // Methods
-export function libraryAdd(movie: Movie) {
+export function libraryAdd(media: Media) {
     const objectStore = createObjectStore();
-    objectStore.put(movie);
+    objectStore.put(media);
 }
 
 export function libraryRemove(uniqueID: string) {
@@ -65,13 +65,13 @@ export async function libraryCheck(uniqueID: string): Promise<boolean> {
     });
 }
 
-export function libraryGet(uniqueID: string): Promise<Movie> {
+export function libraryGet(uniqueID: string): Promise<Movie | TV> {
     const objectStore = createObjectStore();
 
-    return new Promise<Movie>((resolve, reject) => {
+    return new Promise<Movie | TV>((resolve, reject) => {
         const request = objectStore.get(uniqueID);
         request.onsuccess = (event: Event) => {
-            const result: Movie = copyMovie((event.target as IDBRequest).result);
+            const result: Movie | TV = copyMedia((event.target as IDBRequest).result);
 
             resolve(result);
         };
@@ -85,16 +85,16 @@ export function libraryGet(uniqueID: string): Promise<Movie> {
 export function libraryGetAll() {
     const objectStore = createObjectStore();
 
-    return new Promise<Movie[]>((resolve, reject) => {
+    return new Promise<(Movie | TV)[]>((resolve, reject) => {
         const request = objectStore.getAll();
         request.onsuccess = (event: Event) => {
             let movieArrayDB = (event.target as IDBRequest).result;
-            let movieArray: Movie[] = [];
+            let mediaArray: (Movie | TV)[] = [];
             for (let i = 0; i < movieArrayDB.length; i++) {
-                movieArray.push(copyMovie(movieArrayDB[i]));
+                mediaArray.push(copyMedia(movieArrayDB[i]));
             }
 
-            resolve(movieArray);
+            resolve(mediaArray);
         };
 
         request.onerror = () => {
