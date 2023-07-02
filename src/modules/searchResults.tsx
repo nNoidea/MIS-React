@@ -95,10 +95,11 @@ export async function setupSearchResults(GLOBALS: Globals, oldItems: ReactNode, 
                 className="steamHover"
                 onMouseMove={steamHover}
                 onMouseOut={steamHoverLeave}
+                style={{ backgroundColor: lightBlue, borderRadius: "25px" }}
             >
                 <img
                     className="grid-item"
-                    style={{ backgroundColor: lightBlue, height: "90%"}}
+                    style={{ filter: "invert(1)" }}
                     onClick={async () => await nextResults()}
                     src="https://raw.githubusercontent.com/nNoidea/MIS-React/main/images/next.png"
                 />
