@@ -98,7 +98,7 @@ export async function setupSearchResults(GLOBALS: Globals, oldItems: ReactNode, 
             >
                 <img
                     className="grid-item"
-                    style={{ backgroundColor: lightBlue, height: "100%" }}
+                    style={{ backgroundColor: lightBlue, height: "90%"}}
                     onClick={async () => await nextResults()}
                     src="https://raw.githubusercontent.com/nNoidea/MIS-React/main/images/next.png"
                 />
