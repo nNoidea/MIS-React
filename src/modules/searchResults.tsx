@@ -100,7 +100,7 @@ export async function setupSearchResults(GLOBALS: Globals, oldItems: ReactNode, 
                 <img
                     className="grid-item"
                     onClick={async () => await nextResults()}
-                    src="https://raw.githubusercontent.com/nNoidea/MIS-React/main/images/next.png"
+                    src="https://raw.githubusercontent.com/nNoidea/MIS-React/main/images/nextButton.png"
                 />
             </div>
         );
