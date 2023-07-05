@@ -1,6 +1,5 @@
 import { steamHover, steamHoverLeave } from "./steamHover";
 import { getSearchResults } from "../APIs/theMovieDatabase";
-import Button from "react-bootstrap/Button";
 import { libraryCheck, libraryGet } from "./indexedDB";
 import { green, lightBlue, red } from "./colorPallete";
 import { ReactNode } from "react";
@@ -95,13 +94,37 @@ export async function setupSearchResults(GLOBALS: Globals, oldItems: ReactNode, 
                 className="steamHover"
                 onMouseMove={steamHover}
                 onMouseOut={steamHoverLeave}
-                style={{ backgroundColor: lightBlue, borderRadius: "25px" }}
             >
-                <img
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 100% 100%"
+                    width="100%"
+                    height="100%"
                     className="grid-item"
                     onClick={async () => await nextResults()}
-                    src="https://raw.githubusercontent.com/nNoidea/MIS-React/main/images/nextButton.png"
-                />
+                >
+                    <rect
+                        width="100%"
+                        height="100%"
+                        fill={lightBlue}
+                    />
+                    <line
+                        x1="30%"
+                        y1="50%"
+                        x2="70%"
+                        y2="50%"
+                        stroke="white"
+                        strokeWidth="5"
+                    />
+                    <line
+                        x1="50%"
+                        y1="36.6%"
+                        x2="50%"
+                        y2="63.4%"
+                        stroke="white"
+                        strokeWidth="5"
+                    />
+                </svg>
             </div>
         );
     }

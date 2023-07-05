@@ -27,6 +27,7 @@
     border-radius: 25px;
 }
 
+/* Steam hover effect  */
 .steamHover:hover {
     cursor: pointer;
     z-index: 200;
