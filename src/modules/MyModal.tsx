@@ -1,15 +1,15 @@
 import { Badge, Button, ListGroup, Modal } from "react-bootstrap";
 import { green, orange, purple, red } from "./colorPallete";
-import { libraryAdd, libraryRemove } from "./indexedDB";
+import { DBAdd, DBRemove, objectStoreNameLibrary } from "./indexedDB";
 import { setupLibraryPage } from "./librarypage";
 import { Globals } from "../interfaces/interfaces";
 import { gridImageResolution } from "../APIs/theMovieDatabase";
-import { TV, copyMedia } from "../classes/Media";
+import { Movie, TV, copyMedia } from "../classes/Media";
 
 const date = new Date();
 export function MyModal(GLOBALS: Globals) {
-    const { media, modalShow, addLibraryButtonColor, libraryButtonColor } = GLOBALS.GETTERS;
-    const { setModalShow, setAddLibraryButtonColor } = GLOBALS.SETTERS;
+    const { media, modalShow, addLibraryButtonColor, addWatchedButtonColor, libraryButtonColor } = GLOBALS.GETTERS;
+    const { setModalShow, setAddLibraryButtonColor, setAddWatchedButtonColor } = GLOBALS.SETTERS;
 
     if (media == undefined) {
         return <></>;
@@ -33,7 +33,6 @@ export function MyModal(GLOBALS: Globals) {
                             <img
                                 id="modal-img"
                                 src={getBetterPoster(media.poster)}
-                                alt=""
                             />
                         </div>
                         <div className="col movie-data">
@@ -45,41 +44,9 @@ export function MyModal(GLOBALS: Globals) {
                             </div>
                             <div>
                                 <>
-                                    <Button
-                                        className="button"
-                                        style={{ backgroundColor: addLibraryButtonColor, filter: addLibraryButtonColor === "red" ? "brightness(70%)" : "brightness(90%)" }}
-                                        onClick={() => {
-                                            if (addLibraryButtonColor == red) {
-                                                libraryAdd(media);
-                                                setAddLibraryButtonColor(green);
-                                            } else {
-                                                libraryRemove(media.uniqueID);
-                                                setAddLibraryButtonColor(red);
-                                            }
-
-                                            if (libraryButtonColor != "transparent") {
-                                                setupLibraryPage(GLOBALS);
-                                            }
-                                        }}
-                                    >
-                                        📁Library
-                                    </Button>
-                                    <Button
-                                        className="button"
-                                        href={youtubeSearchLinkGenerator(media.name)}
-                                        target="_blank" // Forces the link to be opened on a new tab.
-                                    >
-                                        <img
-                                            src="https://raw.githubusercontent.com/nNoidea/MIS-React/main/images/youtube.png"
-                                            height={16}
-                                        />
-                                        YouTube
-                                    </Button>
-                                    {(() => {
-                                        if (media.mediaType == "movie") {
-                                            return <Button className="button">👀Watched</Button>;
-                                        }
-                                    })()}
+                                    {libraryButton()}
+                                    {youtubeButton()}
+                                    {watchedButton()}
                                 </>
                             </div>
                         </div>
@@ -89,6 +56,79 @@ export function MyModal(GLOBALS: Globals) {
             </Modal.Body>
         </Modal>
     );
+
+    function libraryButton() {
+        return (
+            <Button
+                className="button"
+                style={{ backgroundColor: addLibraryButtonColor }}
+                onClick={() => {
+                    if (changeButtonColor(media.inLibrary, addLibraryButtonColor, setAddLibraryButtonColor)) {
+                        media.inLibrary = true;
+                        DBAdd(objectStoreNameLibrary, media);
+                    } else {
+                        media.inLibrary = false;
+                        DBAdd(objectStoreNameLibrary, media); // update the movie
+                    }
+
+                    // Update the visible movies in the library
+                    if (libraryButtonColor != "transparent") {
+                        setupLibraryPage(GLOBALS);
+                    }
+                }}
+            >
+                📁Library
+            </Button>
+        );
+    }
+
+    function watchedButton() {
+        if (media instanceof Movie) {
+            return (
+                <Button
+                    className="button"
+                    style={{ backgroundColor: addWatchedButtonColor }}
+                    onClick={() => {
+                        if (changeButtonColor(media.watched, addWatchedButtonColor, setAddWatchedButtonColor)) {
+                            media.watched = true;
+                            DBAdd(objectStoreNameLibrary, media);
+                        } else {
+                            media.watched = false;
+                            DBAdd(objectStoreNameLibrary, media);
+                        }
+                    }}
+                >
+                    👀Watched
+                </Button>
+            );
+        }
+    }
+
+    function youtubeButton() {
+        return (
+            <Button
+                className="button"
+                href={youtubeSearchLinkGenerator(media.name)}
+                target="_blank" // Forces the link to be opened on a new tab.
+            >
+                <img
+                    src="https://raw.githubusercontent.com/nNoidea/MIS-React/main/images/youtube.png"
+                    height={16}
+                />
+                YouTube
+            </Button>
+        );
+    }
+
+    function changeButtonColor(mediaColorBoolean: boolean, buttonColorGetter: any, buttonColorSetter: any) {
+        if (mediaColorBoolean == false) {
+            buttonColorSetter(green);
+            return true;
+        } else {
+            buttonColorSetter(red);
+            return false;
+        }
+    }
 
     function descriptionSection(modalDescription: string) {
         if (modalDescription != "") {
@@ -219,10 +259,12 @@ function episodesSection(GLOBALS: Globals) {
 
                                 if (newTV.seasons[seasonNumber].episodes[i]["watched"] == true) {
                                     newTV.seasons[seasonNumber].episodes[i]["watched"] = false;
+                                    DBAdd(objectStoreNameLibrary, newTV);
                                 } else {
                                     newTV.seasons[seasonNumber].episodes[i]["watched"] = true;
                                     setAddLibraryButtonColor(green);
-                                    libraryAdd(newTV);
+                                    newTV.inLibrary = true;
+                                    DBAdd(objectStoreNameLibrary, newTV);
 
                                     if (libraryButtonColor != "transparent") {
                                         setupLibraryPage(GLOBALS);

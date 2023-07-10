@@ -1,6 +1,6 @@
 import { steamHover, steamHoverLeave } from "./steamHover";
 import { getSearchResults } from "../APIs/theMovieDatabase";
-import { libraryCheck, libraryGet } from "./indexedDB";
+import { DBCheck, DBGet, objectStoreNameLibrary } from "./indexedDB";
 import { green, lightBlue, red } from "./colorPallete";
 import { ReactNode } from "react";
 import { Globals } from "../interfaces/interfaces";
@@ -44,10 +44,10 @@ export function GridItems(GLOBALS: Globals, mediaArray: (Movie | TV)[]) {
     return gridItems;
 
     async function setModalInformation(GLOBALS: Globals, media: Movie | TV) {
-        const { setMedia, setSeasonNumber, setSeasonName, setAddLibraryButtonColor, setModalShow } = GLOBALS.SETTERS;
+        const { setMedia, setSeasonNumber, setSeasonName, setAddLibraryButtonColor, setAddWatchedButtonColor, setModalShow } = GLOBALS.SETTERS;
 
-        if (await libraryCheck(media.uniqueID)) {
-            const libraryMovie = libraryGet(media.uniqueID);
+        if (await DBCheck(objectStoreNameLibrary, media.uniqueID)) {
+            const libraryMovie = DBGet(objectStoreNameLibrary, media.uniqueID);
             if (libraryMovie != null) {
                 media = await libraryMovie;
             }
@@ -60,12 +60,14 @@ export function GridItems(GLOBALS: Globals, mediaArray: (Movie | TV)[]) {
             await media.requestSeasonDetails(1);
             setSeasonNumber(1);
             setSeasonName(media.seasons[1].name);
+        } else {
+            setAddWatchedButtonColor(media.watched ? green : red);
         }
 
         setMedia(media);
         setModalShow(true);
 
-        setAddLibraryButtonColor((await libraryCheck(media.uniqueID)) ? green : red);
+        setAddLibraryButtonColor(media.inLibrary ? green : red);
     }
 }
 

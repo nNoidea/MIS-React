@@ -1,10 +1,10 @@
 import { Globals } from "../interfaces/interfaces";
-import { libraryGetAll } from "./indexedDB";
+import { DBGetAll, objectStoreNameLibrary } from "./indexedDB";
 import { GridItems } from "./searchResults";
 
 export async function setupLibraryPage(GLOBALS: Globals) {
     const { setContent } = GLOBALS.SETTERS;
-    const movieArray = await libraryGetAll();
+    const movieArray = (await DBGetAll(objectStoreNameLibrary)).filter((media) => media.inLibrary);
 
     setContent(
         <>

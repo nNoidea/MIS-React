@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { NavigationBar } from "./modules/NavigationBar";
-import { MyModal } from "./modules/modal";
+import { MyModal } from "./modules/MyModal";
 import { red } from "./modules/colorPallete";
 import "./css/style.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "./css/search.css";
 import { preload } from "./modules/preload";
-import { Spinner } from "react-bootstrap";
 import { Globals } from "./interfaces/interfaces";
+import { LoadingScreen } from "./modules/LoadingScreen";
 
 function App() {
     // NavigationBar
@@ -22,9 +22,10 @@ function App() {
 
     // Modal
     const [modalShow, setModalShow] = useState(false);
-    const [seasonNumber, setSeasonNumber] = useState(1); 
-    const [seasonName, setSeasonName] = useState(""); 
+    const [seasonNumber, setSeasonNumber] = useState(1);
+    const [seasonName, setSeasonName] = useState("");
     const [addLibraryButtonColor, setAddLibraryButtonColor] = useState(red);
+    const [addWatchedButtonColor, setAddWatchedButtonColor] = useState(red);
     const [preloaded, setPreloaded] = useState(false);
 
     let GLOBALS: Globals = {
@@ -37,6 +38,7 @@ function App() {
             seasonNumber,
             seasonName,
             addLibraryButtonColor,
+            addWatchedButtonColor,
             preloaded,
         },
         SETTERS: {
@@ -48,6 +50,7 @@ function App() {
             setSeasonNumber,
             setSeasonName,
             setAddLibraryButtonColor,
+            setAddWatchedButtonColor,
             setPreloaded,
         },
     };
@@ -67,13 +70,8 @@ function App() {
             </>
         );
     } else {
-        return (
-            <div style={{ color: red, display: "flex", alignItems: "center", justifyContent: "center", height: "100vh" }}>
-                <div className="text-center">
-                    <Spinner animation="border" />
-                </div>
-            </div>
-        );
+        // Load Screen
+        return LoadingScreen();
     }
 }
 

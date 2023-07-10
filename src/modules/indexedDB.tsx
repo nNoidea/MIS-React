@@ -1,19 +1,26 @@
 import { Media, Movie, TV, copyMedia } from "../classes/Media";
 
+const versionNumber = 9;
+const databaseName = "media";
+export const objectStoreNameLibrary = "cache";
+// export const objectStoreNameWatched = "watched";
+
 // Initiate the database
 let db: IDBDatabase | undefined;
-const request = indexedDB.open("library", 4);
+const request = indexedDB.open(databaseName, versionNumber);
 request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
     db = (event.target as IDBOpenDBRequest).result;
 
     // Delete the already existing database if it exists.
-    if (db.objectStoreNames.contains("media")) {
-        db.deleteObjectStore("media");
+    if (db.objectStoreNames.contains(objectStoreNameLibrary)) {
+        db.deleteObjectStore(objectStoreNameLibrary);
+        // db.deleteObjectStore(objectStoreNameWatched);
     }
 
     // Create a new 'movies' object if it doesn't exists.
-    if (!db.objectStoreNames.contains("media")) {
-        db.createObjectStore("media", { keyPath: "uniqueID" });
+    if (!db.objectStoreNames.contains(objectStoreNameLibrary)) {
+        db.createObjectStore(objectStoreNameLibrary, { keyPath: "uniqueID" });
+        // db.createObjectStore(objectStoreNameWatched, { keyPath: "uniqueID" });
     }
 };
 
@@ -26,26 +33,26 @@ request.onerror = () => {
 };
 
 // Setup the setter / getter object.
-function createObjectStore() {
+function createObjectStoreLibrary(objectStoreName: string) {
     if (!db) {
         throw new Error("Database is not initialized!");
     }
-    return db.transaction(["media"], "readwrite").objectStore("media");
+    return db.transaction([objectStoreName], "readwrite").objectStore(objectStoreName);
 }
 
 // Methods
-export function libraryAdd(media: Media) {
-    const objectStore = createObjectStore();
+export function DBAdd(DBName: string, media: Movie | TV) {
+    const objectStore = createObjectStoreLibrary(DBName);
     objectStore.put(media);
 }
 
-export function libraryRemove(uniqueID: string) {
-    const objectStore = createObjectStore();
+export function DBRemove(DBName: string, uniqueID: string) {
+    const objectStore = createObjectStoreLibrary(DBName);
     objectStore.delete(uniqueID);
 }
 
-export async function libraryCheck(uniqueID: string): Promise<boolean> {
-    const objectStore = createObjectStore();
+export async function DBCheck(DBName: string, uniqueID: string): Promise<boolean> {
+    const objectStore = createObjectStoreLibrary(DBName);
 
     return new Promise<boolean>((resolve, reject) => {
         const request = objectStore.get(uniqueID);
@@ -65,8 +72,8 @@ export async function libraryCheck(uniqueID: string): Promise<boolean> {
     });
 }
 
-export function libraryGet(uniqueID: string): Promise<Movie | TV> {
-    const objectStore = createObjectStore();
+export function DBGet(DBName: string, uniqueID: string): Promise<Movie | TV> {
+    const objectStore = createObjectStoreLibrary(DBName);
 
     return new Promise<Movie | TV>((resolve, reject) => {
         const request = objectStore.get(uniqueID);
@@ -82,8 +89,8 @@ export function libraryGet(uniqueID: string): Promise<Movie | TV> {
     });
 }
 
-export function libraryGetAll() {
-    const objectStore = createObjectStore();
+export function DBGetAll(DBName: string) {
+    const objectStore = createObjectStoreLibrary(DBName);
 
     return new Promise<(Movie | TV)[]>((resolve, reject) => {
         const request = objectStore.getAll();

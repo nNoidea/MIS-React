@@ -9,6 +9,8 @@ export class Media {
     releaseDate: string;
     genres: string[];
 
+    inLibrary: boolean = false;
+
     TMDBScore: number = 0;
     IMDBScore: number = 0;
     TomatoScore: number = 0;
@@ -48,6 +50,7 @@ export function copyMedia(media: Movie | TV) {
 export class Movie extends Media {
     id: number;
     runtime: number[] | null = null;
+    watched: boolean = false;
 
     constructor(id: number, name: string, poster: string, description: string, releaseDate: string, genres: string[]) {
         let uniqueID = "M" + String(id);
