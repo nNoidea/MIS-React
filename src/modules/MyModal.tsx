@@ -65,11 +65,10 @@ export function MyModal(GLOBALS: Globals) {
                 onClick={() => {
                     if (changeButtonColor(media.inLibrary, addLibraryButtonColor, setAddLibraryButtonColor)) {
                         media.inLibrary = true;
-                        DBAdd(objectStoreNameLibrary, media);
                     } else {
                         media.inLibrary = false;
-                        DBAdd(objectStoreNameLibrary, media); // update the movie
                     }
+                    DBAdd(objectStoreNameLibrary, media); // update the movie
 
                     // Update the visible movies in the library
                     if (libraryButtonColor != "transparent") {
@@ -90,12 +89,15 @@ export function MyModal(GLOBALS: Globals) {
                     style={{ backgroundColor: addWatchedButtonColor }}
                     onClick={() => {
                         if (changeButtonColor(media.watched, addWatchedButtonColor, setAddWatchedButtonColor)) {
+                            media.inLibrary = true;
+                            changeButtonColor(false, addLibraryButtonColor, setAddLibraryButtonColor); // also change the library button color
+
                             media.watched = true;
-                            DBAdd(objectStoreNameLibrary, media);
                         } else {
                             media.watched = false;
-                            DBAdd(objectStoreNameLibrary, media);
                         }
+
+                        DBAdd(objectStoreNameLibrary, media);
                     }}
                 >
                     👀Watched
