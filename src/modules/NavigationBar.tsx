@@ -6,7 +6,7 @@ import { Homepage } from "./homepage";
 import { Globals } from "../interfaces/interfaces";
 
 export function NavigationBar(GLOBALS: Globals) {
-    const { homeButtonColor, libraryButtonColor } = GLOBALS.GETTERS;
+    const { homeButtonColor, libraryButtonColor, homepageContent } = GLOBALS.GETTERS;
     const { setHomeButtonColor, setLibraryButtonColor, setContent } = GLOBALS.SETTERS;
 
     // Home Button
@@ -18,7 +18,8 @@ export function NavigationBar(GLOBALS: Globals) {
                 onClick={() => {
                     setHomeButtonColor(red);
                     setLibraryButtonColor("transparent");
-                    setContent(Homepage(GLOBALS));
+
+                    setContent(homepageContent);
                 }}
             >
                 🏠Home

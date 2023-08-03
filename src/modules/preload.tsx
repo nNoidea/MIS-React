@@ -7,12 +7,11 @@ import { Homepage } from "./homepage";
 export let tvGenreList: object | null = null;
 export let movieGenreList: object | null = null;
 
-// Homepage
-export let upcomingMovies: Movie[] | null = null;
-export let trendingMedia: (Movie | TV)[] | null = null;
+export let upcomingMoviesTotalPages: number = 0;
 
 export async function preload(GLOBALS: Globals) {
-    const { setContent, setPreloaded } = GLOBALS.SETTERS;
+    const { setContent, setPreloaded, setHomepageContent } = GLOBALS.SETTERS;
+    const { homepageContent } = GLOBALS.GETTERS;
 
     // Get the movie genre list
     tvGenreList = await getGenres("tv");
@@ -23,51 +22,54 @@ export async function preload(GLOBALS: Globals) {
         return json;
     }
 
-    // Load the homepage components.
-    upcomingMovies = await getUpcomingMovies();
+    let upcomingMoviesFirstPage = await getUpcomingMovies(1);
+    let trendingMediaFirstPage = await getTrendingMedia();
 
-    async function getUpcomingMovies() {
-        let json = await cloudflare(["Get Upcoming Movies", String(1)]);
-        return convertToMovieArray(await json);
-
-        function convertToMovieArray(json: any) {
-            let movieArray: Movie[] = [];
-
-            json.results.forEach((element: any) => {
-                element["media_type"] = "movie";
-                let correctMedia = createMediaObject(element);
-
-                if (correctMedia != false && correctMedia instanceof Movie) {
-                    movieArray.push(correctMedia);
-                }
-            });
-
-            return movieArray;
-        }
-    }
-
-    trendingMedia = await getTrendingMedia();
-    async function getTrendingMedia() {
-        let trendingResults: Trending = await cloudflare(["Get Trending"]);
-
-        return convertToMediaArray(trendingResults.results);
-
-        function convertToMediaArray(array: TrendingResult[]) {
-            let mediaArray: (Movie | TV)[] = [];
-
-            array.forEach((element: TrendingResult) => {
-                let correctMedia = createMediaObject(element);
-
-                if (correctMedia != false) {
-                    mediaArray.push(correctMedia);
-                }
-            });
-
-            return mediaArray;
-        }
-    }
+    // Set the homepage content, so that it can be loaded later.
+    setHomepageContent(Homepage(GLOBALS, upcomingMoviesFirstPage, trendingMediaFirstPage));
 
     // Everything is loaded
-    setContent(Homepage(GLOBALS));
     setPreloaded(true);
+}
+
+export async function getUpcomingMovies(page: number) {
+    let json = await cloudflare(["Get Upcoming Movies", String(page)]);
+    upcomingMoviesTotalPages = json.total_pages;
+
+    return convertToMovieArray(await json);
+
+    function convertToMovieArray(json: any) {
+        let movieArray: Movie[] = [];
+
+        json.results.forEach((element: any) => {
+            element["media_type"] = "movie";
+            let correctMedia = createMediaObject(element);
+
+            if (correctMedia != false && correctMedia instanceof Movie) {
+                movieArray.push(correctMedia);
+            }
+        });
+
+        return movieArray;
+    }
+}
+
+export async function getTrendingMedia() {
+    let trendingResults: Trending = await cloudflare(["Get Trending"]);
+
+    return convertToMediaArray(trendingResults.results);
+
+    function convertToMediaArray(array: TrendingResult[]) {
+        let mediaArray: (Movie | TV)[] = [];
+
+        array.forEach((element: TrendingResult) => {
+            let correctMedia = createMediaObject(element);
+
+            if (correctMedia != false) {
+                mediaArray.push(correctMedia);
+            }
+        });
+
+        return mediaArray;
+    }
 }

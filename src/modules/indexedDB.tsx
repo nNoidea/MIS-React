@@ -1,4 +1,4 @@
-import { Media, Movie, TV, copyMedia } from "../classes/Media";
+import { Movie, TV, copyMedia } from "../classes/Media";
 
 const versionNumber = 9;
 const databaseName = "media";

@@ -1,19 +1,18 @@
 import { Badge } from "react-bootstrap";
-import { trendingMedia, upcomingMovies } from "./preload";
-import { GridItems } from "./searchResults";
+import { GridItems, LoadMoreButton } from "./searchResults";
 import { red } from "./colorPallete";
 import { ReactNode } from "react";
 import { Globals } from "../interfaces/interfaces";
+import { Movie, TV } from "../classes/Media";
+import { getUpcomingMovies, upcomingMoviesTotalPages } from "./preload";
 
-export function Homepage(GLOBALS: Globals) {
-    if (upcomingMovies == null || trendingMedia == null) {
-        return <></>;
-    }
+let currentPage = 1;
 
+export function Homepage(GLOBALS: Globals, upcomingMovies: Movie[], trendingMedia: (Movie | TV)[]) {
     let upcomingMoviesGrid = GridItems(GLOBALS, upcomingMovies);
     let trendingMediaGrid = GridItems(GLOBALS, trendingMedia);
 
-    function generateHomepageSection(sectionTitle: string, gridItems: ReactNode) {
+    function generateHomepageSection(sectionTitle: string, gridItems: ReactNode, loadMoreButton: ReactNode | null) {
         return (
             <>
                 <h1 className="homepageTitle">
@@ -29,15 +28,24 @@ export function Homepage(GLOBALS: Globals) {
                     id="searchResults"
                 >
                     {gridItems}
+                    {loadMoreButton}
                 </div>
             </>
         );
     }
 
+    async function loadMoreFunctionUpcoming() {
+        const { setHomepageContent } = GLOBALS.SETTERS;
+
+        currentPage++;
+
+        setHomepageContent(Homepage(GLOBALS, upcomingMovies.concat(await getUpcomingMovies(currentPage)), trendingMedia));
+    }
+
     return (
         <>
-            {generateHomepageSection("📅New & Upcoming Movies", upcomingMoviesGrid)}
-            {generateHomepageSection("✨Popular Movies & Series", trendingMediaGrid)}
+            {generateHomepageSection("📅New & Upcoming Movies", upcomingMoviesGrid, LoadMoreButton(currentPage, upcomingMoviesTotalPages, loadMoreFunctionUpcoming))}
+            {generateHomepageSection("✨Popular Movies & Series", trendingMediaGrid, null)}
         </>
     );
 }

@@ -87,8 +87,26 @@ export async function setupSearchResults(GLOBALS: Globals, oldItems: ReactNode, 
         await setupSearchResults(GLOBALS, gridItems, searchQuery, currentPage);
     }
 
+    setContent(
+        <>
+            <div
+                className="grid-container"
+                id="searchResults"
+            >
+                {gridItems}
+                {LoadMoreButton(currentPage, movieList.pages, nextResults)}
+            </div>
+        </>
+    );
+}
+
+export function LoadMoreButton(currentPage: number | null, totalPages: number | null, myFunction: Function) {
+    if (currentPage == null || totalPages == null) {
+        return <></>;
+    }
+
     let loadMoreButton = <></>;
-    if (movieList.pages > currentPage) {
+    if (totalPages > currentPage) {
         loadMoreButton = (
             <div
                 data-bs-toggle="modal"
@@ -103,7 +121,7 @@ export async function setupSearchResults(GLOBALS: Globals, oldItems: ReactNode, 
                     width="100%"
                     height="100%"
                     className="grid-item"
-                    onClick={async () => await nextResults()}
+                    onClick={async () => await myFunction()}
                 >
                     <rect
                         width="100%"
@@ -130,16 +148,5 @@ export async function setupSearchResults(GLOBALS: Globals, oldItems: ReactNode, 
             </div>
         );
     }
-
-    setContent(
-        <>
-            <div
-                className="grid-container"
-                id="searchResults"
-            >
-                {gridItems}
-                {loadMoreButton}
-            </div>
-        </>
-    );
+    return loadMoreButton;
 }

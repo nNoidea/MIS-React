@@ -1,12 +1,12 @@
+import "./css/style.css";
+import "bootstrap/dist/css/bootstrap.css";
+import "./css/search.css";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { NavigationBar } from "./modules/NavigationBar";
 import { MyModal } from "./modules/MyModal";
 import { red } from "./modules/colorPallete";
-import "./css/style.css";
-import "bootstrap/dist/css/bootstrap.css";
-import "./css/search.css";
-import { preload } from "./modules/preload";
+import { preload as preload } from "./modules/preload";
 import { Globals } from "./interfaces/interfaces";
 import { LoadingScreen } from "./modules/LoadingScreen";
 
@@ -27,6 +27,7 @@ function App() {
     const [addLibraryButtonColor, setAddLibraryButtonColor] = useState(red);
     const [addWatchedButtonColor, setAddWatchedButtonColor] = useState(red);
     const [preloaded, setPreloaded] = useState(false);
+    const [homepageContent, setHomepageContent] = useState(<></>);
 
     let GLOBALS: Globals = {
         GETTERS: {
@@ -40,6 +41,7 @@ function App() {
             addLibraryButtonColor,
             addWatchedButtonColor,
             preloaded,
+            homepageContent,
         },
         SETTERS: {
             setHomeButtonColor,
@@ -52,6 +54,7 @@ function App() {
             setAddLibraryButtonColor,
             setAddWatchedButtonColor,
             setPreloaded,
+            setHomepageContent,
         },
     };
 
@@ -59,6 +62,11 @@ function App() {
     useEffect(() => {
         preload(GLOBALS);
     }, []);
+
+    // When everything is preloaded, set the content to the homepage
+    useEffect(() => {
+        setContent(homepageContent);
+    }, [homepageContent]);
 
     if (preloaded) {
         return (
