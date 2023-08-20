@@ -2,12 +2,12 @@ import { setupSearchResults } from "./searchResults";
 import Button from "react-bootstrap/Button";
 import { red } from "./colorPallete";
 import { setupLibraryPage } from "./librarypage";
-import { Homepage } from "./homepage";
 import { Globals } from "../interfaces/interfaces";
+import "../css/NavigationBar.css";
 
 export function NavigationBar(GLOBALS: Globals) {
     const { homeButtonColor, libraryButtonColor, homepageContent } = GLOBALS.GETTERS;
-    const { setHomeButtonColor, setLibraryButtonColor, setContent } = GLOBALS.SETTERS;
+    const { setHomeButtonColor, setLibraryButtonColor, setContent, setLoginModalShow } = GLOBALS.SETTERS;
 
     // Home Button
     function HomeButton() {
@@ -67,10 +67,28 @@ export function NavigationBar(GLOBALS: Globals) {
         );
     }
 
+    function LoginButton() {
+        return (
+            <Button
+                id="loginButton"
+                className="button"
+                style={{ backgroundColor: libraryButtonColor }}
+                onClick={() => {
+                    setHomeButtonColor("transparent");
+                    setLibraryButtonColor("transparent");
+                    setLoginModalShow(true);
+                }}
+            >
+                🔒
+            </Button>
+        );
+    }
+
     return (
         <div className="NavigationBar">
             <HomeButton />
             <LibraryButton />
+            <LoginButton />
             <SearchBar />
         </div>
     );

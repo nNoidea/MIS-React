@@ -44,7 +44,7 @@ export function GridItems(GLOBALS: Globals, mediaArray: (Movie | TV)[]) {
     return gridItems;
 
     async function setModalInformation(GLOBALS: Globals, media: Movie | TV) {
-        const { setMedia, setSeasonNumber, setSeasonName, setAddLibraryButtonColor, setAddWatchedButtonColor, setModalShow } = GLOBALS.SETTERS;
+        const { setMedia, setSeasonNumber, setSeasonName, setAddLibraryButtonColor, setAddWatchedButtonColor, setMediaModalShow } = GLOBALS.SETTERS;
 
         if (await DBCheck(objectStoreNameLibrary, media.uniqueID)) {
             const libraryMovie = DBGet(objectStoreNameLibrary, media.uniqueID);
@@ -65,7 +65,7 @@ export function GridItems(GLOBALS: Globals, mediaArray: (Movie | TV)[]) {
         }
 
         setMedia(media);
-        setModalShow(true);
+        setMediaModalShow(true);
 
         setAddLibraryButtonColor(media.inLibrary ? green : red);
     }

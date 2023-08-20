@@ -1,0 +1,16 @@
+/* Style the search box inside the navigation bar */
+.NavigationBar input[type=text] {
+    color: white;
+    background-color: transparent;
+    float: right;
+    padding: 6px;
+    border: none;
+    margin-top: 8px;
+    margin-right: 16px;
+    font-size: 17px;
+    width: 140px;
+}
+
+.NavigationBar input[type="text"]::placeholder {
+    color: white;
+}

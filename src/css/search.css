@@ -1,8 +1,3 @@
-/* Hide the scrollbar */
-::-webkit-scrollbar {
-    display: none;
-}
-
 /* center */
 .center {
     display: flex;

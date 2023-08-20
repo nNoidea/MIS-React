@@ -1,15 +1,16 @@
 import { Badge, Button, ListGroup, Modal } from "react-bootstrap";
 import { green, orange, purple, red } from "./colorPallete";
-import { DBAdd, DBRemove, objectStoreNameLibrary } from "./indexedDB";
+import { DBAdd, objectStoreNameLibrary } from "./indexedDB";
 import { setupLibraryPage } from "./librarypage";
 import { Globals } from "../interfaces/interfaces";
 import { gridImageResolution } from "../APIs/theMovieDatabase";
 import { Movie, TV, copyMedia } from "../classes/Media";
+import "../css/MediaModal.css";
 
 const date = new Date();
 export function MyModal(GLOBALS: Globals) {
-    const { media, modalShow, addLibraryButtonColor, addWatchedButtonColor, libraryButtonColor } = GLOBALS.GETTERS;
-    const { setModalShow, setAddLibraryButtonColor, setAddWatchedButtonColor } = GLOBALS.SETTERS;
+    const { media, mediaModalShow, addLibraryButtonColor, addWatchedButtonColor, libraryButtonColor } = GLOBALS.GETTERS;
+    const { setMediaModalShow, setAddLibraryButtonColor, setAddWatchedButtonColor } = GLOBALS.SETTERS;
 
     if (media == undefined) {
         return <></>;
@@ -17,12 +18,12 @@ export function MyModal(GLOBALS: Globals) {
 
     return (
         <Modal
-            show={modalShow}
+            show={mediaModalShow}
             size="xl"
             aria-labelledby="contained-modal-title-vcenter"
             centered
             onHide={() => {
-                setModalShow(false);
+                setMediaModalShow(false);
             }}
             id="modal"
         >

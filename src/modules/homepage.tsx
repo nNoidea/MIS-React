@@ -5,6 +5,7 @@ import { ReactNode } from "react";
 import { Globals } from "../interfaces/interfaces";
 import { Movie, TV } from "../classes/Media";
 import { getUpcomingMovies, upcomingMoviesTotalPages } from "./preload";
+import "../css/Homepage.css";
 
 let currentPage = 1;
 
@@ -15,7 +16,7 @@ export function Homepage(GLOBALS: Globals, upcomingMovies: Movie[], trendingMedi
     function generateHomepageSection(sectionTitle: string, gridItems: ReactNode, loadMoreButton: ReactNode | null) {
         return (
             <>
-                <h1 className="homepageTitle">
+                <h1 id="homepageTitle">
                     <Badge
                         bg=""
                         style={{ backgroundColor: red }}

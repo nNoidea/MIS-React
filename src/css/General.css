@@ -1,0 +1,37 @@
+/* Hide the scrollbar */
+::-webkit-scrollbar {
+    display: none;
+}
+
+#body {
+    overflow-anchor: none;
+    background: linear-gradient(to right, #2b5876, #4e4376);
+}
+
+/* Footer margin */
+#endFooter {
+    margin: 100px;
+}
+
+/* border */
+.border {
+    border-width: 2px;
+    border-style: solid;
+    border-color: black;
+}
+
+/* Buttons */
+.button {
+    border: 1px solid white !important;
+    margin: 10px;
+}
+
+.button:hover {
+    filter: brightness(80%) !important;
+    /* Apply darker tone when hovering */
+}
+
+/* Load more button */
+.loadMoreButton {
+    margin-top: 50px;
+}

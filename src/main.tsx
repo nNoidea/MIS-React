@@ -1,14 +1,15 @@
-import "./css/style.css";
 import "bootstrap/dist/css/bootstrap.css";
+import "./css/General.css";
 import "./css/search.css";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { NavigationBar } from "./modules/NavigationBar";
-import { MyModal } from "./modules/MyModal";
+import { MyModal } from "./modules/MediaModal";
 import { red } from "./modules/colorPallete";
 import { preload as preload } from "./modules/preload";
 import { Globals } from "./interfaces/interfaces";
 import { LoadingScreen } from "./modules/LoadingScreen";
+import { LoginModal } from "./modules/LoginModal";
 
 function App() {
     // NavigationBar
@@ -21,7 +22,7 @@ function App() {
     const [media, setMedia] = useState(undefined); // Will contain all the movie details
 
     // Modal
-    const [modalShow, setModalShow] = useState(false);
+    const [mediaModalShow, setMediaModalShow] = useState(false);
     const [seasonNumber, setSeasonNumber] = useState(1);
     const [seasonName, setSeasonName] = useState("");
     const [addLibraryButtonColor, setAddLibraryButtonColor] = useState(red);
@@ -29,32 +30,37 @@ function App() {
     const [preloaded, setPreloaded] = useState(false);
     const [homepageContent, setHomepageContent] = useState(<></>);
 
+    // Login
+    const [loginModalShow, setLoginModalShow] = useState(false);
+
     let GLOBALS: Globals = {
         GETTERS: {
             homeButtonColor,
             libraryButtonColor,
             content,
             media,
-            modalShow,
+            mediaModalShow,
             seasonNumber,
             seasonName,
             addLibraryButtonColor,
             addWatchedButtonColor,
             preloaded,
             homepageContent,
+            loginModalShow,
         },
         SETTERS: {
             setHomeButtonColor,
             setLibraryButtonColor,
             setContent,
             setMedia,
-            setModalShow,
+            setMediaModalShow,
             setSeasonNumber,
             setSeasonName,
             setAddLibraryButtonColor,
             setAddWatchedButtonColor,
             setPreloaded,
             setHomepageContent,
+            setLoginModalShow,
         },
     };
 
@@ -74,6 +80,7 @@ function App() {
                 {NavigationBar(GLOBALS)}
                 {content}
                 {MyModal(GLOBALS)}
+                {LoginModal(GLOBALS)}
                 <div id="endFooter"></div>
             </>
         );
