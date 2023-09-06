@@ -45,7 +45,7 @@ export function Homepage(GLOBALS: Globals, upcomingMovies: Movie[], trendingMedi
 
     return (
         <>
-            {generateHomepageSection("📅New & Upcoming Movies IS IT WORKING2!?", upcomingMoviesGrid, LoadMoreButton(currentPage, upcomingMoviesTotalPages, loadMoreFunctionUpcoming))}
+            {generateHomepageSection("📅New & Upcoming Movies", upcomingMoviesGrid, LoadMoreButton(currentPage, upcomingMoviesTotalPages, loadMoreFunctionUpcoming))}
             {generateHomepageSection("✨Popular Movies & Series", trendingMediaGrid, null)}
         </>
     );
