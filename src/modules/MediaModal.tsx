@@ -6,7 +6,7 @@ import { Globals } from "../interfaces/interfaces";
 import { gridImageResolution } from "../APIs/theMovieDatabase";
 import { Movie, TV, copyMedia } from "../classes/Media";
 import "../css/MediaModal.css";
-import { misPostMovie } from "../APIs/mis-post";
+import { misPostMovie, misPostTV } from "../APIs/mis-post";
 
 const date = new Date();
 export function MyModal(GLOBALS: Globals) {
@@ -72,6 +72,12 @@ export function MyModal(GLOBALS: Globals) {
                     }
                     DBAdd(objectStoreNameLibrary, media); // update the movie
 
+                    if (media instanceof Movie) {
+                        misPostMovie(String(media.id), media.name, String(localStorage.getItem("session_id")), media.inLibrary, media.watched);
+                    } else if (media instanceof TV) {
+                        misPostTV(String(media.id), media.name, String(localStorage.getItem("session_id")), media.inLibrary);
+                    }
+
                     // Update the visible movies in the library
                     if (libraryButtonColor != "transparent") {
                         setupLibraryPage(GLOBALS);
@@ -101,9 +107,7 @@ export function MyModal(GLOBALS: Globals) {
 
                         DBAdd(objectStoreNameLibrary, media);
 
-                        if (media instanceof Movie) {
-                            misPostMovie(String(media.id), media.name, String(localStorage.getItem("session_id")), media.inLibrary, media.watched);
-                        }
+                        misPostMovie(String(media.id), media.name, String(localStorage.getItem("session_id")), media.inLibrary, media.watched);
                     }}
                 >
                     👀Watched
