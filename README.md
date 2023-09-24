@@ -1,13 +1,40 @@
 # Motion Is Superior
 
-## Setup for development
-```
-cd MIS-React
-npm install
-npm start
-```
+## Installation Instructions
 
-## Read before you use
-MIS is currently in development and thus stuff will change constantly. Do not expect your database / library of movies and series to stay unbroken. The database might not work in the later versions of MIS. You might even need to clear up your `IndexedDB` data to be able to use the later versions of MIS.
+To set up MIS for development, follow these steps:
 
-MIS uses `indexedDB` API to save your data locally on your browser. Thus, if you clean up your browser, your data might dissapear forever.
+1. Navigate to the MIS-React directory using the command line:
+
+    ```
+    cd MIS-React
+    ```
+
+2. Install the necessary dependencies:
+
+    ```
+    npm install
+    ```
+
+3. Start the development server:
+    ```
+    npm start
+    ```
+
+## Important Notes
+
+Please read these important notes before using MIS:
+
+-   MIS is currently in development, so expect changes. Your movie and series database may break or not work in later versions.
+
+-   MIS uses the `indexedDB` API to save data locally in your browser. Clearing your browser data may result in permanent data loss.
+
+## How MIS Works
+
+MIS relies heavily on the backend for media content. Making changes on the client side may cause issues or result in being banned by the backend.
+
+### Database
+
+-   User data is stored in `IndexedDB` with timestamps. If a media's timestamp is outdated, an API request updates it.
+
+### Cloud

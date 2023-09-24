@@ -6,6 +6,7 @@ import { Globals } from "../interfaces/interfaces";
 import { gridImageResolution } from "../APIs/theMovieDatabase";
 import { Movie, TV, copyMedia } from "../classes/Media";
 import "../css/MediaModal.css";
+import { misPostMovie } from "../APIs/mis-post";
 
 const date = new Date();
 export function MyModal(GLOBALS: Globals) {
@@ -99,6 +100,10 @@ export function MyModal(GLOBALS: Globals) {
                         }
 
                         DBAdd(objectStoreNameLibrary, media);
+
+                        if (media instanceof Movie) {
+                            misPostMovie(String(media.id), media.name, String(localStorage.getItem("session_id")), media.inLibrary, media.watched);
+                        }
                     }}
                 >
                     👀Watched

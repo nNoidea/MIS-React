@@ -2,6 +2,7 @@ import { Button, Col, Form, Modal, ModalBody } from "react-bootstrap";
 import { Globals } from "../interfaces/interfaces";
 import { lightBlue } from "./colorPallete";
 import "../css/LoginModal.css";
+import { misLogin } from "../APIs/mis-login";
 
 export function LoginModal(GLOBALS: Globals) {
     const { loginModalShow } = GLOBALS.GETTERS;
@@ -63,10 +64,10 @@ export function LoginModal(GLOBALS: Globals) {
         }
 
         function LoginUser(email: string, password: string) {
-            console.log("Login user");
+            misLogin(email, password, "", "login");
         }
         function RegisterUser(email: string, password: string) {
-            console.log("Register user");
+            misLogin(email, password, "", "register");
         }
 
         // Check which input field is filled
@@ -88,9 +89,8 @@ export function LoginModal(GLOBALS: Globals) {
                     console.log("passwords don't match");
                 }
             }
-
-            return false;
         }
+        return false;
     }
 
     return (
