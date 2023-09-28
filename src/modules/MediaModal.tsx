@@ -282,6 +282,9 @@ function episodesSection(GLOBALS: Globals) {
                                         setupLibraryPage(GLOBALS);
                                     }
                                 }
+
+                                misPostTV(String(newTV.id), newTV.name, String(localStorage.getItem("session_id")), undefined, [[seasonNumber, i + 1, true]]);
+
                                 setMedia(newTV);
                             }
                         }}
