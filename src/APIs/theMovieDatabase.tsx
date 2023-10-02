@@ -46,12 +46,7 @@ export function createMediaObject(rawMedia: any) {
     }
 
     // Poster
-    let poster = "";
-    if (rawMedia.poster_path == null) {
-        poster = "NO-IMAGE";
-    } else {
-        poster = `https://image.tmdb.org/t/p/${gridImageResolution}` + rawMedia.poster_path;
-    }
+    let poster = rawMedia.poster_path;
 
     // Genre ids
     let genreIDS = rawMedia.genre_ids;

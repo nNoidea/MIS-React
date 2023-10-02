@@ -72,7 +72,7 @@ export function NavigationBar(GLOBALS: Globals) {
             <Button
                 id="loginButton"
                 className="button"
-                style={{ backgroundColor: libraryButtonColor }}
+                style={{ backgroundColor: "transparent"}}
                 onClick={() => {
                     setHomeButtonColor("transparent");
                     setLibraryButtonColor("transparent");

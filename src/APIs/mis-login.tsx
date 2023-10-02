@@ -1,4 +1,4 @@
-export function misLogin(email: string, password: string, session_id: string, mode: string) {
+export async function misLoginOrRegister(email: string, password: string, session_id: string, mode: string) {
     let formdata = new FormData();
     formdata.append("email", email);
     formdata.append("password", password);
@@ -10,16 +10,38 @@ export function misLogin(email: string, password: string, session_id: string, mo
         redirect: "follow" as RequestRedirect,
     };
 
-    fetch(`https://mis-login.zugo.workers.dev/?mode=${mode}`, requestOptions)
-        .then((response) => response.text())
-        .then((result) => {
-            console.log("result", result);
-            // save the session id
-            localStorage.setItem("session_id", result);
-            return true;
-        })
-        .catch((error) => {
-            console.log("error", error);
-            return false;
-        });
+    if (mode == "login" || mode == "register") {
+        fetch(`https://mis-login.zugo.workers.dev/?mode=${mode}`, requestOptions)
+            .then((response) => response.text())
+            .then((result) => {
+                console.log("result", result);
+
+                // check if results contains anything but numbers
+                if (result.match(/\D/g) != null) {
+                    console.log("Error returned session id is not valid", result);
+                    return false;
+                } else {
+                    // save the session id
+                    localStorage.setItem("session_id", result);
+                    return true;
+                }
+            })
+            .catch((error) => {
+                console.log("error", error);
+                return false;
+            });
+    } else if (mode == "session_id") {
+        return await (await fetch(`https://mis-login.zugo.workers.dev/?mode=${mode}`, requestOptions)).json();
+    }
+}
+
+export async function misSessionLogin() {
+    // Will return the user's cloud DB or false
+    let session_id = localStorage.getItem("session_id");
+    if (session_id === null) {
+        console.log("No session id found");
+        return false;
+    }
+
+    return JSON.parse(await misLoginOrRegister("", "", session_id, "session_id"));
 }

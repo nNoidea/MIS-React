@@ -1,6 +1,8 @@
+import { misSessionLogin } from "../APIs/mis-login";
 import { cloudflare, createMediaObject } from "../APIs/theMovieDatabase";
 import { Movie, TV } from "../classes/Media";
 import { Globals, Trending, TrendingResult } from "../interfaces/interfaces";
+import { CloudDBHandler } from "./CloudDBHandler";
 import { Homepage } from "./homepage";
 
 // We generate these variables on the global scope, since this scope gets executed only once.
@@ -10,8 +12,7 @@ export let movieGenreList: object | null = null;
 export let upcomingMoviesTotalPages: number = 0;
 
 export async function preload(GLOBALS: Globals) {
-    const { setContent, setPreloaded, setHomepageContent } = GLOBALS.SETTERS;
-    const { homepageContent } = GLOBALS.GETTERS;
+    const { setPreloaded, setHomepageContent } = GLOBALS.SETTERS;
 
     // Get the movie genre list
     tvGenreList = await getGenres("tv");
@@ -27,6 +28,9 @@ export async function preload(GLOBALS: Globals) {
 
     // Set the homepage content, so that it can be loaded later.
     setHomepageContent(Homepage(GLOBALS, upcomingMoviesFirstPage, trendingMediaFirstPage));
+
+    let cloud = await misSessionLogin();
+    CloudDBHandler(cloud);
 
     // Everything is loaded
     setPreloaded(true);

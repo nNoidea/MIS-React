@@ -283,7 +283,9 @@ function episodesSection(GLOBALS: Globals) {
                                     }
                                 }
 
-                                misPostTV(String(newTV.id), newTV.name, String(localStorage.getItem("session_id")), undefined, [[seasonNumber, i + 1, true]]);
+                                misPostTV(String(newTV.id), newTV.name, String(localStorage.getItem("session_id")), undefined, [
+                                    [seasonNumber, i + 1, newTV.seasons[seasonNumber].episodes[i]["watched"]],
+                                ]);
 
                                 setMedia(newTV);
                             }

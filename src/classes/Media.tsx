@@ -1,4 +1,4 @@
-import { TMDBRequestDetails, TMDBRequestSeasonDetails } from "../APIs/theMovieDatabase";
+import { TMDBRequestDetails, TMDBRequestSeasonDetails, gridImageResolution } from "../APIs/theMovieDatabase";
 
 // This will be a superclass of Movie and TV
 export class Media {
@@ -18,10 +18,15 @@ export class Media {
     constructor(uniqueID: string, name: string, poster: string, description: string, releaseDate: string, genres: string[]) {
         this.uniqueID = uniqueID;
         this.name = name;
-        this.poster = poster;
         this.description = description;
         this.releaseDate = releaseDate;
         this.genres = genres;
+
+        if (poster == null) {
+            this.poster = "NO-IMAGE";
+        } else {
+            this.poster = `https://image.tmdb.org/t/p/${gridImageResolution}` + poster;
+        }
     }
 
     detailsExist: boolean = false;

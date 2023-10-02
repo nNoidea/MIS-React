@@ -6,10 +6,10 @@ import ReactDOM from "react-dom/client";
 import { NavigationBar } from "./modules/NavigationBar";
 import { MyModal } from "./modules/MediaModal";
 import { red } from "./modules/colorPallete";
-import { preload as preload } from "./modules/preload";
 import { Globals } from "./interfaces/interfaces";
 import { LoadingScreen } from "./modules/LoadingScreen";
 import { LoginModal } from "./modules/LoginModal";
+import { preload } from "./modules/preload";
 
 function App() {
     // NavigationBar
@@ -75,6 +75,7 @@ function App() {
     }, [homepageContent]);
 
     if (preloaded) {
+        // Preload is in the GLOBALS
         return (
             <>
                 {NavigationBar(GLOBALS)}
