@@ -9,6 +9,7 @@ export function NavigationBar(GLOBALS: Globals) {
     const { homeButtonColor, libraryButtonColor, homepageContent } = GLOBALS.GETTERS;
     const { setHomeButtonColor, setLibraryButtonColor, setContent, setLoginModalShow } = GLOBALS.SETTERS;
 
+    
     // Home Button
     function HomeButton() {
         return (
