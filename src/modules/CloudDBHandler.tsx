@@ -24,6 +24,11 @@ export async function CloudDBHandler(JSON: any) {
         const tvObject = new TV(serie.id, json.name, json.poster_path, json.overview, json.first_air_date, json.genres);
         tvObject.inLibrary = serie.library;
 
+        for (let episode of serie.episodes) {
+            await tvObject.requestSeasonDetails(episode.seasonNumber);
+            tvObject.seasons[episode.seasonNumber].episodes[episode.episodeNumber].watched = episode.watched;
+        }
+
         DBAdd(objectStoreNameLibrary, tvObject);
     }
 }

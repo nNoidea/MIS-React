@@ -30,8 +30,9 @@ export async function preload(GLOBALS: Globals) {
     setHomepageContent(Homepage(GLOBALS, upcomingMoviesFirstPage, trendingMediaFirstPage));
 
     let cloud = await misSessionLogin();
-    CloudDBHandler(cloud);
-
+    if (cloud != false) {
+        CloudDBHandler(cloud);
+    }
     // Everything is loaded
     setPreloaded(true);
 }

@@ -73,6 +73,8 @@ export function MyModal(GLOBALS: Globals) {
                     DBAdd(objectStoreNameLibrary, media); // update the movie
 
                     if (media instanceof Movie) {
+                        console.log(`inLibrary: ${media.inLibrary}`);
+
                         misPostMovie(String(media.id), media.name, String(localStorage.getItem("session_id")), media.inLibrary, media.watched);
                     } else if (media instanceof TV) {
                         misPostTV(String(media.id), media.name, String(localStorage.getItem("session_id")), media.inLibrary);

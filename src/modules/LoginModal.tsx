@@ -104,83 +104,111 @@ export function LoginModal(GLOBALS: Globals) {
             }}
             id="loginModal"
         >
-            <ModalBody id="LoginWrapper">
-                <Form id="Login">
-                    <h1>Login</h1>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Email address</Form.Label>
-                        <Form.Control
-                            type="email"
-                            placeholder="name@example.com"
-                            onChange={(e) => {
-                                emailLogin = e.target.value;
-                            }}
-                        />
-                    </Form.Group>
-
-                    <Form.Group className="mb-3">
-                        <Form.Label>Password</Form.Label>
-                        <Col>
-                            <Form.Control
-                                type="password"
-                                placeholder="Password"
-                                onChange={(e) => {
-                                    passwordLogin = e.target.value;
-                                }}
-                            />
-                        </Col>
-                    </Form.Group>
-                </Form>
-
-                <Form id="Register">
-                    <h1>Register</h1>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Email address</Form.Label>
-                        <Form.Control
-                            type="email"
-                            placeholder="name@example.com"
-                            onChange={(e) => {
-                                emailRegister = e.target.value;
-                            }}
-                        />
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Password</Form.Label>
-                        <Col>
-                            <Form.Control
-                                type="password"
-                                placeholder="Password"
-                                onChange={(e) => {
-                                    passwordRegister1 = e.target.value;
-                                }}
-                            />
-                        </Col>
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Repeat Password</Form.Label>
-                        <Col>
-                            <Form.Control
-                                type="password"
-                                placeholder="Repeat Password"
-                                onChange={(e) => {
-                                    passwordRegister2 = e.target.value;
-                                }}
-                            />
-                        </Col>
-                    </Form.Group>
-                </Form>
-
-                <Button
-                    id="ContinueButton"
-                    className="button"
-                    style={{ backgroundColor: lightBlue }}
-                    onClick={() => {
-                        handleInputFields(emailLogin, passwordLogin, emailRegister, passwordRegister1, passwordRegister2);
-                    }}
-                >
-                    Continue
-                </Button>
-            </ModalBody>
+            <ModalBody id="LoginWrapper">{loginFields()}</ModalBody>
         </Modal>
     );
+    function loginFields() {
+        // if session id exists show email and logout button
+        // else show login fields
+
+        if (localStorage.getItem("session_id") != undefined && localStorage.getItem("session_id") != "") {
+            return (
+                <>
+                    <h1>{localStorage.getItem("email")}</h1>
+                    <Button
+                        id="ContinueButton"
+                        className="button"
+                        style={{ backgroundColor: lightBlue }}
+                        onClick={() => {
+                            // set session id to ""
+                            localStorage.setItem("session_id", "");
+                            localStorage.setItem("email", "");
+                        }}
+                    >
+                        Logout
+                    </Button>
+                </>
+            );
+        } else {
+            return (
+                <>
+                    <Form id="Login">
+                        <h1>Login</h1>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Email address</Form.Label>
+                            <Form.Control
+                                type="email"
+                                placeholder="name@example.com"
+                                onChange={(e) => {
+                                    emailLogin = e.target.value;
+                                }}
+                            />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Password</Form.Label>
+                            <Col>
+                                <Form.Control
+                                    type="password"
+                                    placeholder="Password"
+                                    onChange={(e) => {
+                                        passwordLogin = e.target.value;
+                                    }}
+                                />
+                            </Col>
+                        </Form.Group>
+                    </Form>
+
+                    <Form id="Register">
+                        <h1>Register</h1>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Email address</Form.Label>
+                            <Form.Control
+                                type="email"
+                                placeholder="name@example.com"
+                                onChange={(e) => {
+                                    emailRegister = e.target.value;
+                                }}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Password</Form.Label>
+                            <Col>
+                                <Form.Control
+                                    type="password"
+                                    placeholder="Password"
+                                    onChange={(e) => {
+                                        passwordRegister1 = e.target.value;
+                                    }}
+                                />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Repeat Password</Form.Label>
+                            <Col>
+                                <Form.Control
+                                    type="password"
+                                    placeholder="Repeat Password"
+                                    onChange={(e) => {
+                                        passwordRegister2 = e.target.value;
+                                    }}
+                                />
+                            </Col>
+                        </Form.Group>
+                    </Form>
+
+                    <Button
+                        id="ContinueButton"
+                        className="button"
+                        style={{ backgroundColor: lightBlue }}
+                        onClick={() => {
+                            handleInputFields(emailLogin, passwordLogin, emailRegister, passwordRegister1, passwordRegister2);
+                        }}
+                    >
+                        Continue
+                    </Button>
+                </>
+            );
+        }
+    }
 }

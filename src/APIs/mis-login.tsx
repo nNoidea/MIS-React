@@ -23,6 +23,7 @@ export async function misLoginOrRegister(email: string, password: string, sessio
                 } else {
                     // save the session id
                     localStorage.setItem("session_id", result);
+                    localStorage.setItem("email", email);
                     return true;
                 }
             })
@@ -31,7 +32,16 @@ export async function misLoginOrRegister(email: string, password: string, sessio
                 return false;
             });
     } else if (mode == "session_id") {
-        return await (await fetch(`https://mis-login.zugo.workers.dev/?mode=${mode}`, requestOptions)).json();
+        let answer = await (await fetch(`https://mis-login.zugo.workers.dev/?mode=${mode}`, requestOptions)).text();
+
+        console.log(answer);
+
+        // if the answer is string
+        if (String(answer) == "session id not found") {
+            return false;
+        } else {
+            return JSON.parse(answer);
+        }
     }
 }
 

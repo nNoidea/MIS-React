@@ -24,6 +24,8 @@ export class Media {
 
         if (poster == null) {
             this.poster = "NO-IMAGE";
+        } else if (poster.includes("https")) {
+            this.poster = poster;
         } else {
             this.poster = `https://image.tmdb.org/t/p/${gridImageResolution}` + poster;
         }
