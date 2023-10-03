@@ -34,8 +34,6 @@ export async function misLoginOrRegister(email: string, password: string, sessio
     } else if (mode == "session_id") {
         let answer = await (await fetch(`https://mis-login.zugo.workers.dev/?mode=${mode}`, requestOptions)).text();
 
-        console.log(answer);
-
         // if the answer is string
         if (String(answer) == "session id not found") {
             return false;
