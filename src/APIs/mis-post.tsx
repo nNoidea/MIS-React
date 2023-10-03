@@ -64,7 +64,5 @@ function misPost(mode: string, session_id: string, userRequest: string) {
     };
 
     fetch(`https://mis-post.zugo.workers.dev?mode=${mode}`, requestOptions)
-        .then((response) => response.text())
-        .then((result) => console.log(result))
         .catch((error) => console.log("error", error));
 }

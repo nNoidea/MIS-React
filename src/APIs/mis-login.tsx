@@ -14,8 +14,6 @@ export async function misLoginOrRegister(email: string, password: string, sessio
         fetch(`https://mis-login.zugo.workers.dev/?mode=${mode}`, requestOptions)
             .then((response) => response.text())
             .then((result) => {
-                console.log("result", result);
-
                 // check if results contains anything but numbers
                 if (result.match(/\D/g) != null) {
                     console.log("Error returned session id is not valid", result);
