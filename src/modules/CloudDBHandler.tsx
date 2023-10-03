@@ -28,7 +28,8 @@ export async function CloudDBHandler(JSON: any) {
 
         for (let episode of serie.episodes) {
             await tvObject.requestSeasonDetails(episode.seasonNumber);
-            tvObject.seasons[episode.seasonNumber].episodes[episode.episodeNumber]["watched"] = episode.watched;
+
+            tvObject.seasons[episode.seasonNumber].episodes[episode.episodeNumber - 1].watched = true;
         }
 
         DBAdd(objectStoreNameLibrary, tvObject);
