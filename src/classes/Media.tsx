@@ -81,8 +81,6 @@ export class TV extends Media {
     }
 
     async requestSeasonDetails(seasonNumber: number) {
-        if (this.seasons[seasonNumber].episodes == undefined) {
-            await TMDBRequestSeasonDetails(this, seasonNumber);
-        }
+        await TMDBRequestSeasonDetails(this, seasonNumber);
     }
 }
