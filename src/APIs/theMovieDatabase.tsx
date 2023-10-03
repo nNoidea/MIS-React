@@ -106,10 +106,6 @@ export async function TMDBRequestSeasonDetails(tv: TV, seasonNumber: number) {
     let json;
     json = await cloudflare(["Season Details", String(tv.id), String(seasonNumber)]);
 
-    if (tv.seasons[seasonNumber] == null) {
-        tv.seasons[seasonNumber] = {}; // or []
-    }
-
     tv.seasons[seasonNumber].episodes = json.episodes;
     for (let i = 0; i < tv.seasons[seasonNumber].episodes.length; i++) {
         // Convert runtime from mintues to [hours, mintues]
