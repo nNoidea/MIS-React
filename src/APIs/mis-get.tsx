@@ -3,7 +3,7 @@ import { movieGenreList, tvGenreList } from "../modules/preload";
 
 export let gridImageResolution = "w342";
 
-export async function cloudflare(array: string[]) {
+export async function misGet(array: string[]) {
     const options: RequestInit = {
         method: "GET",
         redirect: "follow",
@@ -15,7 +15,7 @@ export async function cloudflare(array: string[]) {
 }
 
 export async function getSearchResults(searchQuery: string, pageNumber: number) {
-    let json = await cloudflare(["Multi Search", searchQuery, String(pageNumber)]);
+    let json = await misGet(["Multi Search", searchQuery, String(pageNumber)]);
 
     return normalize(json);
 
@@ -84,11 +84,11 @@ export async function TMDBRequestDetails(media: Movie | TV) {
     let json;
 
     if (media instanceof Movie) {
-        json = await cloudflare(["Get Details", "movie", String(media.id)]);
+        json = await misGet(["Get Details", "movie", String(media.id)]);
         let minutes = json.runtime;
         media.runtime = convertRuntime(minutes);
     } else if (media instanceof TV) {
-        json = await cloudflare(["Get Details", "tv", String(media.id)]);
+        json = await misGet(["Get Details", "tv", String(media.id)]);
 
         if (json.seasons[0].season_number == 1) {
             json.seasons.unshift(null);
@@ -104,7 +104,7 @@ export async function TMDBRequestDetails(media: Movie | TV) {
 
 export async function TMDBRequestSeasonDetails(tv: TV, seasonNumber: number) {
     let json;
-    json = await cloudflare(["Season Details", String(tv.id), String(seasonNumber)]);
+    json = await misGet(["Season Details", String(tv.id), String(seasonNumber)]);
 
     tv.seasons[seasonNumber].episodes = json.episodes;
     for (let i = 0; i < tv.seasons[seasonNumber].episodes.length; i++) {

@@ -1,6 +1,6 @@
 // This file is meant to get the JSON file that has all the movies, series and episodes the user has saved and load them to the indexedDB.
 
-import { cloudflare } from "../APIs/theMovieDatabase";
+import { misGet } from "../APIs/mis-get";
 import { Movie, TV } from "../classes/Media";
 import { DBAdd, objectStoreNameLibrary } from "./indexedDB";
 
@@ -9,7 +9,7 @@ export async function CloudDBHandler(JSON: any) {
     let series = JSON.tv;
 
     for (let movie of movies) {
-        let details = await cloudflare(["Get Details", "movie", movie.id]);
+        let details = await misGet(["Get Details", "movie", movie.id]);
 
         const movieObject = new Movie(movie.id, details.title, details.poster_path, details.overview, details.release_date, details.genres);
         movieObject.inLibrary = movie.library;
@@ -19,7 +19,7 @@ export async function CloudDBHandler(JSON: any) {
     }
 
     for (let serie of series) {
-        let json = await cloudflare(["Get Details", "tv", serie.id]);
+        let json = await misGet(["Get Details", "tv", serie.id]);
 
         const tvObject = new TV(serie.id, json.name, json.poster_path, json.overview, json.first_air_date, json.genres);
         tvObject.inLibrary = serie.library;

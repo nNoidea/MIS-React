@@ -3,7 +3,7 @@ import { green, orange, purple, red } from "./colorPallete";
 import { DBAdd, objectStoreNameLibrary } from "./indexedDB";
 import { setupLibraryPage } from "./librarypage";
 import { Globals } from "../interfaces/interfaces";
-import { gridImageResolution } from "../APIs/theMovieDatabase";
+import { gridImageResolution } from "../APIs/mis-get";
 import { Movie, TV, copyMedia } from "../classes/Media";
 import "../css/MediaModal.css";
 import { misPostMovie, misPostTV } from "../APIs/mis-post";

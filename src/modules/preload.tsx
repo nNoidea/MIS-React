@@ -1,5 +1,5 @@
 import { misSessionLogin } from "../APIs/mis-login";
-import { cloudflare, createMediaObject } from "../APIs/theMovieDatabase";
+import { misGet, createMediaObject } from "../APIs/mis-get";
 import { Movie, TV } from "../classes/Media";
 import { Globals, Trending, TrendingResult } from "../interfaces/interfaces";
 import { CloudDBHandler } from "./CloudDBHandler";
@@ -19,7 +19,7 @@ export async function preload(GLOBALS: Globals) {
     movieGenreList = await getGenres("movie");
 
     async function getGenres(type: string) {
-        let json = await cloudflare(["Genre", type]);
+        let json = await misGet(["Genre", type]);
         return json;
     }
 
@@ -38,7 +38,7 @@ export async function preload(GLOBALS: Globals) {
 }
 
 export async function getUpcomingMovies(page: number) {
-    let json = await cloudflare(["Get Upcoming Movies", String(page)]);
+    let json = await misGet(["Get Upcoming Movies", String(page)]);
     upcomingMoviesTotalPages = json.total_pages;
 
     return convertToMovieArray(await json);
@@ -60,7 +60,7 @@ export async function getUpcomingMovies(page: number) {
 }
 
 export async function getTrendingMedia() {
-    let trendingResults: Trending = await cloudflare(["Get Trending"]);
+    let trendingResults: Trending = await misGet(["Get Trending"]);
 
     return convertToMediaArray(trendingResults.results);
 

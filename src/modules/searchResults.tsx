@@ -1,5 +1,5 @@
 import { steamHover, steamHoverLeave } from "./steamHover";
-import { getSearchResults } from "../APIs/theMovieDatabase";
+import { getSearchResults } from "../APIs/mis-get";
 import { DBCheck, DBGet, objectStoreNameLibrary } from "./indexedDB";
 import { green, lightBlue, red } from "./colorPallete";
 import { ReactNode } from "react";

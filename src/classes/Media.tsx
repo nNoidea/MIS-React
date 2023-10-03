@@ -1,4 +1,4 @@
-import { TMDBRequestDetails, TMDBRequestSeasonDetails, gridImageResolution } from "../APIs/theMovieDatabase";
+import { TMDBRequestDetails, TMDBRequestSeasonDetails, gridImageResolution } from "../APIs/mis-get";
 
 // This will be a superclass of Movie and TV
 export class Media {
