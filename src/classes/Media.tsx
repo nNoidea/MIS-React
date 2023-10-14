@@ -8,6 +8,8 @@ export class Media {
     description: string;
     releaseDate: string;
     genres: string[];
+    cachteDate: Date = new Date("01/01/1970");
+    addedToLibrary: Date;
 
     inLibrary: boolean = false;
 
@@ -29,6 +31,8 @@ export class Media {
         } else {
             this.poster = `https://image.tmdb.org/t/p/${gridImageResolution}` + poster;
         }
+
+        this.addedToLibrary = new Date();
     }
 
     detailsExist: boolean = false;

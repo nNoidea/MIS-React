@@ -43,6 +43,7 @@ function createObjectStoreLibrary(objectStoreName: string) {
 // Methods
 export function DBAdd(DBName: string, media: Movie | TV) {
     const objectStore = createObjectStoreLibrary(DBName);
+    media.cachteDate = new Date();
     objectStore.put(media);
 }
 

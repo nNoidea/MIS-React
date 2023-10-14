@@ -9,6 +9,9 @@ export async function CloudDBHandler(JSON: any) {
     let series = JSON.tv;
 
     for (let movie of movies) {
+        if (movie.cacheDate != null && olderThanADay(new Date(movie.cacheDate))) {
+            // update only if the data is old
+        }
         let details = await misGet(["Get Details", "movie", movie.id]);
 
         const movieObject = new Movie(movie.id, details.title, details.poster_path, details.overview, details.release_date, details.genres);
@@ -19,6 +22,9 @@ export async function CloudDBHandler(JSON: any) {
     }
 
     for (let serie of series) {
+        if (serie.cacheDate != null && olderThanADay(new Date(serie.cacheDate))) {
+            // update only if the data is old.
+        }
         let json = await misGet(["Get Details", "tv", serie.id]);
 
         const tvObject = new TV(serie.id, json.name, json.poster_path, json.overview, json.first_air_date, json.genres);
@@ -33,5 +39,12 @@ export async function CloudDBHandler(JSON: any) {
         }
 
         DBAdd(objectStoreNameLibrary, tvObject);
+    }
+
+    function olderThanADay(date: Date) {
+        let yesterday = new Date(); // Today
+        yesterday.setDate(yesterday.getDate() - 1);
+
+        return date < yesterday;
     }
 }
