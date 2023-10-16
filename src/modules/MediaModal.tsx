@@ -39,7 +39,15 @@ export function MyModal(GLOBALS: Globals) {
                         </div>
                         <div className="col movie-data">
                             <div>
-                                <h1 id="movie-title">{media.name}</h1>
+                                <h1>
+                                    <a
+                                        href={`https://www.google.com/search?q=${media.name}`}
+                                        target="_blank"
+                                        style={{ color: "white", textDecoration: "none" }}
+                                    >
+                                        {media.name}
+                                    </a>
+                                </h1>
                                 {movieDetailsSection(media.releaseDate, media.genres, media.mediaType, media.runtime)}
                                 {scoresSection(media.TMDBScore)}
                                 {descriptionSection(media.description)}
