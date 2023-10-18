@@ -7,9 +7,9 @@ export async function setupLibraryPage(GLOBALS: Globals) {
     const { setContent } = GLOBALS.SETTERS;
     const mediaArray = (await DBGetAll(objectStoreNameLibrary)).filter((media) => media.inLibrary);
     const movieArray = mediaArray.filter((media): media is Movie => media instanceof Movie);
-    const movieArrayWatched = movieArray.filter((media) => media.watched);
-    const movieArrayUnwatched = movieArray.filter((media) => !media.watched);
-    const tvArray = mediaArray.filter((media) => media instanceof TV);
+    const movieArrayWatched = movieArray.filter((media) => media.watched).sort((a, b) => Number(b.releaseDate.substring(0, 4)) - Number(a.releaseDate.substring(0, 4)));
+    const movieArrayUnwatched = movieArray.filter((media) => !media.watched).sort((a, b) => Number(b.releaseDate.substring(0, 4)) - Number(a.releaseDate.substring(0, 4)));
+    const tvArray = mediaArray.filter((media) => media instanceof TV).sort((a, b) => Number(b.releaseDate.substring(0, 4)) - Number(a.releaseDate.substring(0, 4)));
 
     setContent(
         <>
