@@ -1,6 +1,6 @@
 import { Movie, TV, copyMedia } from "../classes/Media";
 
-const versionNumber = 10;
+const versionNumber = 11;
 const databaseName = "media";
 export const objectStoreNameLibrary = "cache";
 // export const objectStoreNameWatched = "watched";

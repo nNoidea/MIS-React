@@ -11,7 +11,6 @@ export async function CloudDBHandler(JSON: any, GLOBALS: Globals) {
     let series = JSON.tv;
 
     for (let movie of movies) {
-        movie.id = "M" + movie.id; // make it work with uniqueID
         if (movie.cacheDate != null && olderThanADay(new Date(movie.cacheDate))) {
             // update only if the data is old
         }
@@ -19,9 +18,9 @@ export async function CloudDBHandler(JSON: any, GLOBALS: Globals) {
         let movieObject: Movie;
 
         // Check if the movie exists in the database
-        if (await DBCheck(objectStoreNameLibrary, movie.id)) {
+        if (await DBCheck(objectStoreNameLibrary, "M" + movie.id)) {
             // If it exists, then check if it's in the library
-            movieObject = (await DBGet(objectStoreNameLibrary, movie.id)) as Movie;
+            movieObject = (await DBGet(objectStoreNameLibrary, "M" + movie.id)) as Movie;
             movieObject.inLibrary = movie.library;
             movieObject.watched = movie.watched;
         } else {
@@ -36,15 +35,13 @@ export async function CloudDBHandler(JSON: any, GLOBALS: Globals) {
     }
 
     for (let serie of series) {
-        serie.id = "T" + serie.id; // make it work with uniqueID
-
         if (serie.cacheDate != null && olderThanADay(new Date(serie.cacheDate))) {
             // update only if the data is old.
         }
 
         let tvObject: TV;
-        if (await DBCheck(objectStoreNameLibrary, serie.id)) {
-            tvObject = (await DBGet(objectStoreNameLibrary, serie.id)) as TV;
+        if (await DBCheck(objectStoreNameLibrary, "T" + serie.id)) {
+            tvObject = (await DBGet(objectStoreNameLibrary, "T" + serie.id)) as TV;
             tvObject.inLibrary = serie.library;
         } else {
             let json = await misGet(["Get Details", "tv", serie.id]);
