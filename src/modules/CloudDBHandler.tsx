@@ -2,9 +2,11 @@
 
 import { misGet } from "../APIs/mis-get";
 import { Movie, TV } from "../classes/Media";
+import { Globals } from "../interfaces/interfaces";
 import { DBAdd, objectStoreNameLibrary } from "./indexedDB";
+import { setupLibraryPage } from "./librarypage";
 
-export async function CloudDBHandler(JSON: any) {
+export async function CloudDBHandler(JSON: any, GLOBALS: Globals) {
     let movies = JSON.movie;
     let series = JSON.tv;
 
@@ -40,6 +42,8 @@ export async function CloudDBHandler(JSON: any) {
 
         DBAdd(objectStoreNameLibrary, tvObject);
     }
+
+    setupLibraryPage(GLOBALS);
 
     function olderThanADay(date: Date) {
         let yesterday = new Date(); // Today

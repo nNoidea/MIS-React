@@ -31,7 +31,7 @@ export async function preload(GLOBALS: Globals) {
 
     let cloud = await misSessionLogin();
     if (cloud != false) {
-        CloudDBHandler(cloud);
+        CloudDBHandler(cloud, GLOBALS);
     }
     // Everything is loaded
     setPreloaded(true);
