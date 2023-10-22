@@ -3,7 +3,7 @@
 import { misGet } from "../APIs/mis-get";
 import { Movie, TV } from "../classes/Media";
 import { Globals } from "../interfaces/interfaces";
-import { DBAdd, objectStoreNameLibrary } from "./indexedDB";
+import { DBAdd, DBCheck, DBGet, objectStoreNameLibrary } from "./indexedDB";
 import { setupLibraryPage } from "./librarypage";
 
 export async function CloudDBHandler(JSON: any, GLOBALS: Globals) {
@@ -11,28 +11,49 @@ export async function CloudDBHandler(JSON: any, GLOBALS: Globals) {
     let series = JSON.tv;
 
     for (let movie of movies) {
+        movie.id = "M" + movie.id; // make it work with uniqueID
         if (movie.cacheDate != null && olderThanADay(new Date(movie.cacheDate))) {
             // update only if the data is old
         }
-        let details = await misGet(["Get Details", "movie", movie.id]);
 
-        const movieObject = new Movie(movie.id, details.title, details.poster_path, details.overview, details.release_date, details.genres);
-        movieObject.inLibrary = movie.library;
-        movieObject.watched = movie.watched;
+        let movieObject: Movie;
+
+        // Check if the movie exists in the database
+        if (await DBCheck(objectStoreNameLibrary, movie.id)) {
+            // If it exists, then check if it's in the library
+            movieObject = (await DBGet(objectStoreNameLibrary, movie.id)) as Movie;
+            movieObject.inLibrary = movie.library;
+            movieObject.watched = movie.watched;
+        } else {
+            let details = await misGet(["Get Details", "movie", movie.id]);
+
+            movieObject = new Movie(movie.id, details.title, details.poster_path, details.overview, details.release_date, details.genres);
+            movieObject.inLibrary = movie.library;
+            movieObject.watched = movie.watched;
+        }
 
         DBAdd(objectStoreNameLibrary, movieObject);
     }
 
     for (let serie of series) {
+        serie.id = "T" + serie.id; // make it work with uniqueID
+
         if (serie.cacheDate != null && olderThanADay(new Date(serie.cacheDate))) {
             // update only if the data is old.
         }
-        let json = await misGet(["Get Details", "tv", serie.id]);
 
-        const tvObject = new TV(serie.id, json.name, json.poster_path, json.overview, json.first_air_date, json.genres);
-        tvObject.inLibrary = serie.library;
+        let tvObject: TV;
+        if (await DBCheck(objectStoreNameLibrary, serie.id)) {
+            tvObject = (await DBGet(objectStoreNameLibrary, serie.id)) as TV;
+            tvObject.inLibrary = serie.library;
+        } else {
+            let json = await misGet(["Get Details", "tv", serie.id]);
 
-        await tvObject.requestDetails();
+            tvObject = new TV(serie.id, json.name, json.poster_path, json.overview, json.first_air_date, json.genres);
+            tvObject.inLibrary = serie.library;
+
+            await tvObject.requestDetails();
+        }
 
         for (let episode of serie.episodes) {
             await tvObject.requestSeasonDetails(episode.seasonNumber);
@@ -43,7 +64,9 @@ export async function CloudDBHandler(JSON: any, GLOBALS: Globals) {
         DBAdd(objectStoreNameLibrary, tvObject);
     }
 
-    setupLibraryPage(GLOBALS);
+    if (GLOBALS.GETTERS.currentPage == "library") {
+        setupLibraryPage(GLOBALS); // Update the library page
+    }
 
     function olderThanADay(date: Date) {
         let yesterday = new Date(); // Today
