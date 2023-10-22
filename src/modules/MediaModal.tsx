@@ -116,6 +116,10 @@ export function MyModal(GLOBALS: Globals) {
                         }
 
                         DBAdd(objectStoreNameLibrary, media);
+                        // Update the visible movies in the library
+                        if (libraryButtonColor != "transparent") {
+                            setupLibraryPage(GLOBALS);
+                        }
 
                         misPostMovie(String(media.id), media.name, String(localStorage.getItem("session_id")), media.inLibrary, media.watched);
                     }}
