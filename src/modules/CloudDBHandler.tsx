@@ -12,10 +12,6 @@ export async function CloudDBHandler(JSON: any, GLOBALS: Globals) {
     let series = JSON.tv;
 
     for (let movie of movies) {
-        if (movie.cacheDate != null && olderThanADay(new Date(movie.cacheDate))) {
-            // update only if the data is old
-        }
-
         let movieObject: Movie;
 
         // Check if the movie exists in the database
@@ -39,10 +35,6 @@ export async function CloudDBHandler(JSON: any, GLOBALS: Globals) {
     }
 
     for (let serie of series) {
-        if (serie.cacheDate != null && olderThanADay(new Date(serie.cacheDate))) {
-            // update only if the data is old.
-        }
-
         let tvObject: TV;
         if (await DBCheck(objectStoreNameLibrary, "T" + serie.id)) {
             tvObject = (await DBGet(objectStoreNameLibrary, "T" + serie.id)) as TV;
@@ -66,12 +58,5 @@ export async function CloudDBHandler(JSON: any, GLOBALS: Globals) {
         if (GLOBALS.GETTERS.buttonColorRef.current === red) {
             setupLibraryPage(GLOBALS); // Update the library page
         }
-    }
-
-    function olderThanADay(date: Date) {
-        let yesterday = new Date(); // Today
-        yesterday.setDate(yesterday.getDate() - 1);
-
-        return date < yesterday;
     }
 }
