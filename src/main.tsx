@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.css";
 import "./css/General.css";
 import "./css/search.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { NavigationBar } from "./modules/NavigationBar";
 import { MyModal } from "./modules/MediaModal";
@@ -33,6 +33,14 @@ function App() {
     // Login
     const [loginModalShow, setLoginModalShow] = useState(false);
 
+    // Create a ref object to store the buttonColor state
+    const buttonColorRef = useRef(libraryButtonColor);
+
+    // Update the ref object whenever the buttonColor state changes
+    useEffect(() => {
+        buttonColorRef.current = libraryButtonColor;
+    }, [libraryButtonColor]);
+
     let GLOBALS: Globals = {
         GETTERS: {
             homeButtonColor,
@@ -47,6 +55,7 @@ function App() {
             preloaded,
             homepageContent,
             loginModalShow,
+            buttonColorRef,
         },
         SETTERS: {
             setHomeButtonColor,

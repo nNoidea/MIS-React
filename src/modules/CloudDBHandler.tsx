@@ -3,6 +3,7 @@
 import { misGet } from "../APIs/mis-get";
 import { Movie, TV } from "../classes/Media";
 import { Globals } from "../interfaces/interfaces";
+import { red } from "./colorPallete";
 import { DBAdd, DBCheck, DBGet, objectStoreNameLibrary } from "./indexedDB";
 import { setupLibraryPage } from "./librarypage";
 
@@ -32,6 +33,9 @@ export async function CloudDBHandler(JSON: any, GLOBALS: Globals) {
         }
 
         DBAdd(objectStoreNameLibrary, movieObject);
+        if (GLOBALS.GETTERS.buttonColorRef.current === red) {
+            setupLibraryPage(GLOBALS); // Update the library page
+        }
     }
 
     for (let serie of series) {
@@ -59,10 +63,9 @@ export async function CloudDBHandler(JSON: any, GLOBALS: Globals) {
         }
 
         DBAdd(objectStoreNameLibrary, tvObject);
-    }
-
-    if (GLOBALS.GETTERS.currentPage == "library") {
-        setupLibraryPage(GLOBALS); // Update the library page
+        if (GLOBALS.GETTERS.buttonColorRef.current === red) {
+            setupLibraryPage(GLOBALS); // Update the library page
+        }
     }
 
     function olderThanADay(date: Date) {
