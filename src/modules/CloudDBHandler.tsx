@@ -23,7 +23,13 @@ export async function CloudDBHandler(JSON: any, GLOBALS: Globals) {
         } else {
             let details = await misGet(["Get Details", "movie", movie.id]);
 
-            movieObject = new Movie(movie.id, details.title, details.poster_path, details.overview, details.release_date, details.genres);
+            let genres: string[] = [];
+
+            for (const genre of details.genres) {
+                genres.push(genre.name);
+            }
+
+            movieObject = new Movie(movie.id, details.title, details.poster_path, details.overview, details.release_date, genres);
             movieObject.inLibrary = movie.library;
             movieObject.watched = movie.watched;
         }
@@ -42,7 +48,12 @@ export async function CloudDBHandler(JSON: any, GLOBALS: Globals) {
         } else {
             let json = await misGet(["Get Details", "tv", serie.id]);
 
-            tvObject = new TV(serie.id, json.name, json.poster_path, json.overview, json.first_air_date, json.genres);
+            let genres: string[] = [];
+            for (const genre of json.genres) {
+                genres.push(genre.name);
+            }
+
+            tvObject = new TV(serie.id, json.name, json.poster_path, json.overview, json.first_air_date, genres);
             tvObject.inLibrary = serie.library;
 
             await tvObject.requestDetails();
