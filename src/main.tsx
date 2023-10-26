@@ -33,10 +33,16 @@ function App() {
     // Login
     const [loginModalShow, setLoginModalShow] = useState(false);
 
-    // Create a ref object to store the buttonColor state
+    // When we pass a useState to a function, it will be passed by value, not by reference.
+    // This means that once a function gets this useState as a parameter, it won't update when the useState updates until the function is called again with the updated useState (which is what React does for us). However what if we pass a useState to a function that takes a long time finish, but we update the useState in the meantime? The function will still use the old useState while it's running.
+    // To fix this we can use a ref object. A ref object is like a pointer to a memory adress. So when we change the value in that memory adress, the ref object will still point to that memory adress and will thus have the updated value.
+    // However, this update won't cause a rerender on it's own (useStates cuase rerenders). But that's okay because we can still force that manually ourselves.
+    // We first create a ref object with the value of the useState.
     const buttonColorRef = useRef(libraryButtonColor);
 
-    // Update the ref object whenever the buttonColor state changes
+    // Then we update the ref object when the useState updates. We are not pointing at the useState, the ref object has it's own unique adress in memory that it points to, but we change the value in that adress.
+    // That's why we need to update the ref object when the useState updates.
+    // This main.tsx file gets much faster updated with the new useState than the functions that take long to execute. So in this file we will always have the updated useState, that's why we update the ref object here.
     useEffect(() => {
         buttonColorRef.current = libraryButtonColor;
     }, [libraryButtonColor]);

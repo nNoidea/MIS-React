@@ -308,7 +308,7 @@ function episodesSection(GLOBALS: Globals) {
                         <span>
                             <strong>{i + 1}. </strong>
                             {media.seasons[seasonNumber].episodes[i].name}
-                            {epsiodeRuntime(setupRuntime(media.seasons[seasonNumber].episodes[i].runtime, true))}
+                            {epsiodeRuntime(setupRuntime(media.seasons[seasonNumber].episodes[i].runtime))}
                             {episodeReleaseDate(episodeDate)}
                         </span>
                     </ListGroup.Item>
@@ -396,7 +396,7 @@ function scoresSection(TMDBScore: number) {
 function movieDetailsSection(releaseDate: string, genres: string[], mediaType: string, runtime: number[] | null) {
     let movie_releaseDate = releaseDateSection(releaseDate);
     let movie_genres = genresSection(genres);
-    let movie_runtime = setupRuntime(runtime, false);
+    let movie_runtime = setupRuntime(runtime);
 
     if (movie_releaseDate != undefined || movie_genres != undefined || movie_runtime != undefined) {
         return (
@@ -429,18 +429,16 @@ function movieDetailsSection(releaseDate: string, genres: string[], mediaType: s
     }
 }
 
-function setupRuntime(runtime: number[] | null, episodeBoolean: boolean) {
-    if (episodeBoolean) {
-        if (runtime != null) {
-            if (runtime[0] != 0 && runtime[1] != 0) {
-                return `⏳${runtime[0]}h ${runtime[1]}m`;
-            } else if (runtime[0] != 0) {
-                return `⏳${runtime[0]}h`;
-            } else if (runtime[1] != 0) {
-                return `⏳${runtime[1]}m`;
-            }
-        } else {
-            return null;
+function setupRuntime(runtime: number[] | null) {
+    if (runtime != null) {
+        if (runtime[0] != 0 && runtime[1] != 0) {
+            return `⏳${runtime[0]}h ${runtime[1]}m`;
+        } else if (runtime[0] != 0) {
+            return `⏳${runtime[0]}h`;
+        } else if (runtime[1] != 0) {
+            return `⏳${runtime[1]}m`;
         }
+    } else {
+        return null;
     }
 }
