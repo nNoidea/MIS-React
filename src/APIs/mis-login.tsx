@@ -22,6 +22,7 @@ export async function misLoginOrRegister(email: string, password: string, sessio
                     // save the session id
                     localStorage.setItem("session_id", result);
                     localStorage.setItem("email", email);
+                    window.location.reload();
                     return true;
                 }
             })
