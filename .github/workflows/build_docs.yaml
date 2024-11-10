@@ -4,11 +4,13 @@ on:
     push:
         branches:
             - main
+        branches-ignore:
+            - pages
     pull_request:
         branches:
             - main
-    branches-ignore:
-        - pages
+        branches-ignore:
+            - pages
 
 jobs:
     build:
