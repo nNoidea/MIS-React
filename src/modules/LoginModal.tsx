@@ -134,7 +134,7 @@ export function LoginModal(GLOBALS: Globals) {
             return (
                 <>
                     <Form id="Login">
-                        <h1>Login one more testasdas sdasdagaiaasdasdn</h1>
+                        <h1>Login one more testasdas sdasdagaiaaasdasdsdasdn</h1>
                         <Form.Group className="mb-3">
                             <Form.Label>Email address</Form.Label>
                             <Form.Control
