@@ -28,6 +28,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs
           publish_branch: pages
-          cname: elements.dev
           user_name: GitHub Actions
           user_email: 41898282+github-actions[bot]@users.noreply.github.com
