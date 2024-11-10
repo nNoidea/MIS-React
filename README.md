@@ -12,7 +12,7 @@ To set up MIS for development, follow these steps:
 
     ```
     cd MIS-React
-    ```
+    ```3
 
 2. Install the necessary dependencies:
 
@@ -24,4 +24,5 @@ To set up MIS for development, follow these steps:
     ```
     npm start
     ```
+
 
