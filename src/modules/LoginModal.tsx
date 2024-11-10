@@ -123,6 +123,7 @@ export function LoginModal(GLOBALS: Globals) {
                             // set session id to ""
                             localStorage.setItem("session_id", "");
                             localStorage.setItem("email", "");
+                            window.location.reload();
                         }}
                     >
                         Logout
